@@ -92,8 +92,10 @@ def run30():
 
 def main():
     print('initializing the script')
-    print('script to run:')
-    choice = input("1 - speedrun\n2 - farming")
+    print('scripts:')
+    print("1 - speedrun")
+    print("2 - farming")
+    choice = input()
     if choice == "1":
         print('requirements: ')
         print('check if adventure is in Idle Mode!')
