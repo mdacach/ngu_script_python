@@ -14,8 +14,8 @@ def moveTo(x, y):
 
 
 def click(x, y, button="left"):
-    x = CORNER[0] + coords[0]
-    y = CORNER[1] + coords[1] - 25
+    x = CORNER[0] + x
+    y = CORNER[1] + y - 25
     pyautogui.click(x, y, button=button)
     pyautogui.sleep(0.5)
 
@@ -30,6 +30,7 @@ def main():
         start = time.time()
         print('*******************')
         print('start')
+
         print('basic loop 3 times')
         for i in range(3):
             handleTraining()
@@ -56,6 +57,7 @@ def main():
         counter += 1
 
         print('*******************')
+        print()
 
 
 def rebirth():
@@ -65,6 +67,11 @@ def rebirth():
     click(*REBIRTH_BUTTON)
     click(*REBIRTH_CONFIRMATION)
     print("rebirth")
+
+
+def saveScreenshot():
+    img = pyautogui.screenshot()
+    img.save(r'rebirth-screen.png')
 
 
 def adventure(time):
