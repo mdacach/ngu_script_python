@@ -2,11 +2,15 @@ import pyautogui
 from coords import *
 import time  # keep track of rebirth time
 
+
+################INIT########################
 # get corner pixel
 CORNER = pyautogui.locateOnScreen("ingame-corner.png")
-
+pyautogui.PAUSE = 0.01
 
 # - 25 to account for ingame corner pixel
+
+
 def moveTo(x, y):
     x = CORNER[0] + x
     y = CORNER[1] + y - 25
@@ -19,25 +23,34 @@ def click(x, y, button="left"):
     pyautogui.click(x, y, button=button)
     pyautogui.sleep(0.5)
 
+########################################
+
 
 def run15():
+    start = time.time()
     print("start")
     handleTraining()
     fightBosses()
+    farmAdventure()
     print('basic loop for 30 times')
-    for i in range(30):
-        print(f'{i+1}', end=" ")
+    counter = 0
+    while ((time.time() - start)/60 < 13):
         adventure(30)
         reclaimEnergy()
         handleTraining()
         handleAugments()
         fightBosses()
+        if (counter % 5 == 0):
+            handleEquips()
+        counter += 1
     print('last part')
     reclaimEnergy()
     augmentationUpgrade()
     adventure(30)
     fightBosses()
     moneyPit()
+    while ((time.time() - start)/60 < 15):
+        pyautogui.sleep(5)
     rebirth()
     print('end')
 
@@ -78,22 +91,32 @@ def run30():
 
 
 def main():
-    pyautogui.PAUSE = 0.01
-    print('*******************')
     print('initializing the script')
-    print('check if adventure is in Idle Mode!')
-    click(*ADVENTURE)
-    pyautogui.sleep(3)
-    counter = 0
-    while True:
-        start = time.time()
-        print('*******************')
-        run15()
-        end = time.time()
-        print(f'rebirth {counter} time: {round((end - start)/60)}')
-        counter += 1
-        print('*******************')
-        print()
+    print('script to run:')
+    choice = input("1 - speedrun\n2 - farming")
+    if choice == "1":
+        print('requirements: ')
+        print('check if adventure is in Idle Mode!')
+        pyautogui.sleep(3)
+        counter = 0
+        while True:
+            start = time.time()
+            print('*******************')
+            run15()
+            end = time.time()
+            print(f'rebirth {counter} time: {round((end - start)/60)}')
+            counter += 1
+            print('*******************')
+            print()
+    if choice == "2":
+        print('farming script')
+        while True:
+            farming()
+
+
+def farming():
+    adventure(60)
+    handleEquips()
 
 
 def reclaimEnergy():
@@ -190,11 +213,18 @@ def handleEquips():
 
     x = SLOT1[0]
     y = SLOT1[1]
-
+    # merge and boost front row
     for i in range(12):
-        for j in range(3):
-            mergeItem(x + INV_DIFF * i, y + INV_DIFF * j)
-            boostItem(x + INV_DIFF * i, y + INV_DIFF * j)
+        mergeItem(x + INV_DIFF * i, y)
+        boostItem(x + INV_DIFF * i, y)
+
+    # boost infinity cube
+    click(*CUBE, button="right")
+
+    # for i in range(12):
+    #     for j in range(3):
+    #         mergeItem(x + INV_DIFF * i, y + INV_DIFF * j)
+    #         boostItem(x + INV_DIFF * i, y + INV_DIFF * j)
 
 
 def mergeItem(x, y):
