@@ -20,6 +20,63 @@ def click(x, y, button="left"):
     pyautogui.sleep(0.5)
 
 
+def run15():
+    print("start")
+    handleTraining()
+    fightBosses()
+    print('basic loop for 30 times')
+    for i in range(30):
+        print(f'{i+1}', end=" ")
+        adventure(30)
+        reclaimEnergy()
+        handleTraining()
+        handleAugments()
+        fightBosses()
+    print('last part')
+    reclaimEnergy()
+    augmentationUpgrade()
+    adventure(30)
+    fightBosses()
+    moneyPit()
+    rebirth()
+    print('end')
+
+
+def run30():
+    print('basic loop 3 times')
+    for i in range(3):
+        handleTraining()
+        fightBosses()
+        farmAdventure()
+        handleEquips()
+        print('handle training')
+        for i in range(3):
+            print(f'loop {i+1}')
+            pyautogui.sleep(30)
+            reclaimEnergy()
+            handleTraining()
+            handleAugments()
+        adventure(180)
+        reclaimEnergy()
+        handleTraining()
+        handleAugments()
+        fightBosses()
+        adventure(180)
+    print('final part')
+    reclaimEnergy()
+    handleTraining()
+    reclaimEnergy()
+    handleAugments()
+    adventure(120)
+    reclaimEnergy()
+    augmentationUpgrade()
+    adventure(60)
+    handleEquips()
+    fightBosses()
+    moneyPit()
+    rebirth()
+
+
 def main():
     pyautogui.PAUSE = 0.01
     print('*******************')
@@ -31,43 +88,10 @@ def main():
     while True:
         start = time.time()
         print('*******************')
-        print('start')
-
-        print('basic loop 3 times')
-        for i in range(3):
-            handleTraining()
-            fightBosses()
-            farmAdventure()
-            handleEquips()
-            print('handle training')
-            for i in range(3):
-                print(f'loop {i+1}')
-                pyautogui.sleep(30)
-                reclaimEnergy()
-                handleTraining()
-                handleAugments()
-            adventure(180)
-            reclaimEnergy()
-            handleTraining()
-            handleAugments()
-            fightBosses()
-            adventure(180)
-        print('final part')
-        handleTraining()
-        reclaimEnergy()
-        handleAugments()
-        adventure(120)
-        reclaimEnergy()
-        augmentationUpgrade()
-        adventure(60)
-        handleEquips()
-        fightBosses()
-        moneyPit()
-        rebirth()
+        run15()
         end = time.time()
-        print(f'rebirth {counter} time: {(end - start)/60}')
+        print(f'rebirth {counter} time: {round((end - start)/60)}')
         counter += 1
-
         print('*******************')
         print()
 
