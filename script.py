@@ -24,7 +24,9 @@ def main():
     pyautogui.PAUSE = 0.01
     print('*******************')
     print('initializing the script')
-    pyautogui.sleep(1.5)
+    print('check if adventure is in Idle Mode!')
+    click(*ADVENTURE)
+    pyautogui.sleep(3)
     counter = 0
     while True:
         start = time.time()
@@ -37,18 +39,27 @@ def main():
             fightBosses()
             farmAdventure()
             handleEquips()
-            print('handle training 3 times')
+            print('handle training')
             for i in range(3):
+                print(f'loop {i+1}')
                 pyautogui.sleep(30)
+                reclaimEnergy()
                 handleTraining()
+                handleAugments()
             adventure(180)
+            reclaimEnergy()
             handleTraining()
+            handleAugments()
             fightBosses()
             adventure(180)
         print('final part')
         handleTraining()
+        reclaimEnergy()
         handleAugments()
-        adventure(180)
+        adventure(120)
+        reclaimEnergy()
+        augmentationUpgrade()
+        adventure(60)
         handleEquips()
         fightBosses()
         moneyPit()
@@ -59,6 +70,16 @@ def main():
 
         print('*******************')
         print()
+
+
+def reclaimEnergy():
+    click(*BASIC_TRAINING)
+    pyautogui.press('r')  # should reclaim energy
+
+
+def augmentationUpgrade():
+    click(*AUGMENTATION)
+    click(*AUG1_UPGRADE)
 
 
 def moneyPit():
