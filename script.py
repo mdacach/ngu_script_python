@@ -26,8 +26,7 @@ def click(x, y, button="left"):
 ########################################
 
 
-f = Features()
-i = Inventory()
+# runs
 
 
 def run15():
@@ -101,6 +100,11 @@ def main():
     print("2 - farming")
     choice = input()
     if choice == "1":
+        print('choose the length of the speedrun:')
+        print('15 min')
+        print('30 min')
+        choice = input()
+
         print('requirements: ')
         print('check if adventure is in Idle Mode!')
         pyautogui.sleep(3)
@@ -108,7 +112,10 @@ def main():
         while True:
             start = time.time()
             print('*******************')
-            run15()
+            if choice == "15":
+                run15()
+            if choice == "30":
+                run30()
             end = time.time()
             print(f'rebirth {counter} time: {round((end - start)/60)}')
             counter += 1
@@ -165,8 +172,10 @@ class Features:
         click(*ADVANCE_ZONE, button="right")
 
     def farmAdventure(self, time):
-        adjustAdventureZone()
+        self.adjustAdventureZone()
+        pyautogui.sleep(0.5)
         pyautogui.press('q')
+        pyautogui.sleep(0.5)
         for i in range(time):
             pyautogui.press('y')
             pyautogui.press('t')
@@ -174,9 +183,11 @@ class Features:
             pyautogui.press('e')
             pyautogui.press('w')
             pyautogui.sleep(1)
+        pyautogui.sleep(0.5)
         pyautogui.press('q')
+        pyautogui.sleep(0.5)
 
-    def augmentation(self, upgrade=false):
+    def augmentation(self, upgrade=False):
         click(*AUGMENTATION)
         if (upgrade):
             click(*AUG1_UPGRADE)
@@ -197,27 +208,27 @@ class Inventory:
 
     def handleEquips(self):
         click(*INVENTORY)
-        mergeItem(*HEAD)
-        mergeItem(*CHEST)
-        mergeItem(*LEGS)
-        mergeItem(*BOOTS)
-        mergeItem(*WEAPON)
-        mergeItem(*ACC1)
-        mergeItem(*ACC2)
-        boostItem(*HEAD)
-        boostItem(*CHEST)
-        boostItem(*LEGS)
-        boostItem(*BOOTS)
-        boostItem(*WEAPON)
-        boostItem(*ACC1)
-        boostItem(*ACC2)
+        self.mergeItem(*HEAD)
+        self.mergeItem(*CHEST)
+        self.mergeItem(*LEGS)
+        self.mergeItem(*BOOTS)
+        self.mergeItem(*WEAPON)
+        self.mergeItem(*ACC1)
+        self.mergeItem(*ACC2)
+        self.boostItem(*HEAD)
+        self.boostItem(*CHEST)
+        self.boostItem(*LEGS)
+        self.boostItem(*BOOTS)
+        self.boostItem(*WEAPON)
+        self.boostItem(*ACC1)
+        self.boostItem(*ACC2)
 
         x = SLOT1[0]
         y = SLOT1[1]
         # merge and boost front row
         for i in range(12):
-            mergeItem(x + INV_DIFF * i, y)
-            boostItem(x + INV_DIFF * i, y)
+            self.mergeItem(x + INV_DIFF * i, y)
+            self.boostItem(x + INV_DIFF * i, y)
 
         # boost infinity cube
         click(*CUBE, button="right")
@@ -237,6 +248,10 @@ def reclaimEnergy():
     click(*BASIC_TRAINING)
     pyautogui.press('r')  # should reclaim energy
 
+
+# helper classes
+f = Features()
+i = Inventory()
 
 if __name__ == "__main__":
     main()
