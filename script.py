@@ -51,13 +51,20 @@ def main():
         adventure(180)
         handleEquips()
         fightBosses()
+        moneyPit()
         rebirth()
         end = time.time()
-        print(f'rebirth {counter} time: {end - start}')
+        print(f'rebirth {counter} time: {(end - start)/60}')
         counter += 1
 
         print('*******************')
         print()
+
+
+def moneyPit():
+    click(*MONEY_PIT)
+    click(*FEED_ME)
+    click(*FEED_YEAH)
 
 
 def rebirth():
