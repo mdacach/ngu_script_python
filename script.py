@@ -1,11 +1,19 @@
 import pyautogui
 from coords import *
+import time  # keep track of rebirth time
 
 # get corner pixel
 CORNER = pyautogui.locateOnScreen("ingame-corner.png")
 
 
-def click(coords, button="left"):
+# - 25 to account for ingame corner pixel
+def moveTo(x, y):
+    x = CORNER[0] + x
+    y = CORNER[1] + y - 25
+    pyautogui.moveTo
+
+
+def click(x, y, button="left"):
     x = CORNER[0] + coords[0]
     y = CORNER[1] + coords[1] - 25
     pyautogui.click(x, y, button=button)
@@ -14,36 +22,48 @@ def click(coords, button="left"):
 
 def main():
     pyautogui.PAUSE = 0.01
+    print('*******************')
+    print('initializing the script')
     pyautogui.sleep(1.5)
+    counter = 0
     while True:
+        start = time.time()
+        print('*******************')
+        print('start')
+        print('basic loop 3 times')
         for i in range(3):
             handleTraining()
             fightBosses()
             farmAdventure()
             handleEquips()
+            print('handle training 3 times')
             for i in range(3):
-                countdown(30)
+                pyautogui.sleep(30)
                 handleTraining()
             adventure(180)
             handleTraining()
             fightBosses()
             adventure(180)
+        print('final part')
         handleTraining()
         handleAugments()
         adventure(180)
         handleEquips()
-        countdown(30)
-        adventure(180)
-        handleEquips()
         fightBosses()
         rebirth()
+        end = time.time()
+        print(f'rebirth {counter} time: {end - start}')
+        counter += 1
+
+        print('*******************')
 
 
 def rebirth():
-    click(REBIRTH_MENU)
+    click(*REBIRTH_MENU)
     pyautogui.sleep(20)
-    click(REBIRTH_BUTTON)
-    click(REBIRTH_CONFIRMATION)
+    print("going to rebirth")
+    click(*REBIRTH_BUTTON)
+    click(*REBIRTH_CONFIRMATION)
     print("rebirth")
 
 
@@ -60,48 +80,40 @@ def adventure(time):
     pyautogui.press('q')
 
 
-def countdown(time):
-    pyautogui.sleep(time/3)
-    print('sleeping...')
-    pyautogui.sleep(time/3)
-    print('sleeping ',  time/3)
-    pyautogui.sleep(time/3)
-
-
 def handleTraining():
-    click(BASIC_TRAINING)
-    click(ATK1)
-    click(DEF1)
-    click(ATK2)
-    click(DEF2)
-    click(ATK3)
-    click(DEF3)
-    click(ATK4)
-    click(DEF4)
-    click(DEF5)
-    click(ATK5)
+    click(*BASIC_TRAINING)
+    click(*ATK1)
+    click(*DEF1)
+    click(*ATK2)
+    click(*DEF2)
+    click(*ATK3)
+    click(*DEF3)
+    click(*ATK4)
+    click(*DEF4)
+    click(*DEF5)
+    click(*ATK5)
 
 
 def handleAugments():
-    click(AUGMENTATION)
-    click(AUG1)
+    click(*AUGMENTATION)
+    click(*AUG1)
 
 
 def fightBosses():
-    click(FIGHT_BOSS)
-    click(NUKE)
+    click(*FIGHT_BOSS)
+    click(*NUKE)
     for i in range(5):
         pyautogui.sleep(2)
-        click(FIGHT)
+        click(*FIGHT)
 
 
 def farmAdventure():
-    click(ADVENTURE)
-    click(ADVANCE_ZONE, button="right")
+    click(*ADVENTURE)
+    click(*ADVANCE_ZONE, button="right")
 
 
 def handleEquips():
-    click(INVENTORY)
+    click(*INVENTORY)
     mergeItem(*HEAD)
     mergeItem(*CHEST)
     mergeItem(*LEGS)
