@@ -11,17 +11,26 @@ pyautogui.PAUSE = 0.01
 # - 25 to account for ingame corner pixel
 
 
+def getCoords(x, y):
+    x = CORNER[0] + x
+    y = CORNER[1] + y - 25
+    return (x, y)
+
+
 def moveTo(x, y):
     x = CORNER[0] + x
     y = CORNER[1] + y - 25
     pyautogui.moveTo
 
 
-def click(x, y, button="left"):
+def click(x, y, button="left", sleep='fast'):
     x = CORNER[0] + x
     y = CORNER[1] + y - 25
     pyautogui.click(x, y, button=button)
-    pyautogui.sleep(0.5)
+    if (sleep == 'fast'):
+        pyautogui.sleep(0.1)
+    else:
+        pyautogui.sleep(0.5)
 
 ########################################
 
@@ -124,12 +133,18 @@ def main():
     if choice == "2":
         print('farming script')
         start = time.time()
-        counter = 0
+        print('1 - boss only')
+        print('2 - all monsters')
+        choice = input()
         while True:
-            farming()
-            counter += 1
-            if (counter % 10):
-                print(f'time elapsed: {round((time.time() - start)/60)}')
+            if choice == '1':
+                while True:
+                    farming(bossOnly=True)
+                    print(f'time: {(time.time() - start)/60} mins')
+            else:
+                while True:
+                    farming()
+                    print(f'time: {(time.time() - start)/60} mins')
 
 
 class Features:
@@ -187,14 +202,14 @@ class Features:
         pyautogui.press('q')
         pyautogui.sleep(0.5)
 
-    def snipeBosses(self):
-        def hasCrown():
-            # get pixel where crown should be
-            # get color of crown
-            # test if pixel is of that color
-            # return true if it is, false otherwise
-            # we need a way to know when an enemy appeared
-            # get pixel of health bar maybe
+    # def snipeBosses(self):
+    #     def hasCrown():
+    #         # get pixel where crown should be
+    #         # get color of crown
+    #         # test if pixel is of that color
+    #         # return true if it is, false otherwise
+    #         # we need a way to know when an enemy appeared
+    #         # get pixel of health bar maybe
 
     def augmentation(self, upgrade=False):
         click(*AUGMENTATION)
@@ -248,14 +263,75 @@ class Inventory:
         #         boostItem(x + INV_DIFF * i, y + INV_DIFF * j)
 
 
-def farming():
-    f.farmAdventure(60)
-    i.handleEquips()
+def sendAttacks():
+    pyautogui.press('y')
+    pyautogui.press('t')
+    pyautogui.press('r')
+    pyautogui.press('e')
+    pyautogui.press('w')
+
+
+def farming(bossOnly=False, kills=20):
+    click(*ADVENTURE)
+    click(*ADVANCE_ZONE, button="right")
+    pyautogui.press('q')  # idle mode
+    counter = 0
+    while True:
+        print('checking spawn')
+        if enemySpawn():
+            print('spawned')
+            if (not bossOnly):
+                while (not isEnemyDead()):
+                    print('attacking')
+                    sendAttacks()
+                    pyautogui.sleep(0.1)
+                counter += 1
+            else:
+                if isBoss():
+                    while (not isEnemyDead()):
+                        print('attacking')
+                        sendAttacks()
+                        pyautogui.sleep(0.1)
+                    counter += 1
+                else:
+                    refreshZone()
+        else:
+            pyautogui.sleep(0.1)
+        if (counter > 0 and counter % kills == 0):  # after 15 fights
+            i.handleEquips()
+            click(*ADVENTURE)  # go back to adventure
+            return
+
+
+def isEnemyDead():
+    border = getCoords(*ENEMY_HEALTH_BAR_BORDER)
+    if (pyautogui.pixelMatchesColor(*border, (255, 255, 255))):
+        print('dead')
+        return True
+    else:
+        print('not dead')
+
+
+def enemySpawn():
+    enemy_hp = getCoords(*ENEMY_HEALTH_BAR_BORDER)
+    return pyautogui.pixelMatchesColor(*enemy_hp, HEALTH_BAR_RED)
 
 
 def reclaimEnergy():
     click(*BASIC_TRAINING)
     pyautogui.press('r')  # should reclaim energy
+
+
+def isBoss():
+    # get the pixel of the crown
+    # match it with yellow
+    crown = getCoords(*CROWN_LOCATION)
+    return pyautogui.pixelMatchesColor(*crown, CROWN_COLOR)
+
+
+def refreshZone():
+    click(*GO_BACK_ZONE)
+    click(*ADVANCE_ZONE)
 
 
 # helper classes
