@@ -60,14 +60,14 @@ def run15():
 
 def run30():
     print('basic loop 3 times')
-    for i in range(3):
+    for _ in range(3):
         f.basicTraining()
         f.fightBosses()
         f.adjustAdventureZone()
         i.handleEquips()
         print('handle training')
-        for i in range(3):
-            print(f'loop {i+1}')
+        for _ in range(3):
+            print(f'loop {_+1}')
             pyautogui.sleep(30)
             reclaimEnergy()
             f.basicTraining()
@@ -186,6 +186,15 @@ class Features:
         pyautogui.sleep(0.5)
         pyautogui.press('q')
         pyautogui.sleep(0.5)
+
+    def snipeBosses(self):
+        def hasCrown():
+            # get pixel where crown should be
+            # get color of crown
+            # test if pixel is of that color
+            # return true if it is, false otherwise
+            # we need a way to know when an enemy appeared
+            # get pixel of health bar maybe
 
     def augmentation(self, upgrade=False):
         click(*AUGMENTATION)
