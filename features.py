@@ -74,6 +74,8 @@ class Adventure:
                 if (not bossOnly):
                     while (not Adventure.isEnemyDead()):
                         # print('attacking')
+                        if (Adventure.isPlayerLow()):
+                            Adventure.healHP()
                         Adventure.sendAttacks()
                         sleep(0.1)
                     counter += 1
@@ -81,6 +83,8 @@ class Adventure:
                     if isBoss():
                         while (not Adventure.isEnemyDead()):
                             # print('attacking')
+                            if (Adventure.isPlayerLow()):
+                                Adventure.healHP()
                             Adventure.sendAttacks()
                             sleep(0.1)
                         counter += 1
@@ -95,10 +99,25 @@ class Adventure:
     def isEnemyDead():
         border = getCoords(*ENEMY_HEALTH_BAR_BORDER)
         if (pyautogui.pixelMatchesColor(*border, (255, 255, 255))):
-            print('dead')
+            # print('dead')
             return True
         else:
-            print('not dead')
+            return False
+            # print('not dead')
+
+    @staticmethod
+    def isPlayerLow():
+        border = getCoords(*MY_HEALTH_BAR)
+        if (pyautogui.pixelMatchesColor(*border, (255, 255, 255))):
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def healHP():
+        click(*GO_BACK_ZONE, button="right")
+        sleep(10)
+        click(*ADVANCE_ZONE, button="right")
 
     @staticmethod
     def enemySpawn():
@@ -109,6 +128,7 @@ class Adventure:
     def reclaimEnergy():
         click(*BASIC_TRAINING)
         pyautogui.press('r')  # should reclaim energy
+
     @staticmethod
     def isBoss():
         # get the pixel of the crown
