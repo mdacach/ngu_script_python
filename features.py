@@ -6,7 +6,7 @@ from coords import *
 
 class BasicTraining:
     @staticmethod
-    def basicTraining(self):
+    def basicTraining():
         click(*BASIC_TRAINING)
         click(*ATK1)
         click(*DEF1)
@@ -22,7 +22,7 @@ class BasicTraining:
 
 class FightBosses:
     @staticmethod
-    def fightBosses(self):
+    def fightBosses():
         click(*FIGHT_BOSS)
         click(*NUKE)
         for _ in range(5):  # wait for boss to die
@@ -32,12 +32,12 @@ class FightBosses:
 
 class Adventure:
     @staticmethod
-    def adventureZone(self):
+    def adventureZone():
         click(*ADVENTURE)
         click(*ADVANCE_ZONE, button="right")
 
     @staticmethod
-    def farmZone(self, time):
+    def farmZone(time):
         Adventure.adventureZone()
         sleep(0.5)
         pyautogui.press('q')
@@ -56,7 +56,7 @@ class Adventure:
 
 class Augmentation:
     @staticmethod
-    def augmentation(self, upgrade=False):
+    def augmentation(upgrade=False):
         click(*AUGMENTATION)
         if upgrade:
             click(*AUG1_UPGRADE)
@@ -66,17 +66,17 @@ class Augmentation:
 
 class Inventory:
     @staticmethod
-    def mergeItem(self, x, y):
+    def mergeItem(x, y):
         moveTo(x, y)
         pyautogui.press('d')
 
     @staticmethod
-    def boostItem(self, x, y):
+    def boostItem(x, y):
         moveTo(x, y)
         pyautogui.press('a')
 
     @staticmethod
-    def boostAndMergeEquips(self):
+    def boostAndMergeEquips():
         click(*INVENTORY)
 
         mergeItem(*HEAD)
@@ -105,7 +105,7 @@ class Inventory:
 
 class MoneyPit:
     @staticmethod
-    def moneyPit(self):
+    def moneyPit():
         click(*MONEY_PIT)
         click(*FEED_ME)
         click(*FEED_YEAH)
@@ -113,7 +113,7 @@ class MoneyPit:
 
 class Rebirth:
     @staticmethod
-    def rebirth(self):
+    def rebirth():
         click(*REBIRTH_MENU)
         sleep(5)  # to see if it's crashing
         click(*REBIRTH_BUTTON)
@@ -122,6 +122,6 @@ class Rebirth:
 
 class Misc:
     @staticmethod
-    def reclaimEnergy(self):
+    def reclaimEnergy():
         click(*BASIC_TRAINING)
         pyautogui.press('r')
