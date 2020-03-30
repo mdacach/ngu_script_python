@@ -53,6 +53,74 @@ class Adventure:
         pyautogui.press('q')
         sleep(0.5)
 
+    @staticmethod
+    def sendAttacks():
+        pyautogui.press('y')
+        pyautogui.press('t')
+        pyautogui.press('r')
+        pyautogui.press('e')
+        pyautogui.press('w')
+
+    @staticmethod
+    def killMonsters(bossOnly=False, kills=20):
+        click(*ADVENTURE)
+        click(*ADVANCE_ZONE, button="right")
+        pyautogui.press('q')  # idle mode
+        counter = 0
+        while True:
+            # print('checking spawn')
+            if Adventure.enemySpawn():
+                # print('spawned')
+                if (not bossOnly):
+                    while (not Adventure.isEnemyDead()):
+                        # print('attacking')
+                        Adventure.sendAttacks()
+                        sleep(0.1)
+                    counter += 1
+                else:
+                    if isBoss():
+                        while (not Adventure.isEnemyDead()):
+                            # print('attacking')
+                            Adventure.sendAttacks()
+                            sleep(0.1)
+                        counter += 1
+                    else:
+                        Adventure.refreshZone()
+            else:
+                sleep(0.1)
+            if (counter > 0 and counter % kills == 0):  # after 15 fights
+                return
+
+    @staticmethod
+    def isEnemyDead():
+        border = getCoords(*ENEMY_HEALTH_BAR_BORDER)
+        if (pyautogui.pixelMatchesColor(*border, (255, 255, 255))):
+            print('dead')
+            return True
+        else:
+            print('not dead')
+
+    @staticmethod
+    def enemySpawn():
+        enemy_hp = getCoords(*ENEMY_HEALTH_BAR_BORDER)
+        return pyautogui.pixelMatchesColor(*enemy_hp, HEALTH_BAR_RED)
+
+    @staticmethod
+    def reclaimEnergy():
+        click(*BASIC_TRAINING)
+        pyautogui.press('r')  # should reclaim energy
+    @staticmethod
+    def isBoss():
+        # get the pixel of the crown
+        # match it with yellow
+        crown = getCoords(*CROWN_LOCATION)
+        return pyautogui.pixelMatchesColor(*crown, CROWN_COLOR)
+
+    @staticmethod
+    def refreshZone():
+        click(*GO_BACK_ZONE)
+        click(*ADVANCE_ZONE)
+
 
 class Augmentation:
     @staticmethod

@@ -10,6 +10,10 @@ CORNER = pyautogui.locateOnScreen('ingame-corner.png')
 pyautogui.PAUSE = 0.01
 
 
+def getCoords(x, y):
+    return (CORNER[0] + x, CORNER[1] + y - 25)
+
+
 def moveTo(x, y):
     x = CORNER[0] + x
     y = CORNER[1] + y - 25
