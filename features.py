@@ -5,6 +5,7 @@ from coords import *
 
 
 class BasicTraining:
+    @staticmethod
     def basicTraining(self):
         click(*BASIC_TRAINING)
         click(*ATK1)
@@ -20,6 +21,7 @@ class BasicTraining:
 
 
 class FightBosses:
+    @staticmethod
     def fightBosses(self):
         click(*FIGHT_BOSS)
         click(*NUKE)
@@ -29,10 +31,12 @@ class FightBosses:
 
 
 class Adventure:
+    @staticmethod
     def adventureZone(self):
         click(*ADVENTURE)
         click(*ADVANCE_ZONE, button="right")
 
+    @staticmethod
     def farmZone(self, time):
         Adventure.adventureZone()
         sleep(0.5)
@@ -51,6 +55,7 @@ class Adventure:
 
 
 class Augmentation:
+    @staticmethod
     def augmentation(self, upgrade=False):
         click(*AUGMENTATION)
         if upgrade:
@@ -60,14 +65,17 @@ class Augmentation:
 
 
 class Inventory:
+    @staticmethod
     def mergeItem(self, x, y):
         moveTo(x, y)
         pyautogui.press('d')
 
+    @staticmethod
     def boostItem(self, x, y):
         moveTo(x, y)
         pyautogui.press('a')
 
+    @staticmethod
     def boostAndMergeEquips(self):
         click(*INVENTORY)
 
@@ -96,6 +104,7 @@ class Inventory:
 
 
 class MoneyPit:
+    @staticmethod
     def moneyPit(self):
         click(*MONEY_PIT)
         click(*FEED_ME)
@@ -103,6 +112,7 @@ class MoneyPit:
 
 
 class Rebirth:
+    @staticmethod
     def rebirth(self):
         click(*REBIRTH_MENU)
         sleep(5)  # to see if it's crashing
@@ -111,6 +121,7 @@ class Rebirth:
 
 
 class Misc:
+    @staticmethod
     def reclaimEnergy(self):
         click(*BASIC_TRAINING)
         pyautogui.press('r')
