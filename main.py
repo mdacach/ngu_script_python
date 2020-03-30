@@ -22,7 +22,12 @@ def main():
             print()
     elif choice == '2':
         print('farming script')
-        farmAdventure()
+        print('boss only? (y/n)')
+        choice = input()
+        if choice == "y":
+            farmAdventure(bossOnly=True)
+        else:
+            farmAdventure()
 
 
 if __name__ == "__main__":

@@ -79,6 +79,7 @@ class Adventure:
                         Adventure.sendAttacks()
                         sleep(0.1)
                     counter += 1
+                    sleep(1)
                     pyautogui.press('d')  # heal
                 else:
                     if isBoss():
@@ -89,6 +90,7 @@ class Adventure:
                             Adventure.sendAttacks()
                             sleep(0.1)
                         counter += 1
+                        sleep(1)
                         pyautogui.press('d')  # heal
                     else:
                         Adventure.refreshZone()

@@ -33,11 +33,14 @@ def run15():
     Rebirth.rebirt()
 
 
-def farmAdventure():
+def farmAdventure(bossOnly=False):
     counter = 0
     start = time.time()
     while True:
-        Adventure.killMonsters()
+        if bossOnly:
+            Adventure.killMonsters(bossOnly=True)
+        else:
+            Adventure.killMonsters()
         counter += 20
         Inventory.boostAndMergeEquips()
         print(f'killed {counter} monsters')
