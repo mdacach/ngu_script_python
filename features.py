@@ -82,7 +82,7 @@ class Adventure:
                     sleep(1)
                     pyautogui.press('d')  # heal
                 else:
-                    if isBoss():
+                    if Adventure.isBoss():
                         while (not Adventure.isEnemyDead()):
                             # print('attacking')
                             if (Adventure.isPlayerLow()):
