@@ -31,27 +31,25 @@ class FightBosses:
 
 
 class Adventure:
-    @staticmethod
-    def adventureZone():
-        click(*ADVENTURE)
-        click(*ADVANCE_ZONE, button="right")
+    zones = {'safe': 0,
+             'tutorial': 1,
+             'sewers': 2,
+             'forest': 3,
+             'cave': 4,
+             'sky': 5,
+             'hsb': 6,
+             'grb': 7}
 
     @staticmethod
-    def farmZone(time):
-        Adventure.adventureZone()
-        sleep(0.5)
-        pyautogui.press('q')
-        sleep(0.5)
-        for i in range(time):
-            pyautogui.press('y')
-            pyautogui.press('t')
-            pyautogui.press('r')
-            pyautogui.press('e')
-            pyautogui.press('w')
-            pyautogui.sleep(1)
-        sleep(0.5)
-        pyautogui.press('q')
-        sleep(0.5)
+    def adventureZone(zone='latest'):
+        click(*ADVENTURE)
+        click(*GO_BACK_ZONE, button="right")   # start at 0
+        if zone == 'latest':
+            click(*ADVANCE_ZONE, button="right")
+        else:
+            times = Adventure.zones[zone]
+            for _ in range(times):
+                click(*ADVANCE_ZONE)
 
     @staticmethod
     def sendAttacks():
@@ -62,9 +60,8 @@ class Adventure:
         pyautogui.press('w')
 
     @staticmethod
-    def killMonsters(bossOnly=False, kills=20):
-        click(*ADVENTURE)
-        click(*ADVANCE_ZONE, button="right")
+    def killMonsters(zone='latest', bossOnly=False, kills=20):
+        Adventure.adventureZone(zone)
         pyautogui.press('q')  # idle mode
         counter = 0
         while True:
