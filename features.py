@@ -118,7 +118,7 @@ class Adventure:
     @staticmethod
     def healHP():
         click(*GO_BACK_ZONE, button="right")
-        sleep(10)
+        sleep(25)
         click(*ADVANCE_ZONE, button="right")
 
     @staticmethod
