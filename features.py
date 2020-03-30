@@ -76,7 +76,7 @@ class Adventure:
                         # print('attacking')
                         if (Adventure.isPlayerLow()):
                             Adventure.healHP()
-                            break
+                            sleep(3)
                         Adventure.sendAttacks()
                         sleep(0.1)
                     counter += 1
@@ -88,7 +88,7 @@ class Adventure:
                             # print('attacking')
                             if (Adventure.isPlayerLow()):
                                 Adventure.healHP()
-                                break
+                                sleep(3)
                             Adventure.sendAttacks()
                             sleep(0.1)
                         counter += 1

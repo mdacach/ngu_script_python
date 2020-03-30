@@ -23,6 +23,7 @@ def moveTo(x, y):
 def click(x, y, button="left"):
     moveTo(x, y)
     pyautogui.click(button=button)
+    sleep(0.1)
 
 
 def sleep(time):
