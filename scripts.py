@@ -31,3 +31,15 @@ def run15():
     while (timeElapsed/60 < 15):
         pyautogui.sleep(2)
     Rebirth.rebirt()
+
+
+def farmAdventure():
+    counter = 0
+    start = time.time()
+    while True:
+        Adventure.killMonsters()
+        counter += 20
+        Inventory.boostAndMergeEquips()
+        print(f'killed {counter} monsters')
+        print(f'{round((time.time() - start)/60)}min elapsed')
+        print()

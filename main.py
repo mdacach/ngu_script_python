@@ -5,17 +5,24 @@ import time
 def main():
     print('starting the script')
     print('check if adventure is in Idle mode!')
-    scriptStart = time.time()
-    counter = 0
-    while True:
-        runStart = time.time()
-        print('*' * 10)
-        run15()
-        runEnd = time.time()
-        print(f'rebirth {counter} time: {round((runEnd - runStart)/60)}')
-        counter += 1
-        print()
-
+    print('1 - speedrun')
+    print('2 - farming')
+    choice = input()
+    if choice == '1':
+        print('speedrun script')
+        scriptStart = time.time()
+        counter = 0
+        while True:
+            runStart = time.time()
+            print('*' * 10)
+            run15()
+            runEnd = time.time()
+            print(f'rebirth {counter} time: {round((runEnd - runStart)/60)}')
+            counter += 1
+            print()
+    elif choice == '2':
+        print('farming script')
+        farmAdventure()
 
 
 if __name__ == "__main__":
