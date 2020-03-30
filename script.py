@@ -211,12 +211,13 @@ class Features:
     #         # we need a way to know when an enemy appeared
     #         # get pixel of health bar maybe
 
-    def augmentation(self, upgrade=False):
+    def augmentation(self, num=1, upgrade=False):
         click(*AUGMENTATION)
+
         if (upgrade):
-            click(*AUG1_UPGRADE)
+            click(AUG1_UPGRADE[0], AUG1_UPGRADE[1] + (num - 1) * AUG_DIFF)
         else:
-            click(*AUG1)
+            click(AUG1[0], AUG1[1] + (num - 1) * AUG_DIFF)
 
 
 class Inventory:
