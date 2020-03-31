@@ -140,7 +140,6 @@ class Adventure:
             sleep(0.1)
         # after this, player may be dead
 
-
     @staticmethod
     def isEnemyDead():
         border = getCoords(*ENEMY_HEALTH_BAR_BORDER)
@@ -235,6 +234,18 @@ class Inventory:
             Inventory.boostItem(x, y)
 
         click(*CUBE, button="right")  # boost infinity cube
+
+
+class TimeMachine:
+    @staticmethod
+    def addEnergy():
+        click(*TIME_MACHINE)
+        click(*TM_ADD_ENERGY)
+
+    @staticmethod
+    def addMagic():
+        click(*TIME_MACHINE)
+        click(*TM_ADD_MAGIC)
 
 
 class MoneyPit:

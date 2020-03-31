@@ -1,4 +1,6 @@
-from features import Adventure
+from features import *
 
 if __name__ == "__main__":
-    Adventure.itopodPush('500')
+    # Adventure.killMonsters(
+    TimeMachine.addEnergy()
+    TimeMachine.addMagic()
