@@ -248,6 +248,17 @@ class TimeMachine:
         click(*TM_ADD_MAGIC)
 
 
+class BloodMagic:
+    @staticmethod
+    def addMagic(aug=1, cap=False):
+        click(*BLOOD_MAGIC)
+        if cap:
+            x, y = getCoords(BM1_CAP[0], BM1_CAP[1] + (aug - 1) * BM_DIFF)
+        else:
+            x, y = getCoords(BM1_ADD[0], BM1_ADD[1] + (aug - 1) * BM_DIFF)
+        click(x, y)
+
+
 class MoneyPit:
     @staticmethod
     def moneyPit():
