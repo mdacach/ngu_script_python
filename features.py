@@ -42,6 +42,25 @@ class Adventure:
              'grb': 7}
 
     @staticmethod
+    def itopodFarm(floor='optimal'):
+        click(*ADVENTURE)
+        click(*ITOPOD_ENTER)
+        if floor == 'optimal':
+            click(*ITOPOD_OPTIMAL)
+        click(*ITOPOD_ENTER_CONFIRMATION)
+
+    @staticmethod
+    def itopodPush(floor='200'):
+        """floor is a string representing the floor number"""
+        click(*ADVENTURE)
+        click(*ITOPOD_ENTER)
+        click(*ITOPOD_MAX)
+        click(*ITOPOD_END_INPUT)
+        pyautogui.write(floor, interval=0.2)
+        click(*ITOPOD_ENTER_CONFIRMATION)
+
+
+    @staticmethod
     def adventureZone(zone='latest'):
         click(*ADVENTURE)
         click(*GO_BACK_ZONE, button="right")   # start at 0
