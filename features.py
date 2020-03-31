@@ -286,3 +286,14 @@ class Misc:
     def reclaimMagic():
         click(*BASIC_TRAINING)
         pyautogui.press('t')
+
+    @staticmethod
+    def inputResource(amount='cap', idle=False):
+        click(*BASIC_TRAINING)
+        if amount == 'cap':
+            click(*ENERGY_CUSTOM_AMOUNT_CAP)
+        elif amount == 'half':
+            if idle:
+                click(*ENERGY_CUSTOM_AMOUNT_HALF_IDLE)
+            else:
+                click(*ENERGY_CUSTOM_AMOUNT_HALF)
