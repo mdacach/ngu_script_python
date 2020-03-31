@@ -59,7 +59,6 @@ class Adventure:
         pyautogui.write(floor, interval=0.2)
         click(*ITOPOD_ENTER_CONFIRMATION)
 
-
     @staticmethod
     def adventureZone(zone='latest'):
         click(*ADVENTURE)
@@ -101,40 +100,46 @@ class Adventure:
         Adventure.adventureZone(zone)
         pyautogui.press('q')  # idle mode
         counter = 0
+        currentZone = zone
         while True:
+            if currentZone == 'safe':
+                Adventure.adventureZone(zone)
+                currentZone = zone
             # print('checking spawn')
             if Adventure.enemySpawn():
                 # print('spawned')
                 if (not bossOnly):
-                    while (not Adventure.isEnemyDead()):
-                        # print('attacking')
-                        if (Adventure.isPlayerLow()):
-                            Adventure.healHP()
-                            sleep(3)
-                        Adventure.sendAttacks()
-                        sleep(0.1)
+                    Adventure.kill()
+                    if Adventure.isPlayerLow():
+                        Adventure.healHP()
+                        currentZone = 'safe'
                     counter += 1
                     sleep(1)
                     pyautogui.press('d')  # heal
                 else:
                     if Adventure.isBoss():
-                        while (not Adventure.isEnemyDead()):
-                            # print('attacking')
-                            if (Adventure.isPlayerLow()):
-                                Adventure.healHP()
-                                sleep(3)
-                            Adventure.sendAttacks()
-                            sleep(0.1)
+                        Adventure.kill()
+                        if (Adventure.isPlayerLow()):
+                            Adventure.healHP()
+                            currentZone = 'safe'
                         counter += 1
                         sleep(1)
                         pyautogui.press('d')  # heal
                     else:
                         Adventure.refreshZone()
             else:
-                sleep(0.1)
+                sleep(0.1)  # wait a little
             if (counter > 0 and counter % kills == 0):
                 pyautogui.press('q')  # after 15 fights
                 return
+
+    @staticmethod
+    def kill():
+        while not Adventure.isEnemyDead():
+            Adventure.sendAttacks()
+            sleep(0.1)
+        # after this, player may be dead
+
 
     @staticmethod
     def isEnemyDead():
@@ -156,9 +161,9 @@ class Adventure:
 
     @staticmethod
     def healHP():
-        click(*GO_BACK_ZONE, button="right")
+        Adventure.adventureZone('safe')
         sleep(25)
-        click(*ADVANCE_ZONE, button="right")
+        # click(*ADVANCE_ZONE, button="right")
 
     @staticmethod
     def enemySpawn():
