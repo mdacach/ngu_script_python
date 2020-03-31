@@ -189,12 +189,14 @@ class Adventure:
 
 class Augmentation:
     @staticmethod
-    def augmentation(upgrade=False):
+    def augmentation(aug=1, upgrade=False):
         click(*AUGMENTATION)
         if upgrade:
-            click(*AUG1_UPGRADE)
+            x, y = getCoords(
+                AUG1_UPGRADE[0], AUG1_UPGRADE[1] + (aug - 1) * AUG_DIFF)
         else:
-            click(*AUG1)
+            x, y = getCoords(AUG1[0], AUG1[1] + (aug - 1) * AUG_DIFF)
+        click(x, y)
 
 
 class Inventory:
