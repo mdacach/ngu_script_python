@@ -9,16 +9,17 @@ class BasicTraining:
     @staticmethod
     def basicTraining():
         click(*BASIC_TRAINING)
-        click(*ATK1)
-        click(*DEF1)
-        click(*ATK2)
-        click(*DEF2)
-        click(*ATK3)
-        click(*DEF3)
-        click(*ATK4)
-        click(*DEF4)
-        click(*DEF5)
-        click(*ATK5)
+        click(*BASIC_TRAINING_ADD, button="right")  # training auto advance
+        # click(*ATK1)
+        # click(*DEF1)
+        # click(*ATK2)
+        # click(*DEF2)
+        # click(*ATK3)
+        # click(*DEF3)
+        # click(*ATK4)
+        # click(*DEF4)
+        # click(*DEF5)
+        # click(*ATK5)
 
 
 class FightBosses:
