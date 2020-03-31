@@ -2,6 +2,7 @@
 
 from helper import *
 from coords import *
+import time
 
 
 class BasicTraining:
@@ -60,6 +61,22 @@ class Adventure:
         pyautogui.press('w')
 
     @staticmethod
+    def killTitan():  # for grb currently
+        click(*ADVENTURE)
+        click(*ADVANCE_ZONE, button="right")
+        click(*ADVANCE_ZONE)
+        pyautogui.press('q')
+        # grb health bar color is not red
+        enemy_hp = getCoords(*ENEMY_HEALTH_BAR)
+        if not pyautogui.pixelMatchesColor(*enemy_hp, (255, 255, 255)):
+            print('grb spawned')
+            start = time.time()
+            while not Adventure.isEnemyDead() or (time.time() - start)/60 < 5:
+                Adventure.sendAttacks()
+                sleep(0.1)
+        pyautogui.press('q')
+
+    @staticmethod
     def killMonsters(zone='latest', bossOnly=False, kills=20):
         Adventure.adventureZone(zone)
         pyautogui.press('q')  # idle mode
@@ -95,7 +112,8 @@ class Adventure:
                         Adventure.refreshZone()
             else:
                 sleep(0.1)
-            if (counter > 0 and counter % kills == 0):  # after 15 fights
+            if (counter > 0 and counter % kills == 0):
+                pyautogui.press('q')  # after 15 fights
                 return
 
     @staticmethod

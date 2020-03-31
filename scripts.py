@@ -43,6 +43,8 @@ def farmAdventure():
     zone = input()
     print('would you like to kil only bosses? (y/n)')
     boss = input()
+    print('would you like to kill GRB? (y/n)')
+    titan = input()
     counter = 0
     start = time.time()
     while True:
@@ -52,6 +54,8 @@ def farmAdventure():
             Adventure.killMonsters(zone=zone)
         counter += 20
         Inventory.boostAndMergeEquips()
+        if titan == 'y':
+            Adventure.killTitan()
         print(f'killed {counter} monsters')
         print(f'{round((time.time() - start)/60)}min elapsed')
         print()
