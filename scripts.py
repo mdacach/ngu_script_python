@@ -56,6 +56,7 @@ def farmAdventure():
         Inventory.boostAndMergeEquips()
         if titan == 'y':
             Adventure.killTitan()
+        MoneyPit.moneyPit()
         print(f'killed {counter} monsters')
         print(f'{round((time.time() - start)/60)}min elapsed')
         print()

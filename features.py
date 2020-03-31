@@ -68,11 +68,11 @@ class Adventure:
         pyautogui.press('q')
         # grb health bar color is not red
         enemy_hp = getCoords(*ENEMY_HEALTH_BAR)
-        sleep(3)
+        sleep(6)
         if not pyautogui.pixelMatchesColor(*enemy_hp, (255, 255, 255)):
             print('grb spawned')
             start = time.time()
-            while not Adventure.isEnemyDead() or (time.time() - start)/60 < 5:
+            while not Adventure.isEnemyDead() or (time.time() - start)/60 < 3:
                 Adventure.sendAttacks()
                 sleep(0.1)
         pyautogui.press('q')
