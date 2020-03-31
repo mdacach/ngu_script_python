@@ -6,6 +6,7 @@ import time
 
 def run15():
     start = time.time()
+    sleep(10)  # wait for energy to all trainings
     BasicTraining.basicTraining()
     FightBosses.fightBosses()
     Adventure.adventureZone()

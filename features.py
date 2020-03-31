@@ -193,10 +193,9 @@ class Augmentation:
     def augmentation(aug=1, upgrade=False):
         click(*AUGMENTATION)
         if upgrade:
-            x, y = getCoords(
-                AUG1_UPGRADE[0], AUG1_UPGRADE[1] + (aug - 1) * AUG_DIFF)
+            x, y = AUG1_UPGRADE[0], AUG1_UPGRADE[1] + (aug - 1) * AUG_DIFF
         else:
-            x, y = getCoords(AUG1[0], AUG1[1] + (aug - 1) * AUG_DIFF)
+            x, y = AUG1[0], AUG1[1] + (aug - 1) * AUG_DIFF
         click(x, y)
 
 
@@ -244,6 +243,7 @@ class TimeMachine:
     def addEnergy():
         click(*TIME_MACHINE)
         click(*TM_ADD_ENERGY)
+        click(CORNER[0], CORNER[1])
 
     @staticmethod
     def addMagic():
@@ -256,9 +256,9 @@ class BloodMagic:
     def addMagic(aug=1, cap=False):
         click(*BLOOD_MAGIC)
         if cap:
-            x, y = getCoords(BM1_CAP[0], BM1_CAP[1] + (aug - 1) * BM_DIFF)
+            x, y = BM1_CAP[0], BM1_CAP[1] + (aug - 1) * BM_DIFF
         else:
-            x, y = getCoords(BM1_ADD[0], BM1_ADD[1] + (aug - 1) * BM_DIFF)
+            x, y = BM1_ADD[0], BM1_ADD[1] + (aug - 1) * BM_DIFF
         click(x, y)
 
 
