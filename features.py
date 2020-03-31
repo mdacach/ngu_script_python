@@ -281,3 +281,8 @@ class Misc:
     def reclaimEnergy():
         click(*BASIC_TRAINING)
         pyautogui.press('r')
+
+    @staticmethod
+    def reclaimMagic():
+        click(*BASIC_TRAINING)
+        pyautogui.press('t')
