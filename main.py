@@ -21,21 +21,7 @@ def main():
             counter += 1
             print()
     elif choice == '2':
-        print('farming script')
-        print('boss only? (y/n)')
-        choice = input()
-        print('which zone would you like to farm')
-        zones = ""
-        for z in Adventure.zones.keys():
-            zones += z + " "
-        print(zones)
-        zone = input()
-        if choice == "y":
-            while True:
-                Adventure.killMonsters(zone=zone, bossOnly=True)
-        else:
-            while True:
-                Adventure.killMonsters(zone=zone)
+        farmAdventure()
 
 
 if __name__ == "__main__":

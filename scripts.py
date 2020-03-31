@@ -33,14 +33,23 @@ def run15():
     Rebirth.rebirt()
 
 
-def farmAdventure(bossOnly=False):
+def farmAdventure():
+    print('farming script')
+    print('which zone: ')
+    zones = ""
+    for z in Adventure.zones.keys():
+        zones += z + "  "
+    print(zones)
+    zone = input()
+    print('would you like to kil only bosses? (y/n)')
+    boss = input()
     counter = 0
     start = time.time()
     while True:
-        if bossOnly:
-            Adventure.killMonsters(bossOnly=True)
+        if boss == 'y':
+            Adventure.killMonsters(zone=zone, bossOnly=True)
         else:
-            Adventure.killMonsters()
+            Adventure.killMonsters(zone=zone)
         counter += 20
         Inventory.boostAndMergeEquips()
         print(f'killed {counter} monsters')
