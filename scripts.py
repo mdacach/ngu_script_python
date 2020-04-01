@@ -40,6 +40,7 @@ def run15():
     while (timeElapsed/60 < 15):
         pyautogui.sleep(2)
         timeElapsed = time.time() - start
+    FightBosses.fightBosses()
     Rebirth.rebirth()
 
 
