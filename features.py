@@ -85,7 +85,7 @@ class Adventure:
     def sendAttacks():
         pyautogui.press('y')
         pyautogui.press('t')
-        pyautogui.press('r')
+        # pyautogui.press('r')
         pyautogui.press('e')
         pyautogui.press('w')
 
