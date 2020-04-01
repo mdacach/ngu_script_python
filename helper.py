@@ -2,8 +2,11 @@
 
 import pyautogui
 # get the game corner coordinates
-CORNER = pyautogui.locateOnScreen('ingame-corner.png')
-
+CORNER = None
+print('searching for corner...')
+while CORNER == None:
+    CORNER = pyautogui.locateOnScreen('ingame-corner.png')
+print('success')
 # our coordinates are shifted 25 px up because of steam border
 
 # lower pyautogui.PAUSE constant for more efficiency
