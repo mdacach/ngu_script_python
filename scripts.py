@@ -16,14 +16,19 @@ def run15():
     timeElapsed = time.time() - start
     while ((timeElapsed)/60 < 13):  # until 13 minutes
         Misc.inputResource(amount='half', idle=True)
+        Adventure.adventureZone()
         TimeMachine.addEnergy()
         Augmentation.augmentation()
         FightBosses.fightBosses()
         BloodMagic.addMagic()
-        Adventure.killMonsters(kills=20)
+        Adventure.itopodFarm()
+        # Adventure.killMonsters(kills=10)
         Inventory.boostAndMergeEquips()
         timeElapsed = time.time() - start
         counter += 1
+        if (counter % 30 == 0):
+            Adventure.adventureZone()
+            sleep(10)
     Misc.reclaimEnergy()
     Misc.inputResource()
     Augmentation.augmentation(upgrade=True)
@@ -31,8 +36,10 @@ def run15():
     FightBosses.fightBosses()
     MoneyPit.moneyPit()
     timeElapsed = time.time() - start
+    print('time elapsed: ' + str(timeElapsed))
     while (timeElapsed/60 < 15):
         pyautogui.sleep(2)
+        timeElapsed = time.time() - start
     Rebirth.rebirth()
 
 
