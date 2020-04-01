@@ -213,11 +213,13 @@ class Inventory:
     @staticmethod
     def mergeItem(x, y):
         moveTo(x, y)
+        sleep(0.1)
         pyautogui.press('d')
 
     @staticmethod
     def boostItem(x, y):
         moveTo(x, y)
+        sleep(0.1)
         pyautogui.press('a')
 
     @staticmethod
@@ -239,11 +241,12 @@ class Inventory:
         Inventory.boostItem(*ACC1)
         Inventory.boostItem(*ACC2)
 
-        for i in range(12):  # boost and merge front row
-            x = SLOT1[0] + INV_DIFF * i
-            y = SLOT1[1]
-            Inventory.mergeItem(x, y)
-            Inventory.boostItem(x, y)
+        for col in range(3):
+            for row in range(12):  # boost and merge front row
+                x = SLOT1[0] + INV_DIFF * row
+                y = SLOT1[1] + INV_DIFF * col
+                Inventory.mergeItem(x, y)
+                Inventory.boostItem(x, y)
 
         click(*CUBE, button="right")  # boost infinity cube
 
