@@ -43,6 +43,11 @@ class Adventure:
              'grb': 7}
 
     @staticmethod
+    def isIdle():
+        pix = getCoords(*IS_IDLE)
+        return pyautogui.pixelMatchesColor(*pix, IS_IDLE_COLOR)
+
+    @staticmethod
     def itopodFarm(floor='optimal'):
         click(*ADVENTURE)
         click(*ITOPOD_ENTER)

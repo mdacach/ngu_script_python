@@ -84,7 +84,8 @@ def farmItopod():
         end = (time.time() - start)
         print(round(end/60))
         currentTime = round(end/60)
-        if (currentTime % 3 == 0 and currentTime > 0):
+        if (currentTime % 10 == 0 and currentTime > 0):
             print('inventory management')
             Inventory.boostAndMergeEquips()
             Adventure.itopodFarm(floor=floor)
+            currentTime += 1

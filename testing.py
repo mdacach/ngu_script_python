@@ -14,3 +14,4 @@ if __name__ == "__main__":
     # TimeMachine.addEnergy()
     # BloodMagic.addMagic()
     # Augmentation.augmentation(3)
+    print(Adventure.isIdle())
