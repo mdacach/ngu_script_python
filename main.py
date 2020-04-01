@@ -7,6 +7,7 @@ def main():
     print('check if adventure is in Idle mode!')
     print('1 - speedrun')
     print('2 - farming')
+    print('3 - itopod')
     choice = input()
     if choice == '1':
         print('speedrun script')
@@ -22,6 +23,8 @@ def main():
             print()
     elif choice == '2':
         farmAdventure()
+    elif choice == '3':
+        farmItopod()
 
 
 if __name__ == "__main__":

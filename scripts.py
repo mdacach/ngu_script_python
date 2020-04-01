@@ -71,3 +71,19 @@ def farmAdventure():
         print(f'killed {counter} monsters')
         print(f'{round((time.time() - start)/60)}min elapsed')
         print()
+
+
+def farmItopod():
+    print('itopod farming script')
+    floor = input('floor: ')
+    Adventure.itopodFarm(floor=floor)
+    pyautogui.press('q')
+    start = time.time()
+    while True:
+        Adventure.kill()
+        end = (time.time() - start)
+        print(round(end/60))
+        if (round(end/60) % 3 == 0):
+            print('inventory management')
+            Inventory.boostAndMergeEquips()
+            Adventure.itopodFarm(floor=floor)

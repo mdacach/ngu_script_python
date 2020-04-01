@@ -48,6 +48,11 @@ class Adventure:
         click(*ITOPOD_ENTER)
         if floor == 'optimal':
             click(*ITOPOD_OPTIMAL)
+        else:
+            click(*ITOPOD_START_INPUT)
+            pyautogui.write(floor, interval=0.2)
+            click(*ITOPOD_END_INPUT)
+            pyautogui.write(floor, interval=0.2)
         click(*ITOPOD_ENTER_CONFIRMATION)
 
     @staticmethod
