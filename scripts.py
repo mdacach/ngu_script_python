@@ -57,7 +57,8 @@ def farmAdventure():
     print('would you like to kill last titan? (default no)')
     titan = input() or 'n'
 
-    kills = int(input("kills till inv management? (default 50)")) or 50
+    kills = input("kills till inv management? (default 50)") or 50
+    kills = int(kills)
 
     counter = 0
     start = time.time()
