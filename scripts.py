@@ -51,12 +51,12 @@ def farmAdventure():
     for z in Adventure.zones.keys():
         zones += z + "  "
     print(zones)
-    zone = input()
+    zone = input() or 'latest'
     print('would you like to kil only bosses? (y/n)')
-    boss = input()
+    boss = input() or 'n'
     print('would you like to kill GRB? (y/n)')
-    titan = input()
-    kills = int(input("kills till inv management?"))
+    titan = input() or 'n'
+    kills = int(input("kills till inv management?")) or 50
     counter = 0
     start = time.time()
     while True:
