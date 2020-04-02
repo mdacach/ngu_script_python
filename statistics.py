@@ -17,4 +17,14 @@ class Statistics:
         x, y = getCoords(EXP_REGION[0], EXP_REGION[1])
         img = pyautogui.screenshot(region=(x, y, 100, 20))
         # img.save('exp-screenshot.png')
-        print(ocr.image_to_string(img))
+        # print(ocr.image_to_string(img))
+        try:
+            text = ocr.image_to_string(img)
+        except:
+            print('could not read exp')
+            return
+        exp = ""
+        for letter in text:
+            if str.isdigit(letter):
+                exp += letter
+        print(f"{exp} exp")
