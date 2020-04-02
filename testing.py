@@ -17,4 +17,5 @@ if __name__ == "__main__":
     # print(Adventure.isIdle())
     # Inventory.boostAndMergeEquips()
     # Inventory.trashItems()
-    Adventure.showZones()
+    # Adventure.showZones()
+    Statistics.screenshot()
