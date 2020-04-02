@@ -28,3 +28,16 @@ class Statistics:
             if str.isdigit(letter):
                 exp += letter
         print(f"{exp} exp")
+
+    @staticmethod
+    def getBoss():
+        x, y = getCoords(BOSS_NUMBER_REGION[0], BOSS_NUMBER_REGION[1])
+        img = pyautogui.screenshot(region=(x, y, 80, 20))
+        # img.save('exp-screenshot.png')
+        # print(ocr.image_to_string(img))
+        try:
+            text = ocr.image_to_string(img)
+        except:
+            print('could not read boss number')
+            return
+        print(text)
