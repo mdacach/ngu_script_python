@@ -1,0 +1,43 @@
+import pyautogui
+from helper import *
+from coords import *
+import pytesseract as ocr
+from PIL import Image
+
+
+class Statistics:
+    @staticmethod
+    def screenshot():
+        img = pyautogui.screenshot(
+            region=(CORNER[0], CORNER[1], GAME_WIDTH, GAME_HEIGHT))
+        img.save('game-screenshot.png')
+
+    @staticmethod
+    def getEXP():
+        x, y = getCoords(EXP_REGION[0], EXP_REGION[1])
+        img = pyautogui.screenshot(region=(x, y, 100, 20))
+        # img.save('exp-screenshot.png')
+        # print(ocr.image_to_string(img))
+        try:
+            text = ocr.image_to_string(img)
+        except:
+            print('could not read exp')
+            return
+        exp = ""
+        for letter in text:
+            if str.isdigit(letter):
+                exp += letter
+        print(f"{exp} exp")
+
+    @staticmethod
+    def getBoss():
+        x, y = getCoords(BOSS_NUMBER_REGION[0], BOSS_NUMBER_REGION[1])
+        img = pyautogui.screenshot(region=(x, y, 80, 20))
+        # img.save('exp-screenshot.png')
+        # print(ocr.image_to_string(img))
+        try:
+            text = ocr.image_to_string(img)
+        except:
+            print('could not read boss number')
+            return
+        print(text)
