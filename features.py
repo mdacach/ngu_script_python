@@ -43,6 +43,16 @@ class Adventure:
              'grb': 7}
 
     @staticmethod
+    def turnIdleOn():
+        if (not Adventure.isIdle()):
+            pyautogui.press('q')
+
+    @staticmethod
+    def turnIdleOff():
+        if (Adventure.isIdle()):
+            pyautogui.press('q')
+
+    @staticmethod
     def showZones():
         z = ""
         for zone in Adventure.zones:
