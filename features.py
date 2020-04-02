@@ -108,6 +108,7 @@ class Adventure:
 
     @staticmethod
     def killTitan():  # for grb currently
+        """ go to lastest titan and attempts to kill it """
         click(*ADVENTURE)
         click(*ADVANCE_ZONE, button="right")
         click(*ADVANCE_ZONE)
@@ -127,6 +128,7 @@ class Adventure:
 
     @staticmethod
     def killMonsters(zone='latest', bossOnly=False, kills=20):
+        """ kills {kills} monsters in {zone} and returns"""
         Adventure.adventureZone(zone)
         # pyautogui.press('q')  # idle mode
         Adventure.turnIdleOff()
