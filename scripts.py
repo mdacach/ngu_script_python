@@ -45,20 +45,23 @@ def run15():
 
 
 def farmAdventure():
-    print('farming script')
-    print('which zone: ')
-    zones = ""
-    for z in Adventure.zones.keys():
-        zones += z + "  "
-    print(zones)
+    print('starting farming script')
+
+    print('which zone: (default latest)')
+    Adventure.showZones()
     zone = input() or 'latest'
-    print('would you like to kil only bosses? (y/n)')
+
+    print('kill bosses only? (default no)')
     boss = input() or 'n'
-    print('would you like to kill GRB? (y/n)')
+
+    print('would you like to kill last titan? (default no)')
     titan = input() or 'n'
-    kills = int(input("kills till inv management?")) or 50
+
+    kills = int(input("kills till inv management? (default 50)")) or 50
+
     counter = 0
     start = time.time()
+
     while True:
         if boss == 'y':
             Adventure.killMonsters(zone=zone, bossOnly=True, kills=kills)
@@ -66,13 +69,18 @@ def farmAdventure():
             Adventure.killMonsters(zone=zone, kills=kills)
         counter += kills
         Inventory.boostAndMergeEquips()
-        if (counter > 0 and counter % 100 == 0):  # at every 400 kills
+
+        if (counter > 0 and counter % 200 == 0):  # at every 200 kills
+            print('trashing items')
             Inventory.trashItems()
+
         if titan == 'y':
+            print('attempting to kill titan')
             Adventure.killTitan()
+
         MoneyPit.moneyPit()
         print(f'killed {counter} monsters')
-        print(f'{round((time.time() - start)/60)}min elapsed')
+        print(f'{round((time.time() - start)/60)} min elapsed')
         print()
 
 
