@@ -226,13 +226,13 @@ class Inventory:
     def boostAndMergeEquips():
         click(*INVENTORY)
 
+        Inventory.mergeItem(*WEAPON)
+        Inventory.mergeItem(*ACC1)
+        Inventory.mergeItem(*ACC2)
         Inventory.mergeItem(*HEAD)
         Inventory.mergeItem(*CHEST)
         Inventory.mergeItem(*LEGS)
         Inventory.mergeItem(*BOOTS)
-        Inventory.mergeItem(*WEAPON)
-        Inventory.mergeItem(*ACC1)
-        Inventory.mergeItem(*ACC2)
         Inventory.boostItem(*HEAD)
         Inventory.boostItem(*CHEST)
         Inventory.boostItem(*LEGS)
