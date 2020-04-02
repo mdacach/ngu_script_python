@@ -56,13 +56,14 @@ def farmAdventure():
     boss = input()
     print('would you like to kill GRB? (y/n)')
     titan = input()
+    kills = int(input("kills till inv management?"))
     counter = 0
     start = time.time()
     while True:
         if boss == 'y':
-            Adventure.killMonsters(zone=zone, bossOnly=True)
+            Adventure.killMonsters(zone=zone, bossOnly=True, kills=kills)
         else:
-            Adventure.killMonsters(zone=zone)
+            Adventure.killMonsters(zone=zone, kills=kills)
         counter += 20
         Inventory.boostAndMergeEquips()
         if titan == 'y':
