@@ -43,6 +43,13 @@ class Adventure:
              'grb': 7}
 
     @staticmethod
+    def showZones():
+        z = ""
+        for zone in Adventure.zones:
+            z += zone + " "
+        print(z)
+
+    @staticmethod
     def isIdle():
         pix = getCoords(*IS_IDLE)
         return pyautogui.pixelMatchesColor(*pix, IS_IDLE_COLOR)
