@@ -1,4 +1,5 @@
 from features import *
+from statistics import *
 import helper
 
 if __name__ == "__main__":
@@ -18,4 +19,5 @@ if __name__ == "__main__":
     # Inventory.boostAndMergeEquips()
     # Inventory.trashItems()
     # Adventure.showZones()
-    Statistics.screenshot()
+    # Statistics.screenshot()
+    Statistics.getEXP()
