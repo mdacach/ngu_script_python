@@ -250,6 +250,25 @@ class Inventory:
 
         click(*CUBE, button="right")  # boost infinity cube
 
+    @staticmethod
+    def trashItems():
+        click(*INVENTORY)
+        for col in range(3, 5):
+            for row in range(12):
+                x = SLOT1[0] + INV_DIFF * row
+                y = SLOT1[1] + INV_DIFF * col
+                Inventory.trashItem(x, y)
+
+    @staticmethod
+    def trashItem(x, y):
+        moveTo(x, y)
+        sleep(0.1)
+        pyautogui.keyDown('ctrl')
+        sleep(0.1)
+        pyautogui.click()
+        sleep(0.1)
+        pyautogui.keyUp('ctrl')
+
 
 class TimeMachine:
     @staticmethod

@@ -15,4 +15,5 @@ if __name__ == "__main__":
     # BloodMagic.addMagic()
     # Augmentation.augmentation(3)
     # print(Adventure.isIdle())
-    Inventory.boostAndMergeEquips()
+    # Inventory.boostAndMergeEquips()
+    Inventory.trashItems()
