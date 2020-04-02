@@ -64,8 +64,10 @@ def farmAdventure():
             Adventure.killMonsters(zone=zone, bossOnly=True, kills=kills)
         else:
             Adventure.killMonsters(zone=zone, kills=kills)
-        counter += 20
+        counter += kills
         Inventory.boostAndMergeEquips()
+        if (counter > 0 and counter % 100 == 0):  # at every 400 kills
+            Inventory.trashItems()
         if titan == 'y':
             Adventure.killTitan()
         MoneyPit.moneyPit()
