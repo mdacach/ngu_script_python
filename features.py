@@ -111,22 +111,25 @@ class Adventure:
         click(*ADVENTURE)
         click(*ADVANCE_ZONE, button="right")
         click(*ADVANCE_ZONE)
-        pyautogui.press('q')
+        # pyautogui.press('q')
+        Adventure.turnIdleOff()
         # grb health bar color is not red
         enemy_hp = getCoords(*ENEMY_HEALTH_BAR)
         sleep(6)
         if not pyautogui.pixelMatchesColor(*enemy_hp, (255, 255, 255)):
-            print('grb spawned')
+            print('titan spawned')
             start = time.time()
             while not Adventure.isEnemyDead() or (time.time() - start)/60 < 3:
                 Adventure.sendAttacks()
                 sleep(0.1)
-        pyautogui.press('q')
+        # pyautogui.press('q')
+        Adventure.turnIdleOn()
 
     @staticmethod
     def killMonsters(zone='latest', bossOnly=False, kills=20):
         Adventure.adventureZone(zone)
-        pyautogui.press('q')  # idle mode
+        # pyautogui.press('q')  # idle mode
+        Adventure.turnIdleOff()
         counter = 0
         currentZone = zone
         while True:
@@ -158,7 +161,8 @@ class Adventure:
             else:
                 sleep(0.1)  # wait a little
             if (counter > 0 and counter % kills == 0):
-                pyautogui.press('q')  # after 15 fights
+                # pyautogui.press('q')  # after 15 fights
+                Adventure.turnIdleOn()
                 return
 
     @staticmethod
