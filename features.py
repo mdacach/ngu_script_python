@@ -40,7 +40,10 @@ class Adventure:
              'cave': 4,
              'sky': 5,
              'hsb': 6,
-             'grb': 7}
+             'grb': 7,
+             'clock': 8,
+             'gct': 9,
+             '2d': 10}
 
     @staticmethod
     def turnIdleOn():
