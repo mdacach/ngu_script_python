@@ -309,7 +309,8 @@ class Inventory:
         moveTo(x, y)
         sleep(0.3)
         # if transformable
-        if pyautogui.locateOnScreen('transformable.png') != None:
+        region = (CORNER[0], CORNER[1], GAME_WIDTH, GAME_HEIGHT)
+        if pyautogui.locateOnScreen('transformable.png', region=region) != None:
             pyautogui.keyDown('ctrl')
             sleep(0.1)
             pyautogui.click()
