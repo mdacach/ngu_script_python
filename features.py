@@ -298,6 +298,14 @@ class Inventory:
         pyautogui.keyUp('ctrl')
 
     @staticmethod
+    def locatePendants():
+        region = (CORNER[0], CORNER[1], GAME_WIDTH, GAME_HEIGHT)
+        locations = pyautogui.locateAllOnScreen('pendant.png', region=region)
+        for loc in locations:
+            center = pyautogui.center(loc)
+            rawMove(*center)
+
+    @staticmethod
     def transformItems():
         click(*INVENTORY)
         for col in range(2, 3):  # only one col

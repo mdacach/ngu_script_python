@@ -22,4 +22,5 @@ if __name__ == "__main__":
     # Statistics.screenshot()
     # Statistics.getEXP()
     # Statistics.getBoss()
-    Inventory.transformItems()
+
+    Inventory.locatePendants()
