@@ -255,17 +255,19 @@ class Inventory:
         Inventory.mergeItem(*WEAPON)
         Inventory.mergeItem(*ACC1)
         Inventory.mergeItem(*ACC2)
+        Inventory.mergeItem(*ACC3)
         Inventory.mergeItem(*HEAD)
         Inventory.mergeItem(*CHEST)
         Inventory.mergeItem(*LEGS)
         Inventory.mergeItem(*BOOTS)
+        Inventory.boostItem(*WEAPON)
+        Inventory.boostItem(*ACC1)
+        Inventory.boostItem(*ACC2)
+        Inventory.boostItem(*ACC3)
         Inventory.boostItem(*HEAD)
         Inventory.boostItem(*CHEST)
         Inventory.boostItem(*LEGS)
         Inventory.boostItem(*BOOTS)
-        Inventory.boostItem(*WEAPON)
-        Inventory.boostItem(*ACC1)
-        Inventory.boostItem(*ACC2)
 
         for col in range(3):
             for row in range(12):  # boost and merge front row
