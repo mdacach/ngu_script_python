@@ -21,4 +21,5 @@ if __name__ == "__main__":
     # Adventure.showZones()
     # Statistics.screenshot()
     # Statistics.getEXP()
-    Statistics.getBoss()
+    # Statistics.getBoss()
+    Inventory.transformItems()

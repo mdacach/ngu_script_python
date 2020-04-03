@@ -69,9 +69,12 @@ def farmAdventure():
         else:
             Adventure.killMonsters(zone=zone, kills=kills)
         counter += kills
+        if counter > 0 and counter % 300 == 0:
+            Inventory.transformItems()
+
         Inventory.boostAndMergeEquips()
 
-        if (counter > 0 and counter % 200 == 0):  # at every 200 kills
+        if (counter > 0 and counter % 300 == 0):  # at every 200 kills
             print('trashing items')
             Inventory.trashItems()
 

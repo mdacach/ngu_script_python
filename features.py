@@ -295,6 +295,27 @@ class Inventory:
         sleep(0.1)
         pyautogui.keyUp('ctrl')
 
+    @staticmethod
+    def transformItems():
+        click(*INVENTORY)
+        for col in range(2, 3):  # only one col
+            for row in range(12):
+                x = SLOT1[0] + INV_DIFF * row
+                y = SLOT1[1] + INV_DIFF * col
+                Inventory.transformItem(x, y)
+
+    @staticmethod
+    def transformItem(x, y):
+        moveTo(x, y)
+        sleep(0.3)
+        # if transformable
+        if pyautogui.locateOnScreen('transformable.png') != None:
+            pyautogui.keyDown('ctrl')
+            sleep(0.1)
+            pyautogui.click()
+            sleep(0.1)
+            pyautogui.keyUp('ctrl')
+
 
 class TimeMachine:
     @staticmethod
