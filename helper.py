@@ -23,6 +23,14 @@ def moveTo(x, y):
     pyautogui.moveTo(x, y)
 
 
+def rawMove(x, y):
+    pyautogui.moveTo(x, y)
+
+
+def rawClick(x, y, button="left"):
+    pyautogui.click(x, y, button=button)
+
+
 def click(x, y, button="left"):
     moveTo(x, y)
     pyautogui.click(button=button)
