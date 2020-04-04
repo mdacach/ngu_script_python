@@ -21,6 +21,7 @@ class Navigation:
         'rebirth': REBIRTH_MENU,
     }
 
+    @staticmethod
     def menu(m):
         """ Navigates to specified menu. """
-        click(*menus[menu])
+        click(*menus[m])
