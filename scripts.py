@@ -1,3 +1,4 @@
+""" Scripts module. """
 from helper import *
 from coords import *
 from features import *
@@ -5,6 +6,7 @@ import time
 
 
 def run15():
+    """ Performs a 15 minute run. """
     start = time.time()
     sleep(20)  # wait for energy to all trainings
     print('sleeping for 20s to have enough energy for training')
@@ -45,6 +47,7 @@ def run15():
 
 
 def farmAdventure():
+    """ Farms adventure zones. """
     print('starting farming script')
 
     print('which zone: (default latest)')
@@ -92,6 +95,7 @@ def farmAdventure():
 
 
 def farmItopod():
+    """ Farms ITOPOD. """
     print('itopod farming script')
     floor = input('floor: ')
     Adventure.itopodFarm(floor=floor)

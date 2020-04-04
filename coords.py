@@ -1,3 +1,7 @@
+""" Coordinates file. 
+
+Coordinates are relative to in-game top-left corner. 
+"""
 GAME_WIDTH = 960
 GAME_HEIGHT = 600
 
