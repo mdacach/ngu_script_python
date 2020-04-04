@@ -99,15 +99,15 @@ def farmItopod():
     print('itopod farming script')
     floor = input('floor: ')
     Adventure.itopodFarm(floor=floor)
-    pyautogui.press('q')
+    Adventure.turnIdleOff()
     start = time.time()
+    counter = 0
     while True:
         Adventure.kill()
-        end = (time.time() - start)
-        # print(round(end/60))
-        currentTime = round(end/60)
-        if (currentTime % 10 == 0 and currentTime > 0):
+        counter += 1
+        if counter % 10:
+            print(f'kills: {counter}')
+        if (counter > 0 and counter % 30):
             print('inventory management')
             Inventory.boostAndMergeEquips()
             Adventure.itopodFarm(floor=floor)
-            currentTime += 1

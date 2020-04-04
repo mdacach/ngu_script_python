@@ -47,7 +47,10 @@ class Adventure:
              'grb': 7,
              'clock': 8,
              'gct': 9,
-             '2d': 10}
+             '2d': 10,
+             'ab': 11,
+             'jake': 12,
+             'avsp': 13}
 
     @staticmethod
     def turnIdleOn():
