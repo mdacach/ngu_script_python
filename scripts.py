@@ -82,6 +82,8 @@ def farmAdventure():
             print('attempting to kill titan')
             Adventure.killTitan()
 
+        Yggdrasil.harvestGold()
+
         MoneyPit.moneyPit()
         print(f'killed {counter} monsters')
         print(f'{round((time.time() - start)/60)} min elapsed')

@@ -269,6 +269,8 @@ class Inventory:
         Inventory.mergeItem(*BOOTS)
         Inventory.boostItem(*BOOTS)
 
+        click(*CUBE, button="right")
+
         for col in range(3):
             for row in range(12):  # boost and merge front row
                 x = SLOT1[0] + INV_DIFF * row
@@ -276,7 +278,7 @@ class Inventory:
                 Inventory.mergeItem(x, y)
                 Inventory.boostItem(x, y)
 
-        click(*CUBE, button="right")  # boost infinity cube
+          # boost infinity cube
 
     @staticmethod
     def trashItems():
