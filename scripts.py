@@ -70,7 +70,7 @@ def farmAdventure():
             Adventure.killMonsters(zone=zone, kills=kills)
         counter += kills
         if counter > 0 and counter % 300 == 0:
-            Inventory.transformItems()
+            Inventory.transformPendants()
 
         Inventory.boostAndMergeEquips()
 
@@ -97,7 +97,7 @@ def farmItopod():
     while True:
         Adventure.kill()
         end = (time.time() - start)
-        print(round(end/60))
+        # print(round(end/60))
         currentTime = round(end/60)
         if (currentTime % 10 == 0 and currentTime > 0):
             print('inventory management')

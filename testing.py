@@ -23,4 +23,6 @@ if __name__ == "__main__":
     # Statistics.getEXP()
     # Statistics.getBoss()
 
-    Inventory.locatePendants()
+    # Inventory.locatePendants()
+    click(*INVENTORY)
+    Inventory.transformPendants()

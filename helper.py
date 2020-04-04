@@ -40,9 +40,9 @@ def click(x, y, button="left"):
 def ctrlClick():
     """ Performs a control click on current mouse position"""
     pyautogui.keyDown('ctrl')
-    sleep(0.2)
+    sleep(0.3)
     pyautogui.click()
-    sleep(0.2)
+    sleep(0.3)
     pyautogui.keyUp('ctrl')
 
 

@@ -253,20 +253,20 @@ class Inventory:
         click(*INVENTORY)
 
         Inventory.mergeItem(*WEAPON)
-        Inventory.mergeItem(*ACC1)
-        Inventory.mergeItem(*ACC2)
-        Inventory.mergeItem(*ACC3)
-        Inventory.mergeItem(*HEAD)
-        Inventory.mergeItem(*CHEST)
-        Inventory.mergeItem(*LEGS)
-        Inventory.mergeItem(*BOOTS)
         Inventory.boostItem(*WEAPON)
+        Inventory.mergeItem(*ACC1)
         Inventory.boostItem(*ACC1)
+        Inventory.mergeItem(*ACC2)
         Inventory.boostItem(*ACC2)
+        Inventory.mergeItem(*ACC3)
         Inventory.boostItem(*ACC3)
+        Inventory.mergeItem(*HEAD)
         Inventory.boostItem(*HEAD)
+        Inventory.mergeItem(*CHEST)
         Inventory.boostItem(*CHEST)
+        Inventory.mergeItem(*LEGS)
         Inventory.boostItem(*LEGS)
+        Inventory.mergeItem(*BOOTS)
         Inventory.boostItem(*BOOTS)
 
         for col in range(3):
@@ -298,12 +298,24 @@ class Inventory:
         pyautogui.keyUp('ctrl')
 
     @staticmethod
+    def transformPendants():
+        locations = Inventory.locatePendants()
+        for loc in locations:
+            center = pyautogui.center(loc)
+            rawMove(*center)  # show tooltip
+            sleep(0.1)
+            if Inventory.checkTransformable():
+                ctrlClick()
+                # print('control click')
+
+    @staticmethod
     def locatePendants():
         region = (CORNER[0], CORNER[1], GAME_WIDTH, GAME_HEIGHT)
         locations = pyautogui.locateAllOnScreen('pendant.png', region=region)
-        for loc in locations:
-            center = pyautogui.center(loc)
-            rawMove(*center)
+        # for loc in locations:
+        #     center = pyautogui.center(loc)
+        #     rawMove(*center)
+        return locations
 
     @staticmethod
     def transformItems():
@@ -313,6 +325,13 @@ class Inventory:
                 x = SLOT1[0] + INV_DIFF * row
                 y = SLOT1[1] + INV_DIFF * col
                 Inventory.transformItem(x, y)
+
+    @staticmethod
+    def checkTransformable():
+        region = (CORNER[0], CORNER[1], GAME_WIDTH, GAME_HEIGHT)
+        if pyautogui.locateOnScreen('transformable.png', region=region) != None:
+            return True
+        return False
 
     @staticmethod
     def transformItem(x, y):
