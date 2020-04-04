@@ -269,6 +269,9 @@ class Inventory:
         Inventory.mergeItem(*BOOTS)
         Inventory.boostItem(*BOOTS)
 
+        Inventory.boostItem(SLOT1[0], SLOT1[1])
+        Inventory.boostItem(SLOT1[0] + INV_DIFF, SLOT1[1])
+
         click(*CUBE, button="right")
 
         for col in range(3):
