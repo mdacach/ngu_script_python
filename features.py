@@ -393,6 +393,7 @@ class Yggdrasil:
     def harvestGold():
         click(*YGGDRASIL)
         click(*FRUIT_GOLD_HARVEST)
+        click(*FRUIT_POWER_HARVEST)
 
 
 class Misc:
