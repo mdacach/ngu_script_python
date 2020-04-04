@@ -312,6 +312,7 @@ class Inventory:
 
     @staticmethod
     def locatePendants():
+        click(*INVENTORY)
         region = (CORNER[0], CORNER[1], GAME_WIDTH, GAME_HEIGHT)
         locations = pyautogui.locateAllOnScreen('pendant.png', region=region)
         # for loc in locations:

@@ -70,6 +70,7 @@ def farmAdventure():
             Adventure.killMonsters(zone=zone, kills=kills)
         counter += kills
         if counter > 0 and counter % 300 == 0:
+            print('transforming pendants')
             Inventory.transformPendants()
 
         Inventory.boostAndMergeEquips()
@@ -77,12 +78,11 @@ def farmAdventure():
         if (counter > 0 and counter % 300 == 0):  # at every 200 kills
             print('trashing items')
             Inventory.trashItems()
+            Yggdrasil.harvestGold()
 
         if titan == 'y':
             print('attempting to kill titan')
             Adventure.killTitan()
-
-        Yggdrasil.harvestGold()
 
         MoneyPit.moneyPit()
         print(f'killed {counter} monsters')
