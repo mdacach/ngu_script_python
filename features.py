@@ -9,9 +9,9 @@ class BasicTraining:
     """ Basic training handling. """
     @staticmethod
     def basicTraining():
-        """ Right clicks on add energy to ATK1. 
+        """ Right clicks on add energy to ATK1.
 
-            Requires training auto advance to be bought. 
+            Requires training auto advance to be bought.
         """
         click(*BASIC_TRAINING)
         click(*BASIC_TRAINING_ADD, button="right")  # training auto advance
@@ -77,10 +77,10 @@ class Adventure:
 
     @staticmethod
     def itopodFarm(floor='optimal'):
-        """ Enters ITOPOD in {floor} floor. 
+        """ Enters ITOPOD in {floor} floor.
 
         Keyword arguments
-        floor -- floor to stay on. 
+        floor -- floor to stay on.
         """
         click(*ADVENTURE)
         click(*ITOPOD_ENTER)
@@ -95,10 +95,10 @@ class Adventure:
 
     @staticmethod
     def itopodPush(floor='200'):
-        """ Enters ITOPOD with starting floor MAX and ending floor {floor}. 
+        """ Enters ITOPOD with starting floor MAX and ending floor {floor}.
 
         Keyword arguments
-        floor -- ending floor to farm. 
+        floor -- ending floor to farm.
         """
         click(*ADVENTURE)
         click(*ITOPOD_ENTER)
@@ -109,7 +109,7 @@ class Adventure:
 
     @staticmethod
     def adventureZone(zone='latest'):
-        """ Navigates to adventure zone {zone}. 
+        """ Navigates to adventure zone {zone}.
 
         Keyword arguments
         zone -- zone to go to, by name specified in showZones.
@@ -134,7 +134,7 @@ class Adventure:
 
     @staticmethod
     def killTitan():  # REWORK
-        """ Go to latest zone and attempts to kill the titan. 
+        """ Go to latest zone and attempts to kill the titan.
          """
         click(*ADVENTURE)
         click(*ADVANCE_ZONE, button="right")
@@ -254,10 +254,10 @@ class Adventure:
 class Augmentation:
     @staticmethod
     def augmentation(aug=1, upgrade=False):
-        """ Allocates energy to augmentation. 
+        """ Allocates energy to augmentation.
 
         Keyword arguments
-        aug -- augmentation number, 1 is Danger Scissors. 
+        aug -- augmentation number, 1 is Danger Scissors.
         upgrade -- if True, will allocate energy to aug update instead.
         """
         click(*AUGMENTATION)
@@ -354,7 +354,7 @@ class Inventory:
 
     @staticmethod
     def locatePendants():
-        """ Returns a generator of the (absolute) locations of all pendants on screen. """
+        """ Returns a generator of the (absolute) locations of all pendants. """
         click(*INVENTORY)
         region = (CORNER[0], CORNER[1], GAME_WIDTH, GAME_HEIGHT)
         locations = pyautogui.locateAllOnScreen('pendant.png', region=region)
