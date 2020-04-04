@@ -6,25 +6,28 @@ import time
 
 
 class BasicTraining:
+    """ Basic training handling. """
     @staticmethod
     def basicTraining():
+        """ Right clicks on add energy to ATK1. 
+
+            Requires training auto advance to be bought. 
+        """
         click(*BASIC_TRAINING)
         click(*BASIC_TRAINING_ADD, button="right")  # training auto advance
-        # click(*ATK1)
-        # click(*DEF1)
-        # click(*ATK2)
-        # click(*DEF2)
-        # click(*ATK3)
-        # click(*DEF3)
-        # click(*ATK4)
-        # click(*DEF4)
-        # click(*DEF5)
-        # click(*ATK5)
 
 
 class FightBosses:
+    """ Fighthing bosses handling. """
+    @staticmethod
+    def nuke():
+        """ Clicks Nuke in Fight Boss menu. """
+        click(*FIGHT_BOSS)
+        click(*NUKE)
+
     @staticmethod
     def fightBosses():
+        """ Clicks Nuke and then Fight Boss for 10 more seconds. """
         click(*FIGHT_BOSS)
         click(*NUKE)
         for _ in range(5):  # wait for boss to die
@@ -33,6 +36,7 @@ class FightBosses:
 
 
 class Adventure:
+    """ Features to handle adventure progression. """
     zones = {'safe': 0,
              'tutorial': 1,
              'sewers': 2,
@@ -47,16 +51,19 @@ class Adventure:
 
     @staticmethod
     def turnIdleOn():
+        """ Enables Idle mode. """
         if (not Adventure.isIdle()):
             pyautogui.press('q')
 
     @staticmethod
     def turnIdleOff():
+        """ Disables Idle mode. """
         if (Adventure.isIdle()):
             pyautogui.press('q')
 
     @staticmethod
     def showZones():
+        """ Prints the adventure zones to the screen. """
         z = ""
         for zone in Adventure.zones:
             z += zone + " "
@@ -64,11 +71,17 @@ class Adventure:
 
     @staticmethod
     def isIdle():
+        """ Returns true if Idle Mode is enabled, false otherwise. """
         pix = getCoords(*IS_IDLE)
         return pyautogui.pixelMatchesColor(*pix, IS_IDLE_COLOR)
 
     @staticmethod
     def itopodFarm(floor='optimal'):
+        """ Enters ITOPOD in {floor} floor. 
+
+        Keyword arguments
+        floor -- floor to stay on. 
+        """
         click(*ADVENTURE)
         click(*ITOPOD_ENTER)
         if floor == 'optimal':
@@ -82,7 +95,11 @@ class Adventure:
 
     @staticmethod
     def itopodPush(floor='200'):
-        """floor is a string representing the floor number"""
+        """ Enters ITOPOD with starting floor MAX and ending floor {floor}. 
+
+        Keyword arguments
+        floor -- ending floor to farm. 
+        """
         click(*ADVENTURE)
         click(*ITOPOD_ENTER)
         click(*ITOPOD_MAX)
@@ -92,6 +109,11 @@ class Adventure:
 
     @staticmethod
     def adventureZone(zone='latest'):
+        """ Navigates to adventure zone {zone}. 
+
+        Keyword arguments
+        zone -- zone to go to, by name specified in showZones.
+        """
         click(*ADVENTURE)
         click(*GO_BACK_ZONE, button="right")   # start at 0
         if zone == 'latest':
@@ -103,6 +125,7 @@ class Adventure:
 
     @staticmethod
     def sendAttacks():
+        """ Cycles through attacks in adventure mode. """
         pyautogui.press('y')
         pyautogui.press('t')
         # pyautogui.press('r')
@@ -110,8 +133,9 @@ class Adventure:
         pyautogui.press('w')
 
     @staticmethod
-    def killTitan():  # for grb currently
-        """ go to lastest titan and attempts to kill it """
+    def killTitan():  # REWORK
+        """ Go to latest zone and attempts to kill the titan. 
+         """
         click(*ADVENTURE)
         click(*ADVANCE_ZONE, button="right")
         click(*ADVANCE_ZONE)
@@ -130,7 +154,7 @@ class Adventure:
         Adventure.turnIdleOn()
 
     @staticmethod
-    def killMonsters(zone='latest', bossOnly=False, kills=20):
+    def killMonsters(zone='latest', bossOnly=False, kills=20):  # REWORK
         """ kills {kills} monsters in {zone} and returns"""
         Adventure.adventureZone(zone)
         # pyautogui.press('q')  # idle mode
@@ -172,6 +196,7 @@ class Adventure:
 
     @staticmethod
     def kill():
+        """ Kills the current enemy. """
         while not Adventure.isEnemyDead():
             Adventure.sendAttacks()
             sleep(0.1)
@@ -179,7 +204,9 @@ class Adventure:
 
     @staticmethod
     def isEnemyDead():
+        """ Returns True if current enemy is dead, false otherwise. """
         border = getCoords(*ENEMY_HEALTH_BAR_BORDER)
+        # check if border of enemy health bar is white
         if (pyautogui.pixelMatchesColor(*border, (255, 255, 255))):
             # print('dead')
             return True
@@ -189,6 +216,7 @@ class Adventure:
 
     @staticmethod
     def isPlayerLow():
+        """ Returns True if player life is below 30%. """
         border = getCoords(*MY_HEALTH_BAR)
         if (pyautogui.pixelMatchesColor(*border, (255, 255, 255))):
             return True
@@ -197,22 +225,20 @@ class Adventure:
 
     @staticmethod
     def healHP():
+        """ Heal HP in the Safe Zone. """
         Adventure.adventureZone('safe')
         sleep(25)
         # click(*ADVANCE_ZONE, button="right")
 
     @staticmethod
     def enemySpawn():
+        """ Returns True if enemy in adventure zone is spawned. """
         enemy_hp = getCoords(*ENEMY_HEALTH_BAR_BORDER)
         return pyautogui.pixelMatchesColor(*enemy_hp, HEALTH_BAR_RED)
 
     @staticmethod
-    def reclaimEnergy():
-        click(*BASIC_TRAINING)
-        pyautogui.press('r')  # should reclaim energy
-
-    @staticmethod
     def isBoss():
+        """ Returns True if current enemy is a Boss. """
         # get the pixel of the crown
         # match it with yellow
         crown = getCoords(*CROWN_LOCATION)
@@ -220,6 +246,7 @@ class Adventure:
 
     @staticmethod
     def refreshZone():
+        """ Go to another zone and back. """
         click(*GO_BACK_ZONE)
         click(*ADVANCE_ZONE)
 
