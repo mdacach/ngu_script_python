@@ -1,8 +1,13 @@
+""" File to run. 
+
+Let's you choose the feature you would like to run.
+"""
 from scripts import *
 import time
 
 
 def main():
+    """ Main menu with all scripts. """
     print('starting the script')
     print('check if adventure is in Idle mode!')
     print('1 - speedrun')
