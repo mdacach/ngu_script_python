@@ -388,6 +388,13 @@ class Rebirth:
         click(*REBIRTH_CONFIRMATION)
 
 
+class Yggdrasil:
+    @staticmethod
+    def harvestGold():
+        click(*YGGDRASIL)
+        click(*FRUIT_GOLD_HARVEST)
+
+
 class Misc:
     @staticmethod
     def reclaimEnergy():

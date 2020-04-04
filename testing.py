@@ -24,5 +24,6 @@ if __name__ == "__main__":
     # Statistics.getBoss()
 
     # Inventory.locatePendants()
-    click(*INVENTORY)
-    Inventory.transformPendants()
+    # click(*INVENTORY)
+    Yggdrasil.harvestGold()
+    # Inventory.transformPendants()
