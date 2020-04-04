@@ -254,6 +254,12 @@ class Adventure:
 class Augmentation:
     @staticmethod
     def augmentation(aug=1, upgrade=False):
+        """ Allocates energy to augmentation. 
+
+        Keyword arguments
+        aug -- augmentation number, 1 is Danger Scissors. 
+        upgrade -- if True, will allocate energy to aug update instead.
+        """
         click(*AUGMENTATION)
         if upgrade:
             x, y = AUG1_UPGRADE[0], AUG1_UPGRADE[1] + (aug - 1) * AUG_DIFF
@@ -265,18 +271,21 @@ class Augmentation:
 class Inventory:
     @staticmethod
     def mergeItem(x, y):
+        """ Attemps to merge to item at x, y (relative). """
         moveTo(x, y)
         sleep(0.1)
         pyautogui.press('d')
 
     @staticmethod
     def boostItem(x, y):
+        """ Attempts to boost item at x, y (relative). """
         moveTo(x, y)
         sleep(0.1)
         pyautogui.press('a')
 
     @staticmethod
     def boostAndMergeEquips():
+        """ Wrapper function to boost and merge all equipment slots and the three first rows of inventory. """
         click(*INVENTORY)
 
         Inventory.mergeItem(*WEAPON)
@@ -312,6 +321,7 @@ class Inventory:
 
     @staticmethod
     def trashItems():
+        """ Wrapper function to trash items at rows 4 and 5. """
         click(*INVENTORY)
         for col in range(3, 5):
             for row in range(12):
@@ -321,6 +331,7 @@ class Inventory:
 
     @staticmethod
     def trashItem(x, y):
+        """ Trashes item at x, y (relative). """
         moveTo(x, y)
         sleep(0.1)
         pyautogui.keyDown('ctrl')
@@ -331,6 +342,7 @@ class Inventory:
 
     @staticmethod
     def transformPendants():
+        """ Wrapper function to transform all maxed pendants. """
         locations = Inventory.locatePendants()
         for loc in locations:
             center = pyautogui.center(loc)
@@ -342,6 +354,7 @@ class Inventory:
 
     @staticmethod
     def locatePendants():
+        """ Returns a generator of the (absolute) locations of all pendants on screen. """
         click(*INVENTORY)
         region = (CORNER[0], CORNER[1], GAME_WIDTH, GAME_HEIGHT)
         locations = pyautogui.locateAllOnScreen('pendant.png', region=region)
@@ -351,33 +364,12 @@ class Inventory:
         return locations
 
     @staticmethod
-    def transformItems():
-        click(*INVENTORY)
-        for col in range(2, 3):  # only one col
-            for row in range(12):
-                x = SLOT1[0] + INV_DIFF * row
-                y = SLOT1[1] + INV_DIFF * col
-                Inventory.transformItem(x, y)
-
-    @staticmethod
     def checkTransformable():
+        """ Check if item being highlighted is transformable. """
         region = (CORNER[0], CORNER[1], GAME_WIDTH, GAME_HEIGHT)
         if pyautogui.locateOnScreen('transformable.png', region=region) != None:
             return True
         return False
-
-    @staticmethod
-    def transformItem(x, y):
-        moveTo(x, y)
-        sleep(0.3)
-        # if transformable
-        region = (CORNER[0], CORNER[1], GAME_WIDTH, GAME_HEIGHT)
-        if pyautogui.locateOnScreen('transformable.png', region=region) != None:
-            pyautogui.keyDown('ctrl')
-            sleep(0.1)
-            pyautogui.click()
-            sleep(0.1)
-            pyautogui.keyUp('ctrl')
 
 
 class TimeMachine:
