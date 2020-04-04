@@ -287,6 +287,78 @@ class Inventory:
         pyautogui.press('a')
 
     @staticmethod
+    def boostAndMergeEquipped():
+        """ Wrapper function to boost and merge all equipped items. """
+        click(*INVENTORY)
+        Inventory.mergeItem(*WEAPON)
+        Inventory.boostItem(*WEAPON)
+        Inventory.mergeItem(*ACC1)
+        Inventory.boostItem(*ACC1)
+        Inventory.mergeItem(*ACC2)
+        Inventory.boostItem(*ACC2)
+        Inventory.mergeItem(*ACC3)
+        Inventory.boostItem(*ACC3)
+        Inventory.mergeItem(*HEAD)
+        Inventory.boostItem(*HEAD)
+        Inventory.mergeItem(*CHEST)
+        Inventory.boostItem(*CHEST)
+        Inventory.mergeItem(*LEGS)
+        Inventory.boostItem(*LEGS)
+        Inventory.mergeItem(*BOOTS)
+        Inventory.boostItem(*BOOTS)
+
+    @staticmethod
+    def boostCube():
+        """ Boost infinity cube. """
+        click(*INVENTORY)
+        click(*CUBE, button="right")
+
+    @staticmethod
+    def boostInventory(slots=36):
+        """ Boost first {slots} slots of inventory. 
+
+        Keyword arguments 
+        slots -- number of slots to boost. 
+        """
+        num = 0
+        x0 = SLOT1[0]
+        y0 = SLOT1[1]
+        i = 0
+        j = 0
+        while num < slots:
+            if (i >= 12):
+                i = 0
+                j += 1
+            x = x0 + INV_DIFF * i
+            y = y0 + INV_DIFF * j
+            i += 1
+            Inventory.boostItem(x, y)
+            num += 1
+
+    @staticmethod
+    def mergeInventory(slots=36):
+        """ Merge first {slots} slots of inventory. 
+
+        Keyword arguments 
+        slots -- number of slots to merge. 
+        """
+
+        num = 0
+        x0 = SLOT1[0]
+        y0 = SLOT1[1]
+        i = 0
+        j = 0
+        while num < slots:
+            if (i >= 12):
+                i = 0
+                j += 1
+            x = x0 + INV_DIFF * i
+            y = y0 + INV_DIFF * j
+            i += 1
+            Inventory.mergeItem(x, y)
+            num += 1
+
+    @staticmethod
     def boostAndMergeEquips():
         """ Wrapper function to boost and merge all equipment slots and the three first rows of inventory. """
         click(*INVENTORY)
