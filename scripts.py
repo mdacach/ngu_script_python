@@ -78,7 +78,8 @@ def farmAdventure():
         if (counter > 0 and counter % 300 == 0):  # at every 200 kills
             print('trashing items')
             Inventory.trashItems()
-            Yggdrasil.harvestGold()
+            Yggdrasil.harvestAll()
+            Yggdrasil.activatePower()
 
         if titan == 'y':
             print('attempting to kill titan')

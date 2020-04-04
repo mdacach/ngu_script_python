@@ -393,6 +393,16 @@ class Rebirth:
 
 class Yggdrasil:
     @staticmethod
+    def harvestAll():
+        click(*YGGDRASIL)
+        click(*HARVEST_ALL_MAX_TIER)
+
+    @staticmethod
+    def activatePower():
+        click(*YGGDRASIL)
+        click(*FRUIT_POWER_HARVEST)
+
+    @staticmethod
     def harvestGold():
         click(*YGGDRASIL)
         click(*FRUIT_GOLD_HARVEST)
