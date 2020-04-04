@@ -375,30 +375,39 @@ class Inventory:
 class TimeMachine:
     @staticmethod
     def addEnergy():
+        """ Adds energy to Time Machine. """
         click(*TIME_MACHINE)
         click(*TM_ADD_ENERGY)
         click(CORNER[0], CORNER[1])
 
     @staticmethod
     def addMagic():
+        """ Adds magic to Time Machine. """
         click(*TIME_MACHINE)
         click(*TM_ADD_MAGIC)
 
 
 class BloodMagic:
     @staticmethod
-    def addMagic(aug=1, cap=False):
+    def addMagic(magic=1, cap=False):
+        """ Adds magic to Blood Magic. 
+
+        Keyword arguments 
+        magic -- magic number, starts at 1. 
+        cap -- if True, will try to cap magic instead. 
+        """
         click(*BLOOD_MAGIC)
         if cap:
-            x, y = BM1_CAP[0], BM1_CAP[1] + (aug - 1) * BM_DIFF
+            x, y = BM1_CAP[0], BM1_CAP[1] + (magic - 1) * BM_DIFF
         else:
-            x, y = BM1_ADD[0], BM1_ADD[1] + (aug - 1) * BM_DIFF
+            x, y = BM1_ADD[0], BM1_ADD[1] + (magic - 1) * BM_DIFF
         click(x, y)
 
 
 class MoneyPit:
     @staticmethod
     def moneyPit():
+        """ Throws money into pit. """
         click(*MONEY_PIT)
         click(*FEED_ME)
         click(*FEED_YEAH)
@@ -407,6 +416,7 @@ class MoneyPit:
 class Rebirth:
     @staticmethod
     def rebirth():
+        """ Rebirth. """
         click(*REBIRTH_MENU)
         sleep(5)  # to see if it's crashing
         click(*REBIRTH_BUTTON)
@@ -416,34 +426,39 @@ class Rebirth:
 class Yggdrasil:
     @staticmethod
     def harvestAll():
+        """ Harvest all max tiered fruits. """
         click(*YGGDRASIL)
         click(*HARVEST_ALL_MAX_TIER)
 
     @staticmethod
     def activatePower():
+        """ Activates power fruit. """
         click(*YGGDRASIL)
-        click(*FRUIT_POWER_HARVEST)
-
-    @staticmethod
-    def harvestGold():
-        click(*YGGDRASIL)
-        click(*FRUIT_GOLD_HARVEST)
         click(*FRUIT_POWER_HARVEST)
 
 
 class Misc:
     @staticmethod
     def reclaimEnergy():
+        """ Reclaims all energy. """
         click(*BASIC_TRAINING)
         pyautogui.press('r')
 
     @staticmethod
     def reclaimMagic():
+        """ Reclaims all magic. """
         click(*BASIC_TRAINING)
         pyautogui.press('t')
 
     @staticmethod
     def inputResource(amount='cap', idle=False):
+        """ Sets input resource to {amount}. 
+
+        Keyword arguments
+        amount -- amount to input, half or cap.  
+        idle -- if True will consider only the idle energy. 
+        """
+
         click(*BASIC_TRAINING)
         if amount == 'cap':
             click(*ENERGY_CUSTOM_AMOUNT_CAP)
