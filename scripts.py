@@ -46,6 +46,26 @@ def run15():
     Rebirth.rebirth()
 
 
+def farmScript():
+    """ Personal script to farming. """
+    print('farming script')
+
+
+def farmZone(zone='latest'):
+    """ Farms an adventure zone. """
+    Adventure.adventureZone(zone=zone)
+    Adventure.turnIdleOff()
+    killMonsters()
+
+
+def killMonsters():
+    """ Kills adventure monsters """
+    while True:
+        if Adventure.enemySpawn():
+            Adventure.kill()
+            pyautogui.press('d')  # to heal
+
+
 def farmAdventure():
     """ Farms adventure zones. """
     print('starting farming script')
@@ -72,13 +92,15 @@ def farmAdventure():
         else:
             Adventure.killMonsters(zone=zone, kills=kills)
         counter += kills
-        if counter > 0 and counter % 300 == 0:
-            print('transforming pendants')
-            Inventory.transformPendants()
+        # if counter > 0 and counter % 300 == 0:
+        #     print('transforming pendants')
+        #     Inventory.transformPendants()
 
-        Inventory.boostAndMergeEquips()
+        Inventory.boostAndMergeEquipped()
+        Inventory.mergeInventory()
+        Inventory.boostInventory(slots=3)
 
-        if (counter > 0 and counter % 300 == 0):  # at every 200 kills
+        if (counter > 0 and counter % 300 == 0):  # at every 300 kills
             print('trashing items')
             Inventory.trashItems()
             Yggdrasil.harvestAll()
@@ -106,4 +128,4 @@ def farmItopod():
             Adventure.kill()
             counter += 1
             if (counter % 25):
-                Inventory.boostInventory(slots=3)
+                Inventory.boostInventory(slots=3)  # to farm boosts
