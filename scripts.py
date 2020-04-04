@@ -100,14 +100,10 @@ def farmItopod():
     floor = input('floor: ')
     Adventure.itopodFarm(floor=floor)
     Adventure.turnIdleOff()
-    start = time.time()
     counter = 0
     while True:
-        Adventure.kill()
-        counter += 1
-        if counter % 10:
-            print(f'kills: {counter}')
-        if (counter > 0 and counter % 30):
-            print('inventory management')
-            Inventory.boostAndMergeEquips()
-            Adventure.itopodFarm(floor=floor)
+        if (Adventure.enemySpawn()):
+            Adventure.kill()
+            counter += 1
+            if (counter % 25):
+                Inventory.boostInventory(slots=3)
