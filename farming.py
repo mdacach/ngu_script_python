@@ -28,6 +28,7 @@ print(args.kills)
 print(args.verbose)
 
 Adventure.adventureZone(args.zone)
+print(Navigation.currentMenu)
 killCounter = 0
 if args.verbose:
     print(f'farming zone {args.zone}')
@@ -57,10 +58,11 @@ while True:
             print(f'inv management')
             print(f'time: {round((time.time() - start))/60} minutes')
             Adventure.turnIdleOn()
-            Inventory.boostAndMergeEquipped()
-            Inventory.boostInventory(slots=10)
-            Inventory.boostCube()
-            Inventory.mergeInventory(slots=36)
+            # Inventory.boostAndMergeEquipped()
+            # Inventory.boostInventory(slots=10)
+            # Inventory.boostCube()
+            # Inventory.mergeInventory(slots=36)
+            Inventory.mergeInventory(slots=60)
             # go back to adventure
             print(f'going back to adventure')
             # click(*ADVENTURE)

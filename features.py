@@ -61,7 +61,7 @@ class Adventure:
     @staticmethod
     def turnIdleOn():
         """ Enables Idle mode. """
-        if Navigation.menu != 'adventure':
+        if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
         if (not Adventure.isIdle()):
             pyautogui.press('q')
@@ -69,7 +69,7 @@ class Adventure:
     @staticmethod
     def turnIdleOff():
         """ Disables Idle mode. """
-        if Navigation.menu != 'adventure':
+        if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
         if (Adventure.isIdle()):
             pyautogui.press('q')
@@ -85,7 +85,7 @@ class Adventure:
     @staticmethod
     def isIdle():
         """ Returns true if Idle Mode is enabled, false otherwise. """
-        if Navigation.menu != 'adventure':
+        if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
         pix = getCoords(*coords.IS_IDLE)
         return pyautogui.pixelMatchesColor(*pix, coords.IS_IDLE_COLOR)
@@ -147,7 +147,7 @@ class Adventure:
     @staticmethod
     def sendAttacks():
         """ Cycles through attacks in adventure mode. """
-        if Navigation.menu != 'adventure':
+        if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
         pyautogui.press('y')
         pyautogui.press('t')
@@ -221,7 +221,7 @@ class Adventure:
     @staticmethod
     def kill():
         """ Kills the current enemy. """
-        if Navigation.menu != 'adventure':
+        if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
         while not Adventure.isEnemyDead():
             Adventure.sendAttacks()
@@ -231,7 +231,7 @@ class Adventure:
     @staticmethod
     def isEnemyDead():
         """ Returns True if current enemy is dead, false otherwise. """
-        if Navigation.menu != 'adventure':
+        if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
         border = getCoords(*coords.ENEMY_HEALTH_BAR_BORDER)
         # check if border of enemy health bar is white
@@ -245,7 +245,7 @@ class Adventure:
     @staticmethod
     def isPlayerLow():
         """ Returns True if player life is below 30%. """
-        if Navigation.menu != 'adventure':
+        if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
         border = getCoords(*coords.MY_HEALTH_BAR)
         if (pyautogui.pixelMatchesColor(*border, (255, 255, 255))):
@@ -256,7 +256,7 @@ class Adventure:
     @staticmethod
     def healHP():
         """ Heal HP in the Safe Zone. """
-        if Navigation.menu != 'adventure':
+        if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
         Adventure.adventureZone('safe')
         sleep(25)
@@ -265,7 +265,7 @@ class Adventure:
     @staticmethod
     def enemySpawn():
         """ Returns True if enemy in adventure zone is spawned. """
-        if Navigation.menu != 'adventure':
+        if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
 
         enemy_hp = getCoords(*coords.ENEMY_HEALTH_BAR_BORDER)
@@ -274,7 +274,7 @@ class Adventure:
     @staticmethod
     def isBoss():
         """ Returns True if current enemy is a Boss. """
-        if Navigation.menu != 'adventure':
+        if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
 
         # get the pixel of the crown
@@ -285,7 +285,7 @@ class Adventure:
     @staticmethod
     def refreshZone():
         """ Go to another zone and back. """
-        if Navigation.menu != 'adventure':
+        if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
 
         click(*coords.GO_BACK_ZONE)
@@ -315,7 +315,7 @@ class Inventory:
     @staticmethod
     def mergeItem(x, y):
         """ Attemps to merge to item at x, y (relative). """
-        if Navigation.menu != 'inventory':
+        if Navigation.currentMenu != 'inventory':
             raise Exception('should be in Inventory menu!')
 
         click(x, y)
@@ -325,7 +325,7 @@ class Inventory:
     @staticmethod
     def boostItem(x, y):
         """ Attempts to boost item at x, y (relative). """
-        if Navigation.menu != 'inventory':
+        if Navigation.currentMenu != 'inventory':
             raise Exception('should be in Inventory menu!')
 
         click(x, y)
@@ -460,7 +460,7 @@ class Inventory:
     @staticmethod
     def trashItem(x, y):
         """ Trashes item at x, y (relative). """
-        if Navigation.menu != 'inventory':
+        if Navigation.currentMenu != 'inventory':
             raise Exception('should be in Inventory menu!')
 
         moveTo(x, y)
@@ -500,7 +500,7 @@ class Inventory:
     @staticmethod
     def checkTransformable():
         """ Check if item being highlighted is transformable. """
-        if Navigation.menu != 'inventory':
+        if Navigation.currentMenu != 'inventory':
             raise Exception('should be in Inventory menu!')
 
         region = (CORNER[0], CORNER[1], coords.GAME_WIDTH, coords.GAME_HEIGHT)
