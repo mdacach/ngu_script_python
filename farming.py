@@ -58,8 +58,8 @@ while True:
             Adventure.turnIdleOn()
             Inventory.boostAndMergeEquipped()
             Inventory.boostInventory(slots=10)
-            Inventory.mergeInventory(slots=36)
             Inventory.boostCube()
+            Inventory.mergeInventory(slots=36)
             # go back to adventure
             print(f'going back to adventure')
             click(*ADVENTURE)
