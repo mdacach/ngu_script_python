@@ -48,9 +48,9 @@ while True:
                 Adventure.refreshZone()
         else:
             Adventure.kill()
+            killCounter += 1
             if args.verbose:
                 print(f'kill count: {killCounter}')
-            killCounter += 1
             pyautogui.press('d')
         if killCounter > 0 and killCounter % args.kills == 0:
             print(f'inv management')
