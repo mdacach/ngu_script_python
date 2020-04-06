@@ -3,6 +3,7 @@ import argparse
 from helper import *
 from coords import *
 from features import *
+from navigation import Navigation
 import time
 import pyautogui
 
@@ -62,4 +63,5 @@ while True:
             Inventory.mergeInventory(slots=36)
             # go back to adventure
             print(f'going back to adventure')
-            click(*ADVENTURE)
+            # click(*ADVENTURE)
+            Navigation.menu('adventure')
