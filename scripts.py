@@ -120,12 +120,15 @@ def farmItopod():
     """ Farms ITOPOD. """
     print('itopod farming script')
     floor = input('floor: ')
-    Adventure.itopodFarm(floor=floor)
+    # Adventure.itopodFarm(floor=floor)
+    Adventure.itopodPush(floor=floor)
     Adventure.turnIdleOff()
     counter = 0
     while True:
         if (Adventure.enemySpawn()):
             Adventure.kill()
             counter += 1
-            if (counter % 25):
-                Inventory.boostInventory(slots=3)  # to farm boosts
+            if (counter % 25 == 0):
+                # Inventory.boostInventory(slots=3)  # to farm boosts
+                Inventory.boostAndMergeEquipped()
+                click(*ADVENTURE)
