@@ -449,15 +449,31 @@ class Inventory:
                 # print('control click')
 
     @staticmethod
+    def transformAll(image):
+        """ Transform all items if transformable. """
+        Navigation.menu('inventory')
+        locations = Inventory.locateAll(image)
+        for loc in locations:
+            center = pyautogui.center(loc)  # get center
+            rawClick(*center)
+            sleep(0.1)
+            if Inventory.checkTransformable():
+                ctrlClick()
+
+    @staticmethod
+    def locateAll(image):
+        """ Returns a generator of the (absolute) locations of all items {image}. """
+        Navigation.menu('inventory')
+        region = (CORNER[0], CORNER[1], coords.GAME_WIDTH, coords.GAME_HEIGHT)
+        locations = pyautogui.locateAllOnScreen(image, region=region)
+        return locations
+
+    @staticmethod
     def locatePendants():
         """ Returns a generator of the (absolute) locations of all pendants. """
-        # click(*coords.INVENTORY)
         Navigation.menu('inventory')
         region = (CORNER[0], CORNER[1], coords.GAME_WIDTH, coords.GAME_HEIGHT)
         locations = pyautogui.locateAllOnScreen('pendant.png', region=region)
-        # for loc in locations:
-        #     center = pyautogui.center(loc)
-        #     rawMove(*center)
         return locations
 
     @staticmethod
