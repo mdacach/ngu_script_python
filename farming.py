@@ -57,8 +57,8 @@ while True:
             print(f'time: {round((time.time() - start))/60} minutes')
             Adventure.turnIdleOn()
             Inventory.boostAndMergeEquipped()
-            Inventory.mergeInventory(slots=36)
             Inventory.boostInventory(slots=10)
+            Inventory.mergeInventory(slots=36)
             Inventory.boostCube()
             # go back to adventure
             print(f'going back to adventure')
