@@ -1,7 +1,8 @@
 """ Module for various features handling."""
 
 from helper import *
-from coords import *
+# from coords import *
+import coords
 from navigation import Navigation
 import time
 
@@ -14,26 +15,30 @@ class BasicTraining:
 
             Requires training auto advance to be bought.
         """
-        click(*BASIC_TRAINING)
-        click(*BASIC_TRAINING_ADD, button="right")  # training auto advance
+        # click(*coords.BASIC_TRAINING)
+        Navigation.menu('basicTraining')
+        # training auto advance
+        click(*coords.BASIC_TRAINING_ADD, button="right")
 
 
-class FightBosses:
+class FightBosses:        # click(*coords.BASIC_TRAINING)
     """ Fighthing bosses handling. """
     @staticmethod
     def nuke():
         """ Clicks Nuke in Fight Boss menu. """
-        click(*FIGHT_BOSS)
-        click(*NUKE)
+        # click(*coords.FIGHT_BOSS)
+        Navigation.menu('fightBoss')
+        click(*coords.NUKE)
 
     @staticmethod
     def fightBosses():
         """ Clicks Nuke and then Fight Boss for 10 more seconds. """
-        click(*FIGHT_BOSS)
-        click(*NUKE)
+        # click(*coords.FIGHT_BOSS)
+        Navigation.menu('fightBoss')
+        click(*coords.NUKE)
         for _ in range(5):  # wait for boss to die
             pyautogui.sleep(2)
-            click(*FIGHT)
+            click(*coords.FIGHT)
 
 
 class Adventure:
@@ -56,12 +61,16 @@ class Adventure:
     @staticmethod
     def turnIdleOn():
         """ Enables Idle mode. """
+        if Navigation.menu != 'adventure':
+            raise Exception('should be in Adventure menu!')
         if (not Adventure.isIdle()):
             pyautogui.press('q')
 
     @staticmethod
     def turnIdleOff():
         """ Disables Idle mode. """
+        if Navigation.menu != 'adventure':
+            raise Exception('should be in Adventure menu!')
         if (Adventure.isIdle()):
             pyautogui.press('q')
 
@@ -76,8 +85,10 @@ class Adventure:
     @staticmethod
     def isIdle():
         """ Returns true if Idle Mode is enabled, false otherwise. """
-        pix = getCoords(*IS_IDLE)
-        return pyautogui.pixelMatchesColor(*pix, IS_IDLE_COLOR)
+        if Navigation.menu != 'adventure':
+            raise Exception('should be in Adventure menu!')
+        pix = getCoords(*coords.IS_IDLE)
+        return pyautogui.pixelMatchesColor(*pix, coords.IS_IDLE_COLOR)
 
     @staticmethod
     def itopodFarm(floor='optimal'):
@@ -86,16 +97,17 @@ class Adventure:
         Keyword arguments
         floor -- floor to stay on.
         """
-        click(*ADVENTURE)
-        click(*ITOPOD_ENTER)
+        # click(*coords.ADVENTURE)
+        Navigation.menu('adventure')
+        click(*coords.ITOPOD_ENTER)
         if floor == 'optimal':
-            click(*ITOPOD_OPTIMAL)
+            click(*coords.ITOPOD_OPTIMAL)
         else:
-            click(*ITOPOD_START_INPUT)
+            click(*coords.ITOPOD_START_INPUT)
             pyautogui.write(floor, interval=0.2)
-            click(*ITOPOD_END_INPUT)
+            click(*coords.ITOPOD_END_INPUT)
             pyautogui.write(floor, interval=0.2)
-        click(*ITOPOD_ENTER_CONFIRMATION)
+        click(*coords.ITOPOD_ENTER_CONFIRMATION)
 
     @staticmethod
     def itopodPush(floor='200'):
@@ -104,12 +116,13 @@ class Adventure:
         Keyword arguments
         floor -- ending floor to farm.
         """
-        click(*ADVENTURE)
-        click(*ITOPOD_ENTER)
-        click(*ITOPOD_MAX)
-        click(*ITOPOD_END_INPUT)
+        # click(*coords.ADVENTURE)
+        Navigation.menu('adventure')
+        click(*coords.ITOPOD_ENTER)
+        click(*coords.ITOPOD_MAX)
+        click(*coords.ITOPOD_END_INPUT)
         pyautogui.write(floor, interval=0.2)
-        click(*ITOPOD_ENTER_CONFIRMATION)
+        click(*coords.ITOPOD_ENTER_CONFIRMATION)
 
     @staticmethod
     def adventureZone(zone='latest'):
@@ -118,21 +131,24 @@ class Adventure:
         Keyword arguments
         zone -- zone to go to, by name specified in showZones.
         """
-        click(*ADVENTURE)
+        # click(*coords.ADVENTURE)
+        Navigation.menu('adventure')
         if (Navigation.adventureZone == zone):
             return
-        click(*GO_BACK_ZONE, button="right")   # start at 0
+        click(*coords.GO_BACK_ZONE, button="right")   # start at 0
         if zone == 'latest':
-            click(*ADVANCE_ZONE, button="right")
+            click(*coords.ADVANCE_ZONE, button="right")
         else:
             times = Adventure.zones[zone]
             for _ in range(times):
-                click(*ADVANCE_ZONE)
+                click(*coords.ADVANCE_ZONE)
         Navigation.adventureZone = zone
 
     @staticmethod
     def sendAttacks():
         """ Cycles through attacks in adventure mode. """
+        if Navigation.menu != 'adventure':
+            raise Exception('should be in Adventure menu!')
         pyautogui.press('y')
         pyautogui.press('t')
         # pyautogui.press('r')
@@ -143,13 +159,14 @@ class Adventure:
     def killTitan():  # REWORK
         """ Go to latest zone and attempts to kill the titan.
          """
-        click(*ADVENTURE)
-        click(*ADVANCE_ZONE, button="right")
-        click(*ADVANCE_ZONE)
+        # click(*coords.ADVENTURE)
+        Navigation.menu('adventure')
+        click(*coords.ADVANCE_ZONE, button="right")
+        click(*coords.ADVANCE_ZONE)
         # pyautogui.press('q')
         Adventure.turnIdleOff()
         # grb health bar color is not red
-        enemy_hp = getCoords(*ENEMY_HEALTH_BAR)
+        enemy_hp = getCoords(*coords.ENEMY_HEALTH_BAR)
         sleep(6)
         if not pyautogui.pixelMatchesColor(*enemy_hp, (255, 255, 255)):
             print('titan spawned')
@@ -204,6 +221,8 @@ class Adventure:
     @staticmethod
     def kill():
         """ Kills the current enemy. """
+        if Navigation.menu != 'adventure':
+            raise Exception('should be in Adventure menu!')
         while not Adventure.isEnemyDead():
             Adventure.sendAttacks()
             sleep(0.1)
@@ -212,7 +231,9 @@ class Adventure:
     @staticmethod
     def isEnemyDead():
         """ Returns True if current enemy is dead, false otherwise. """
-        border = getCoords(*ENEMY_HEALTH_BAR_BORDER)
+        if Navigation.menu != 'adventure':
+            raise Exception('should be in Adventure menu!')
+        border = getCoords(*coords.ENEMY_HEALTH_BAR_BORDER)
         # check if border of enemy health bar is white
         if (pyautogui.pixelMatchesColor(*border, (255, 255, 255))):
             # print('dead')
@@ -224,7 +245,9 @@ class Adventure:
     @staticmethod
     def isPlayerLow():
         """ Returns True if player life is below 30%. """
-        border = getCoords(*MY_HEALTH_BAR)
+        if Navigation.menu != 'adventure':
+            raise Exception('should be in Adventure menu!')
+        border = getCoords(*coords.MY_HEALTH_BAR)
         if (pyautogui.pixelMatchesColor(*border, (255, 255, 255))):
             return True
         else:
@@ -233,6 +256,8 @@ class Adventure:
     @staticmethod
     def healHP():
         """ Heal HP in the Safe Zone. """
+        if Navigation.menu != 'adventure':
+            raise Exception('should be in Adventure menu!')
         Adventure.adventureZone('safe')
         sleep(25)
         # click(*ADVANCE_ZONE, button="right")
@@ -240,22 +265,31 @@ class Adventure:
     @staticmethod
     def enemySpawn():
         """ Returns True if enemy in adventure zone is spawned. """
-        enemy_hp = getCoords(*ENEMY_HEALTH_BAR_BORDER)
-        return pyautogui.pixelMatchesColor(*enemy_hp, HEALTH_BAR_RED)
+        if Navigation.menu != 'adventure':
+            raise Exception('should be in Adventure menu!')
+
+        enemy_hp = getCoords(*coords.ENEMY_HEALTH_BAR_BORDER)
+        return pyautogui.pixelMatchesColor(*enemy_hp, coords.HEALTH_BAR_RED)
 
     @staticmethod
     def isBoss():
         """ Returns True if current enemy is a Boss. """
+        if Navigation.menu != 'adventure':
+            raise Exception('should be in Adventure menu!')
+
         # get the pixel of the crown
         # match it with yellow
-        crown = getCoords(*CROWN_LOCATION)
-        return pyautogui.pixelMatchesColor(*crown, CROWN_COLOR)
+        crown = getCoords(*coords.CROWN_LOCATION)
+        return pyautogui.pixelMatchesColor(*crown, coords.CROWN_COLOR)
 
     @staticmethod
     def refreshZone():
         """ Go to another zone and back. """
-        click(*GO_BACK_ZONE)
-        click(*ADVANCE_ZONE)
+        if Navigation.menu != 'adventure':
+            raise Exception('should be in Adventure menu!')
+
+        click(*coords.GO_BACK_ZONE)
+        click(*coords.ADVANCE_ZONE)
 
 
 class Augmentation:
@@ -267,11 +301,13 @@ class Augmentation:
         aug -- augmentation number, 1 is Danger Scissors.
         upgrade -- if True, will allocate energy to aug update instead.
         """
-        click(*AUGMENTATION)
+        # click(*coords.AUGMENTATION)
+        Navigation.menu('augments')
         if upgrade:
-            x, y = AUG1_UPGRADE[0], AUG1_UPGRADE[1] + (aug - 1) * AUG_DIFF
+            x, y = coords.AUG1_UPGRADE[0], coords.AUG1_UPGRADE[1] + \
+                (aug - 1) * coords.AUG_DIFF
         else:
-            x, y = AUG1[0], AUG1[1] + (aug - 1) * AUG_DIFF
+            x, y = coords.AUG1[0], coords.AUG1[1] + (aug - 1) * coords.AUG_DIFF
         click(x, y)
 
 
@@ -279,62 +315,72 @@ class Inventory:
     @staticmethod
     def mergeItem(x, y):
         """ Attemps to merge to item at x, y (relative). """
+        if Navigation.menu != 'inventory':
+            raise Exception('should be in Inventory menu!')
+
         click(x, y)
-        sleep(FAST_SLEEP)
+        sleep(coords.FAST_SLEEP)
         pyautogui.press('d')
 
     @staticmethod
     def boostItem(x, y):
         """ Attempts to boost item at x, y (relative). """
+        if Navigation.menu != 'inventory':
+            raise Exception('should be in Inventory menu!')
+
         click(x, y)
-        sleep(FAST_SLEEP)
+        sleep(coords.FAST_SLEEP)
         pyautogui.press('a')
 
     @staticmethod
     def boostAndMergeEquipped():
         """ Wrapper function to boost and merge all equipped items. """
-        click(*INVENTORY)
-        Inventory.mergeItem(*WEAPON)
-        Inventory.boostItem(*WEAPON)
-        Inventory.mergeItem(*ACC1)
-        Inventory.boostItem(*ACC1)
-        Inventory.mergeItem(*ACC2)
-        Inventory.boostItem(*ACC2)
-        Inventory.mergeItem(*ACC3)
-        Inventory.boostItem(*ACC3)
-        Inventory.mergeItem(*HEAD)
-        Inventory.boostItem(*HEAD)
-        Inventory.mergeItem(*CHEST)
-        Inventory.boostItem(*CHEST)
-        Inventory.mergeItem(*LEGS)
-        Inventory.boostItem(*LEGS)
-        Inventory.mergeItem(*BOOTS)
-        Inventory.boostItem(*BOOTS)
+        # click(*coords.INVENTORY)
+        Navigation.menu('inventory')
+        Inventory.mergeItem(*coords.WEAPON)
+        Inventory.boostItem(*coords.WEAPON)
+        Inventory.mergeItem(*coords.ACC1)
+        Inventory.boostItem(*coords.ACC1)
+        Inventory.mergeItem(*coords.ACC2)
+        Inventory.boostItem(*coords.ACC2)
+        Inventory.mergeItem(*coords.ACC3)
+        Inventory.boostItem(*coords.ACC3)
+        Inventory.mergeItem(*coords.HEAD)
+        Inventory.boostItem(*coords.HEAD)
+        Inventory.mergeItem(*coords.CHEST)
+        Inventory.boostItem(*coords.CHEST)
+        Inventory.mergeItem(*coords.LEGS)
+        Inventory.boostItem(*coords.LEGS)
+        Inventory.mergeItem(*coords.BOOTS)
+        Inventory.boostItem(*coords.BOOTS)
 
     @staticmethod
     def boostCube():
         """ Boost infinity cube. """
-        click(*INVENTORY)
-        click(*CUBE, button="right")
+        # click(*coords.INVENTORY)
+        Navigation.menu('inventory')
+        click(*coords.CUBE, button="right")
 
     @staticmethod
     def boostInventory(slots=36):
         """ Boost first {slots} slots of inventory. 
 
-        Keyword arguments 
+        Keyword arguments: 
         slots -- number of slots to boost. 
         """
+        Navigation.menu('inventory')
+
         num = 0
-        x0 = SLOT1[0]
-        y0 = SLOT1[1]
+        x0 = coords.SLOT1[0]
+        y0 = coords.SLOT1[1]
         i = 0
         j = 0
         while num < slots:
             if (i >= 12):
                 i = 0
                 j += 1
-            x = x0 + INV_DIFF * i
-            y = y0 + INV_DIFF * j
+            x = x0 + coords.INV_DIFF * i
+            y = y0 + coords.INV_DIFF * j
             i += 1
             Inventory.boostItem(x, y)
             num += 1
@@ -346,18 +392,19 @@ class Inventory:
         Keyword arguments 
         slots -- number of slots to merge. 
         """
+        Navigation.menu('inventory')
 
         num = 0
-        x0 = SLOT1[0]
-        y0 = SLOT1[1]
+        x0 = coords.SLOT1[0]
+        y0 = coords.SLOT1[1]
         i = 0
         j = 0
         while num < slots:
             if (i >= 12):
                 i = 0
                 j += 1
-            x = x0 + INV_DIFF * i
-            y = y0 + INV_DIFF * j
+            x = x0 + coords.INV_DIFF * i
+            y = y0 + coords.INV_DIFF * j
             i += 1
             Inventory.mergeItem(x, y)
             num += 1
@@ -365,34 +412,35 @@ class Inventory:
     @staticmethod
     def boostAndMergeEquips():
         """ Wrapper function to boost and merge all equipment slots and the three first rows of inventory. """
-        click(*INVENTORY)
+        # click(*coords.INVENTORY)
+        Navigation.menu('inventory')
 
-        Inventory.mergeItem(*WEAPON)
-        Inventory.boostItem(*WEAPON)
-        Inventory.mergeItem(*ACC1)
-        Inventory.boostItem(*ACC1)
-        Inventory.mergeItem(*ACC2)
-        Inventory.boostItem(*ACC2)
-        Inventory.mergeItem(*ACC3)
-        Inventory.boostItem(*ACC3)
-        Inventory.mergeItem(*HEAD)
-        Inventory.boostItem(*HEAD)
-        Inventory.mergeItem(*CHEST)
-        Inventory.boostItem(*CHEST)
-        Inventory.mergeItem(*LEGS)
-        Inventory.boostItem(*LEGS)
-        Inventory.mergeItem(*BOOTS)
-        Inventory.boostItem(*BOOTS)
+        Inventory.mergeItem(*coords.WEAPON)
+        Inventory.boostItem(*coords.WEAPON)
+        Inventory.mergeItem(*coords.ACC1)
+        Inventory.boostItem(*coords.ACC1)
+        Inventory.mergeItem(*coords.ACC2)
+        Inventory.boostItem(*coords.ACC2)
+        Inventory.mergeItem(*coords.ACC3)
+        Inventory.boostItem(*coords.ACC3)
+        Inventory.mergeItem(*coords.HEAD)
+        Inventory.boostItem(*coords.HEAD)
+        Inventory.mergeItem(*coords.CHEST)
+        Inventory.boostItem(*coords.CHEST)
+        Inventory.mergeItem(*coords.LEGS)
+        Inventory.boostItem(*coords.LEGS)
+        Inventory.mergeItem(*coords.BOOTS)
+        Inventory.boostItem(*coords.BOOTS)
 
-        Inventory.boostItem(SLOT1[0], SLOT1[1])
-        Inventory.boostItem(SLOT1[0] + INV_DIFF, SLOT1[1])
+        Inventory.boostItem(coords.SLOT1[0], coords.SLOT1[1])
+        Inventory.boostItem(coords.SLOT1[0] + coords.INV_DIFF, coords.SLOT1[1])
 
-        click(*CUBE, button="right")
+        click(*coords.CUBE, button="right")
 
         for col in range(3):
             for row in range(12):  # boost and merge front row
-                x = SLOT1[0] + INV_DIFF * row
-                y = SLOT1[1] + INV_DIFF * col
+                x = coords.SLOT1[0] + coords.INV_DIFF * row
+                y = coords.SLOT1[1] + coords.INV_DIFF * col
                 Inventory.mergeItem(x, y)
                 Inventory.boostItem(x, y)
 
@@ -401,16 +449,20 @@ class Inventory:
     @staticmethod
     def trashItems():
         """ Wrapper function to trash items at rows 4 and 5. """
-        click(*INVENTORY)
+        # click(*coords.INVENTORY)
+        Navigation.menu('inventory')
         for col in range(3, 5):
             for row in range(12):
-                x = SLOT1[0] + INV_DIFF * row
-                y = SLOT1[1] + INV_DIFF * col
+                x = coords.SLOT1[0] + coords.INV_DIFF * row
+                y = coords.SLOT1[1] + coords.INV_DIFF * col
                 Inventory.trashItem(x, y)
 
     @staticmethod
     def trashItem(x, y):
         """ Trashes item at x, y (relative). """
+        if Navigation.menu != 'inventory':
+            raise Exception('should be in Inventory menu!')
+
         moveTo(x, y)
         sleep(0.1)
         pyautogui.keyDown('ctrl')
@@ -422,6 +474,8 @@ class Inventory:
     @staticmethod
     def transformPendants():
         """ Wrapper function to transform all maxed pendants. """
+        Navigation.menu('inventory')
+
         locations = Inventory.locatePendants()
         for loc in locations:
             center = pyautogui.center(loc)
@@ -434,8 +488,9 @@ class Inventory:
     @staticmethod
     def locatePendants():
         """ Returns a generator of the (absolute) locations of all pendants. """
-        click(*INVENTORY)
-        region = (CORNER[0], CORNER[1], GAME_WIDTH, GAME_HEIGHT)
+        # click(*coords.INVENTORY)
+        Navigation.menu('inventory')
+        region = (CORNER[0], CORNER[1], coords.GAME_WIDTH, coords.GAME_HEIGHT)
         locations = pyautogui.locateAllOnScreen('pendant.png', region=region)
         # for loc in locations:
         #     center = pyautogui.center(loc)
@@ -445,7 +500,10 @@ class Inventory:
     @staticmethod
     def checkTransformable():
         """ Check if item being highlighted is transformable. """
-        region = (CORNER[0], CORNER[1], GAME_WIDTH, GAME_HEIGHT)
+        if Navigation.menu != 'inventory':
+            raise Exception('should be in Inventory menu!')
+
+        region = (CORNER[0], CORNER[1], coords.GAME_WIDTH, coords.GAME_HEIGHT)
         if pyautogui.locateOnScreen('transformable.png', region=region) != None:
             return True
         return False
@@ -455,15 +513,16 @@ class TimeMachine:
     @staticmethod
     def addEnergy():
         """ Adds energy to Time Machine. """
-        click(*TIME_MACHINE)
-        click(*TM_ADD_ENERGY)
-        click(CORNER[0], CORNER[1])
+        # click(*coords.TIME_MACHINE)
+        Navigation.menu('timeMachine')
+        click(*coords.TM_ADD_ENERGY)
 
     @staticmethod
     def addMagic():
         """ Adds magic to Time Machine. """
-        click(*TIME_MACHINE)
-        click(*TM_ADD_MAGIC)
+        # click(*coords.TIME_MACHINE)
+        Navigation.menu('timeMachine')
+        click(*coords.TM_ADD_MAGIC)
 
 
 class BloodMagic:
@@ -475,11 +534,15 @@ class BloodMagic:
         magic -- magic number, starts at 1. 
         cap -- if True, will try to cap magic instead. 
         """
-        click(*BLOOD_MAGIC)
+        # click(*coords.BLOOD_MAGIC)
+        Navigation.menu('bloodMagic')
+
         if cap:
-            x, y = BM1_CAP[0], BM1_CAP[1] + (magic - 1) * BM_DIFF
+            x, y = coords.BM1_CAP[0], coords.BM1_CAP[1] + \
+                (magic - 1) * coords.BM_DIFF
         else:
-            x, y = BM1_ADD[0], BM1_ADD[1] + (magic - 1) * BM_DIFF
+            x, y = coords.BM1_ADD[0], coords.BM1_ADD[1] + \
+                (magic - 1) * coords.BM_DIFF
         click(x, y)
 
 
@@ -487,46 +550,55 @@ class MoneyPit:
     @staticmethod
     def moneyPit():
         """ Throws money into pit. """
-        click(*MONEY_PIT)
-        click(*FEED_ME)
-        click(*FEED_YEAH)
+        # click(*coords.MONEY_PIT)
+        Navigation.menu('moneyPit')
+
+        click(*coords.FEED_ME)
+        click(*coords.FEED_YEAH)
 
 
 class Rebirth:
     @staticmethod
     def rebirth():
         """ Rebirth. """
-        click(*REBIRTH_MENU)
-        sleep(5)  # to see if it's crashing
-        click(*REBIRTH_BUTTON)
-        click(*REBIRTH_CONFIRMATION)
+        # click(*coords.REBIRTH_MENU)
+        Navigation.menu('rebirth')
+        sleep(5)  # to see the number
+        click(*coords.REBIRTH_BUTTON)
+        click(*coords.REBIRTH_CONFIRMATION)
 
 
 class Yggdrasil:
     @staticmethod
     def harvestAll():
         """ Harvest all max tiered fruits. """
-        click(*YGGDRASIL)
-        click(*HARVEST_ALL_MAX_TIER)
+        # click(*coords.YGGDRASIL)
+        Navigation.menu('yggdrasil')
+        click(*coords.HARVEST_ALL_MAX_TIER)
 
     @staticmethod
     def activatePower():
         """ Activates power fruit. """
-        click(*YGGDRASIL)
-        click(*FRUIT_POWER_HARVEST)
+        # click(*coords.YGGDRASIL)
+        Navigation.menu('yggdrasil')
+        click(*coords.FRUIT_POWER_HARVEST)
 
 
 class Misc:
     @staticmethod
     def reclaimEnergy():
         """ Reclaims all energy. """
-        click(*BASIC_TRAINING)
+        # click(*coords.BASIC_TRAINING)
+        if Navigation.currentMenu == 'adventure':
+            Navigation.menu('basicTraining')
         pyautogui.press('r')
 
     @staticmethod
     def reclaimMagic():
         """ Reclaims all magic. """
-        click(*BASIC_TRAINING)
+        # click(*coords.BASIC_TRAINING)
+        if Navigation.currentMenu == 'adventure':
+            Navigation.menu('basicTraining')
         pyautogui.press('t')
 
     @staticmethod
@@ -537,12 +609,16 @@ class Misc:
         amount -- amount to input, half or cap.  
         idle -- if True will consider only the idle energy. 
         """
+        possibleMenus = ['basicTraining', 'augments', 'advTraining',
+                         'timeMachine', 'bloodMagic', 'wandoos', 'ngu']
 
-        click(*BASIC_TRAINING)
+        if Navigation.currentMenu not in possibleMenus:
+            Navigation.menu('basicTraining')
+        # click(*coords.BASIC_TRAINING)
         if amount == 'cap':
-            click(*ENERGY_CUSTOM_AMOUNT_CAP)
+            click(*coords.ENERGY_CUSTOM_AMOUNT_CAP)
         elif amount == 'half':
             if idle:
-                click(*ENERGY_CUSTOM_AMOUNT_HALF_IDLE)
+                click(*coords.ENERGY_CUSTOM_AMOUNT_HALF_IDLE)
             else:
-                click(*ENERGY_CUSTOM_AMOUNT_HALF)
+                click(*coords.ENERGY_CUSTOM_AMOUNT_HALF)
