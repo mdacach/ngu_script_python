@@ -1,5 +1,5 @@
 """ Navigation module. """
-from coords import *
+import coords
 from helper import *
 
 
@@ -7,18 +7,19 @@ class Navigation:
     """ Class to navigate through menus. """
 
     menus = {
-        'basicTraining': BASIC_TRAINING,
-        'fightBoss': FIGHT_BOSS,
-        'moneyPit': MONEY_PIT,
-        'adventure': ADVENTURE,
-        'inventory': INVENTORY,
-        'augments': AUGMENTATION,
-        'timeMachine': TIME_MACHINE,
-        'bloodMagic': BLOOD_MAGIC,
-        'wandoos': WANDOOS,
-        'ngu': NGU,
-        'yggdrasil': YGGDRASIL,
-        'rebirth': REBIRTH_MENU,
+        'basicTraining': coords.BASIC_TRAINING,
+        'fightBoss': coords.FIGHT_BOSS,
+        'moneyPit': coords.MONEY_PIT,
+        'adventure': coords.ADVENTURE,
+        'inventory': coords.INVENTORY,
+        'augments': coords.AUGMENTATION,
+        'advTraining': coords.ADV_TRAINING,
+        'timeMachine': coords.TIME_MACHINE,
+        'bloodMagic': coords.BLOOD_MAGIC,
+        'wandoos': coords.WANDOOS,
+        'ngu': coords.NGU,
+        'yggdrasil': coords.YGGDRASIL,
+        'rebirth': coords.REBIRTH_MENU,
     }
 
     currentMenu = ''
@@ -27,4 +28,8 @@ class Navigation:
     @staticmethod
     def menu(m):
         """ Navigates to specified menu. """
-        click(*menus[m])
+        if (Navigation.currentMenu == m):  # already on menu
+            return
+        click(*Navigation.menus[m])
+        Navigation.currentMenu = m
+        sleep(0.5)
