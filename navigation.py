@@ -21,6 +21,9 @@ class Navigation:
         'rebirth': REBIRTH_MENU,
     }
 
+    currentMenu = ''
+    adventureZone = ''
+
     @staticmethod
     def menu(m):
         """ Navigates to specified menu. """

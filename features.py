@@ -2,6 +2,7 @@
 
 from helper import *
 from coords import *
+from navigation import Navigation
 import time
 
 
@@ -118,6 +119,8 @@ class Adventure:
         zone -- zone to go to, by name specified in showZones.
         """
         click(*ADVENTURE)
+        if (Navigation.adventureZone == zone):
+            return
         click(*GO_BACK_ZONE, button="right")   # start at 0
         if zone == 'latest':
             click(*ADVANCE_ZONE, button="right")
@@ -125,6 +128,7 @@ class Adventure:
             times = Adventure.zones[zone]
             for _ in range(times):
                 click(*ADVANCE_ZONE)
+        Navigation.adventureZone = zone
 
     @staticmethod
     def sendAttacks():
