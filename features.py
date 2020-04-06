@@ -276,14 +276,14 @@ class Inventory:
     def mergeItem(x, y):
         """ Attemps to merge to item at x, y (relative). """
         moveTo(x, y)
-        sleep(0.1)
+        sleep(MEDIUM_SLEEP)
         pyautogui.press('d')
 
     @staticmethod
     def boostItem(x, y):
         """ Attempts to boost item at x, y (relative). """
         moveTo(x, y)
-        sleep(0.1)
+        sleep(MEDIUM_SLEEP)
         pyautogui.press('a')
 
     @staticmethod

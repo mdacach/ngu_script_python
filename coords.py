@@ -2,6 +2,11 @@
 
 Coordinates are relative to in-game top-left corner. 
 """
+
+# some user constants
+FAST_SLEEP = 0.15
+MEDIUM_SLEEP = 0.3
+
 GAME_WIDTH = 960
 GAME_HEIGHT = 600
 
