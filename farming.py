@@ -63,6 +63,8 @@ while True:
             # Inventory.boostCube()
             # Inventory.mergeInventory(slots=36)
             Inventory.mergeInventory(slots=60)
+            if killCounter % 300:
+                Inventory.trashItems()
             # go back to adventure
             print(f'going back to adventure')
             # click(*ADVENTURE)

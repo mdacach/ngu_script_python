@@ -410,43 +410,6 @@ class Inventory:
             num += 1
 
     @staticmethod
-    def boostAndMergeEquips():
-        """ Wrapper function to boost and merge all equipment slots and the three first rows of inventory. """
-        # click(*coords.INVENTORY)
-        Navigation.menu('inventory')
-
-        Inventory.mergeItem(*coords.WEAPON)
-        Inventory.boostItem(*coords.WEAPON)
-        Inventory.mergeItem(*coords.ACC1)
-        Inventory.boostItem(*coords.ACC1)
-        Inventory.mergeItem(*coords.ACC2)
-        Inventory.boostItem(*coords.ACC2)
-        Inventory.mergeItem(*coords.ACC3)
-        Inventory.boostItem(*coords.ACC3)
-        Inventory.mergeItem(*coords.HEAD)
-        Inventory.boostItem(*coords.HEAD)
-        Inventory.mergeItem(*coords.CHEST)
-        Inventory.boostItem(*coords.CHEST)
-        Inventory.mergeItem(*coords.LEGS)
-        Inventory.boostItem(*coords.LEGS)
-        Inventory.mergeItem(*coords.BOOTS)
-        Inventory.boostItem(*coords.BOOTS)
-
-        Inventory.boostItem(coords.SLOT1[0], coords.SLOT1[1])
-        Inventory.boostItem(coords.SLOT1[0] + coords.INV_DIFF, coords.SLOT1[1])
-
-        click(*coords.CUBE, button="right")
-
-        for col in range(3):
-            for row in range(12):  # boost and merge front row
-                x = coords.SLOT1[0] + coords.INV_DIFF * row
-                y = coords.SLOT1[1] + coords.INV_DIFF * col
-                Inventory.mergeItem(x, y)
-                Inventory.boostItem(x, y)
-
-          # boost infinity cube
-
-    @staticmethod
     def trashItems():
         """ Wrapper function to trash items at rows 4 and 5. """
         # click(*coords.INVENTORY)
