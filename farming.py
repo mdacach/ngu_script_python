@@ -45,6 +45,7 @@ while True:
                 killCounter += 1
                 if args.verbose:
                     print(f'kill count: {killCounter}')
+                sleep(1)
                 pyautogui.press('d')
             else:
                 Adventure.refreshZone()
@@ -53,34 +54,18 @@ while True:
             killCounter += 1
             if args.verbose:
                 print(f'kill count: {killCounter}')
+            sleep(1)
             pyautogui.press('d')
         if killCounter > 0 and killCounter % args.kills == 0:
             print(f'inv management')
             print(f'time: {round((time.time() - start))/60} minutes')
             Adventure.turnIdleOn()
-            # Inventory.boostAndMergeEquipped()
-            # Inventory.boostInventory(slots=10)
-            # Inventory.boostCube()
-            # Inventory.mergeInventory(slots=36)
-            if killCounter % 300 == 0:
-                if args.verbose:
-                    print('merging')
-                Inventory.mergeInventory(slots=60)
-                locations = Inventory.locateAll('flubber.png')
-                if args.verbose:
-                    print('transforming')
-                for loc in locations:
-                    Inventory.transformItem(loc)
-                if args.verbose:
-                    print('merging again')
-                Inventory.mergeInventory(slots=60)
-                Inventory.boostAndMergeEquipped()
-            else:
-                Inventory.mergeInventory(slots=60)
-
+            Inventory.boostAndMergeEquipped()
+            Inventory.boostInventory(slots=10)
+            Inventory.boostCube()
+            Inventory.mergeInventory(slots=3)
             if killCounter % 300 == 0:
                 Inventory.trashItems()
             # go back to adventure
             print(f'going back to adventure')
-            # click(*ADVENTURE)
             Navigation.menu('adventure')
