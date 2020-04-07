@@ -27,7 +27,6 @@ killCounter = 0
 
 f.Adventure.turnIdleOff()
 while True:
-    Navigation.menu('adventure')
     if f.Adventure.enemySpawn():
         if args.fast:
             f.Adventure.kill(fast=True)
@@ -36,9 +35,12 @@ while True:
         killCounter += 1
 
         if killCounter % 100 == 0:  # at every 100 kills
+            f.Adventure.turnIdleOn()
             f.Inventory.boostAndMergeEquipped()
             f.Inventory.boostInventory(slots=10)
             f.Inventory.boostCube()
             f.Inventory.mergeInventory(slots=3)
+            Navigation.menu('adventure')
+            f.Adventure.turnIdleOff()
 
 # add support to yggdrasil (TODO)
