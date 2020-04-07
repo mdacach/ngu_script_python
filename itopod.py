@@ -24,9 +24,10 @@ else:
 
 start = time.time()
 killCounter = 0
+
+f.Adventure.turnIdleOff()
 while True:
     Navigation.menu('adventure')
-    f.Adventure.turnIdleOff()
     if f.Adventure.enemySpawn():
         if args.fast:
             f.Adventure.kill(fast=True)
