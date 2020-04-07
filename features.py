@@ -133,8 +133,8 @@ class Adventure:
         """
         # click(*coords.ADVENTURE)
         Navigation.menu('adventure')
-        if (Navigation.adventureZone == zone):
-            return
+        # if (Navigation.adventureZone == zone):
+        #     return
         click(*coords.GO_BACK_ZONE, button="right")   # start at 0
         if zone == 'latest':
             click(*coords.ADVANCE_ZONE, button="right")
@@ -219,13 +219,16 @@ class Adventure:
                 return
 
     @staticmethod
-    def kill():
+    def kill(fast=False):
         """ Kills the current enemy. """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
         while not Adventure.isEnemyDead():
-            Adventure.sendAttacks()
-            sleep(0.1)
+            if fast:
+                pyautogui.press('w')
+            else:
+                Adventure.sendAttacks()
+                sleep(0.1)
         # after this, player may be dead
 
     @staticmethod
