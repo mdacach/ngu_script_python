@@ -313,6 +313,15 @@ class Augmentation:
 
 class Inventory:
     @staticmethod
+    def loadout(num):
+        """ Wears loadout {num}. """
+        Navigation.menu('inventory')
+        if num == 1:
+            click(*coords.LOADOUT1)
+        if num == 2:
+            click(*coords.LOADOUT2)
+
+    @staticmethod
     def mergeItem(x, y):
         """ Attemps to merge to item at x, y (relative). """
         if Navigation.currentMenu != 'inventory':
