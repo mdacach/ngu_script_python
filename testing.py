@@ -15,8 +15,9 @@ if __name__ == "__main__":
     # Misc.inputResource()
     # print(Inventory.locateAll('pendant.png'))
     # Inventory.transformAll('flubber.png')
-    locations = Inventory.locateAll('flubber.png')
-    for loc in locations:
-        sleep(0.5)
-        # rawMove(*pyautogui.center(loc))
-        Inventory.transformItem(loc)
+    # locations = Inventory.locateAll('flubber.png')
+    # for loc in locations:
+    #     sleep(0.5)
+    #     # rawMove(*pyautogui.center(loc))
+    #     Inventory.transformItem(loc)
+    Inventory.loadout(2)

@@ -28,6 +28,7 @@ def run3():
     """ Performs a 3 minute run. """
     start = time.time()
     f.BasicTraining.basicTraining()
+    f.Inventory.loadout(2)
     f.FightBosses.fightBosses()
     f.Adventure.adventureZone()
     loopCounter = 0
@@ -41,6 +42,7 @@ def run3():
         f.FightBosses.fightBosses()
         if loopCounter % 5 == 0:
             f.Adventure.adventureZone()
+            f.Inventory.loadout(1)
         # if (loopCounter % 10 == 0):
         #     f.Adventure.adventureZone()
         #     print('sleeping for overall check')
