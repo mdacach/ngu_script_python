@@ -62,8 +62,23 @@ while True:
             # Inventory.boostInventory(slots=10)
             # Inventory.boostCube()
             # Inventory.mergeInventory(slots=36)
-            Inventory.mergeInventory(slots=60)
-            if killCounter % 300:
+            if killCounter % 300 == 0:
+                if args.verbose:
+                    print('merging')
+                Inventory.mergeInventory(slots=60)
+                locations = Inventory.locateAll('flubber.png')
+                if args.verbose:
+                    print('transforming')
+                for loc in locations:
+                    Inventory.transformItem(loc)
+                if args.verbose:
+                    print('merging again')
+                Inventory.mergeInventory(slots=60)
+                Inventory.boostAndMergeEquipped()
+            else:
+                Inventory.mergeInventory(slots=60)
+
+            if killCounter % 300 == 0:
                 Inventory.trashItems()
             # go back to adventure
             print(f'going back to adventure')
