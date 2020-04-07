@@ -14,4 +14,9 @@ if __name__ == "__main__":
     # Navigation.menu('timeMachine')
     # Misc.inputResource()
     # print(Inventory.locateAll('pendant.png'))
-    Inventory.transformAll('flubber.png')
+    # Inventory.transformAll('flubber.png')
+    locations = Inventory.locateAll('flubber.png')
+    for loc in locations:
+        sleep(0.5)
+        # rawMove(*pyautogui.center(loc))
+        Inventory.transformItem(loc)
