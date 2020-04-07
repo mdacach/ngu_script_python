@@ -7,12 +7,53 @@ from navigation import Navigation
 import time
 import pyautogui
 
-# parser = argparse.ArgumentParser()
-# parser.add_argument('--duration', help='duration of the run',
-#                     default=10)
-# args = parser.parse_args()
+parser = argparse.ArgumentParser()
+parser.add_argument('--duration', help='duration of the run',
+                    default=3)
+args = parser.parse_args()
 
-# print(args.duration)
+print(args.duration)
+
+if (args.duration == 3):
+    start = time.time()
+    counter = 0
+    while True:
+        counter += 1
+        print(f'run {counter}')
+        print(f'time: {round((time.time() - start))} sec')
+        run3()
+
+
+def run3():
+    """ Performs a 3 minute run. """
+    start = time.time()
+    f.BasicTraining.basicTraining()
+    f.FightBosses.fightBosses()
+    f.Adventure.adventureZone()
+    loopCounter = 0
+    while (time.time() - start < 150):
+        loopCounter += 1
+        f.Misc.inputResource(amount='half', idle=True)
+        f.TimeMachine.addEnergy()
+        f.Augmentation.augmentation()
+        f.BloodMagic.addMagic(cap=True)
+        f.Adventure.itopodFarm()
+        f.FightBosses.fightBosses()
+        if loopCounter % 5 == 0:
+            f.Adventure.adventureZone()
+        # if (loopCounter % 10 == 0):
+        #     f.Adventure.adventureZone()
+        #     print('sleeping for overall check')
+        #     sleep(30)  # 30 sec to check on the run
+
+    f.Misc.reclaimEnergy()
+    f.Misc.reclaimMagic()
+    f.Augmentation.augmentation(upgrade=True)
+    f.FightBosses.fightBosses()
+    f.MoneyPit.moneyPit()
+    while (time.time() - start < 180):
+        f.FightBosses()
+    f.Rebirth.rebirth()
 
 
 def run7():
@@ -29,7 +70,6 @@ def run7():
         f.TimeMachine.addEnergy()
         f.Augmentation.augmentation()
         f.BloodMagic.addMagic(cap=True)
-
 
 
 def run10():
