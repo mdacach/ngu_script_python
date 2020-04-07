@@ -2,6 +2,7 @@
 from helper import *
 from coords import *
 from features import *
+from navigation import Navigation
 import time
 
 
@@ -120,15 +121,18 @@ def farmItopod():
     """ Farms ITOPOD. """
     print('itopod farming script')
     floor = input('floor: ')
-    # Adventure.itopodFarm(floor=floor)
-    Adventure.itopodPush(floor=floor)
+    Adventure.itopodFarm(floor=floor)
+    # Adventure.itopodPush(floor=floor)
     Adventure.turnIdleOff()
     counter = 0
     while True:
         if (Adventure.enemySpawn()):
             Adventure.kill()
             counter += 1
-            if (counter % 25 == 0):
+            if (counter % 50 == 0):
                 # Inventory.boostInventory(slots=3)  # to farm boosts
                 Inventory.boostAndMergeEquipped()
-                click(*ADVENTURE)
+                Inventory.boostInventory(slots=10)
+                Inventory.boostCube()
+                Inventory.mergeInventory(slots=36)
+                Navigation.menu('adventure')
