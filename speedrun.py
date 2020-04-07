@@ -14,14 +14,17 @@ args = parser.parse_args()
 
 print(args.duration)
 
-if (args.duration == 3):
-    start = time.time()
-    counter = 0
-    while True:
-        counter += 1
-        print(f'run {counter}')
-        print(f'time: {round((time.time() - start))} sec')
-        run3()
+
+def main():
+    if (args.duration == 3):
+        print('3 minute runs!')
+        start = time.time()
+        counter = 0
+        while True:
+            counter += 1
+            print(f'run {counter}')
+            print(f'time: {round((time.time() - start))} sec')
+            run3()
 
 
 def run3():
@@ -103,3 +106,7 @@ def run10():
     while (time.time() - start < 600):
         f.FightBosses()
     f.Rebirth.rebirth()
+
+
+if __name__ == "__main__":
+    main()
