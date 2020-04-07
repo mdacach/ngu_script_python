@@ -34,6 +34,7 @@ def run3():
     f.Inventory.loadout(2)
     f.FightBosses.fightBosses()
     f.Adventure.adventureZone()
+    sleep(10)
     loopCounter = 0
     while (time.time() - start < 150):
         loopCounter += 1
@@ -41,7 +42,6 @@ def run3():
         f.TimeMachine.addEnergy()
         f.Augmentation.augmentation()
         f.BloodMagic.addMagic(cap=True)
-        f.Adventure.itopodFarm()
         f.FightBosses.fightBosses()
         if loopCounter % 5 == 0:
             f.Adventure.adventureZone()
@@ -53,6 +53,7 @@ def run3():
 
     f.Misc.reclaimEnergy()
     f.Misc.reclaimMagic()
+    f.Misc.inputResource(amount='cap', idle=True)
     f.Augmentation.augmentation(upgrade=True)
     f.FightBosses.fightBosses()
     f.MoneyPit.moneyPit()
