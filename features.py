@@ -449,16 +449,25 @@ class Inventory:
                 # print('control click')
 
     @staticmethod
+    def transformItem(loc):
+        """ Transforms item being hovered. """
+        if Navigation.currentMenu != 'inventory':
+            raise Exception('should be in Inventory menu!')
+        center = pyautogui.center(loc)
+        rawClick(*center)
+        sleep(0.1)
+        print('checking transformable')
+        if Inventory.checkTransformable():
+            print('is transformable')
+            ctrlClick()
+
+    @staticmethod
     def transformAll(image):
         """ Transform all items if transformable. """
         Navigation.menu('inventory')
         locations = Inventory.locateAll(image)
         for loc in locations:
-            center = pyautogui.center(loc)  # get center
-            rawClick(*center)
-            sleep(0.1)
-            if Inventory.checkTransformable():
-                ctrlClick()
+            Inventory.transformItem(loc)
 
     @staticmethod
     def locateAll(image):
@@ -584,8 +593,8 @@ class Misc:
     def inputResource(amount='cap', idle=False):
         """ Sets input resource to {amount}. 
 
-        Keyword arguments
-        amount -- amount to input, half or cap.  
+        Keyword arguments: \n
+        amount -- amount to input, half or cap.  \n
         idle -- if True will consider only the idle energy. 
         """
         possibleMenus = ['basicTraining', 'augments', 'advTraining',
