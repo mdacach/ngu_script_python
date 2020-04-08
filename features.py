@@ -451,20 +451,6 @@ class Inventory:
         pyautogui.keyUp('ctrl')
 
     @staticmethod
-    def transformPendants():
-        """ Wrapper function to transform all maxed pendants. """
-        Navigation.menu('inventory')
-
-        locations = Inventory.locatePendants()
-        for loc in locations:
-            center = pyautogui.center(loc)
-            rawMove(*center)  # show tooltip
-            sleep(0.1)
-            if Inventory.checkTransformable():
-                ctrlClick()
-                # print('control click')
-
-    @staticmethod
     def transformItem(loc):
         """ Transforms item being hovered. """
         if Navigation.currentMenu != 'inventory':
@@ -491,14 +477,6 @@ class Inventory:
         Navigation.menu('inventory')
         region = (CORNER[0], CORNER[1], coords.GAME_WIDTH, coords.GAME_HEIGHT)
         locations = pyautogui.locateAllOnScreen(image, region=region)
-        return locations
-
-    @staticmethod
-    def locatePendants():
-        """ Returns a generator of the (absolute) locations of all pendants. """
-        Navigation.menu('inventory')
-        region = (CORNER[0], CORNER[1], coords.GAME_WIDTH, coords.GAME_HEIGHT)
-        locations = pyautogui.locateAllOnScreen('pendant.png', region=region)
         return locations
 
     @staticmethod
