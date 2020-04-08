@@ -10,7 +10,7 @@ import pyautogui
 parser = argparse.ArgumentParser()
 parser.add_argument('--push', help='push to max possible floor')
 parser.add_argument(
-    '--fast', help='use only regular attacks to be faster', default=False)
+    '--fast', help='use only regular attacks to be faster', default=True)
 parser.add_argument('--floor', help='floor to farm', default='optimal')
 
 args = parser.parse_args()
@@ -33,13 +33,15 @@ while True:
         else:
             f.Adventure.kill()
         killCounter += 1
+        print(f'kill counter: {killCounter}')
 
         if killCounter % 100 == 0:  # at every 100 kills
             f.Adventure.turnIdleOn()
             f.Inventory.boostAndMergeEquipped()
             f.Inventory.boostInventory(slots=10)
             f.Inventory.boostCube()
-            f.Inventory.mergeInventory(slots=3)
+            f.Inventory.mergeInventory(slots=24)
+            f.Yggdrasil.harvestAll()
             Navigation.menu('adventure')
             f.Adventure.turnIdleOff()
 

@@ -22,10 +22,6 @@ parser.add_argument('--verbose', '-v',
 
 args = parser.parse_args()
 print(args)
-print(args.zone)
-print(args.boss)
-print(args.kills)
-print(args.verbose)
 
 Adventure.adventureZone(args.zone)
 print(Navigation.currentMenu)
@@ -37,7 +33,6 @@ if args.verbose:
 
 start = time.time()
 while True:
-    Adventure.turnIdleOff()
     if Adventure.enemySpawn():
         if args.boss:
             if Adventure.isBoss():
@@ -61,11 +56,13 @@ while True:
             print(f'time: {round((time.time() - start))/60} minutes')
             Adventure.turnIdleOn()
             Inventory.boostAndMergeEquipped()
-            Inventory.boostInventory(slots=10)
+            Inventory.boostInventory(slots=5)
             Inventory.boostCube()
-            Inventory.mergeInventory(slots=3)
+            # Inventory.mergeInventory(slots=4)
             if killCounter % 300 == 0:
                 Inventory.trashItems()
+                Yggdrasil.harvestAll()
             # go back to adventure
             print(f'going back to adventure')
             Navigation.menu('adventure')
+            Adventure.turnIdleOff()

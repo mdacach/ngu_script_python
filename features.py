@@ -333,6 +333,8 @@ class Inventory:
         click(x, y)
         sleep(coords.MEDIUM_SLEEP)
         pyautogui.press('d')
+        sleep(coords.FAST_SLEEP)
+        pyautogui.press('d')
 
     @staticmethod
     def boostItem(x, y):
@@ -342,6 +344,8 @@ class Inventory:
 
         click(x, y)
         sleep(coords.MEDIUM_SLEEP)
+        pyautogui.press('a')
+        sleep(coords.FAST_SLEEP)
         pyautogui.press('a')
 
     @staticmethod
