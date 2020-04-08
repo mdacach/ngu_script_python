@@ -60,7 +60,7 @@ while True:
             Inventory.boostCube()
             # Inventory.mergeInventory(slots=4)
             if killCounter % 300 == 0:
-                Inventory.trashItems()
+               # Inventory.trashItems()
                 Yggdrasil.harvestAll()
             # go back to adventure
             print(f'going back to adventure')
