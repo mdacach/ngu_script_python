@@ -331,7 +331,7 @@ class Inventory:
             raise Exception('should be in Inventory menu!')
 
         click(x, y)
-        sleep(coords.FAST_SLEEP)
+        sleep(coords.MEDIUM_SLEEP)
         pyautogui.press('d')
 
     @staticmethod
@@ -341,7 +341,7 @@ class Inventory:
             raise Exception('should be in Inventory menu!')
 
         click(x, y)
-        sleep(coords.FAST_SLEEP)
+        sleep(coords.MEDIUM_SLEEP)
         pyautogui.press('a')
 
     @staticmethod
