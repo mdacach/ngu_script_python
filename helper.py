@@ -8,7 +8,7 @@ import pyautogui
 CORNER = None
 print('searching for corner...')
 while CORNER == None:
-    CORNER = pyautogui.locateOnScreen('ingame-corner.png')
+    CORNER = pyautogui.locateOnScreen('images/ingame-corner.png')
     if CORNER == None:
         print('could not find top-left corner')
 print('success')
