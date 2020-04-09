@@ -42,6 +42,7 @@ while True:
             f.Inventory.boostCube()
             f.Inventory.mergeInventory(slots=24)
             f.Yggdrasil.harvestAll()
+            f.Yggdrasil.activatePom()
             Navigation.menu('adventure')
             f.Adventure.turnIdleOff()
 
