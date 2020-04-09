@@ -4,6 +4,7 @@ from helper import *
 from coords import *
 from features import *
 from navigation import Navigation
+from inventory import invManagement
 import time
 import pyautogui
 
@@ -18,6 +19,8 @@ parser.add_argument('--kills', '-k',
                     default=50)
 parser.add_argument('--verbose', '-v',
                     help='print stuff',
+                    action='store_true')
+parser.add_argument('--fast', '-f', help='use only regular attacks',
                     action='store_true')
 
 args = parser.parse_args()
@@ -36,7 +39,10 @@ while True:
     if Adventure.enemySpawn():
         if args.boss:
             if Adventure.isBoss():
-                Adventure.kill()
+                if args.fast:
+                    Adventure.kill(fast=True)
+                else:
+                    Adventure.kill()
                 killCounter += 1
                 if args.verbose:
                     print(f'kill count: {killCounter}')
@@ -45,24 +51,27 @@ while True:
             else:
                 Adventure.refreshZone()
         else:
-            Adventure.kill()
+            if args.fast:
+                Adventure.kill(fast=True)
+            else:
+                Adventure.kill()
             killCounter += 1
             if args.verbose:
                 print(f'kill count: {killCounter}')
             sleep(1)
             pyautogui.press('d')
+
         if killCounter > 0 and killCounter % args.kills == 0:
             print(f'inv management')
             print(f'time: {round((time.time() - start))/60} minutes')
             Adventure.turnIdleOn()
-            Inventory.boostAndMergeEquipped()
-            Inventory.boostInventory(slots=5)
-            Inventory.boostCube()
-            # Inventory.mergeInventory(slots=4)
+
+            invManagement()
+
             if killCounter % 300 == 0:
-               # Inventory.trashItems()
                 Yggdrasil.harvestAll()
-            # go back to adventure
+                Yggdrasil.activatePom()
+
             print(f'going back to adventure')
             Navigation.menu('adventure')
             Adventure.turnIdleOff()
