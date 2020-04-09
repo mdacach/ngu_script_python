@@ -403,10 +403,10 @@ class Inventory:
 
     @staticmethod
     def mergeInventory(slots=36):
-        """ Merge first {slots} slots of inventory. 
+        """ Merge first slots of inventory. 
 
-        Keyword arguments 
-        slots -- number of slots to merge. 
+        Keyword arguments: 
+        slots -- number of slots to merge, starting from first one. 
         """
         Navigation.menu('inventory')
 
@@ -512,7 +512,7 @@ class BloodMagic:
     def addMagic(magic=1, cap=False):
         """ Adds magic to Blood Magic. 
 
-        Keyword arguments 
+        Keyword arguments:
         magic -- magic number, starts at 1. 
         cap -- if True, will try to cap magic instead. 
         """
@@ -564,6 +564,12 @@ class Yggdrasil:
         # click(*coords.YGGDRASIL)
         Navigation.menu('yggdrasil')
         click(*coords.FRUIT_POWER_HARVEST)
+
+    @staticmethod
+    def activatePom():
+        """ Activates pomegranate. """
+        Navigation.menu('yggdrasil')
+        click(*coords.FRUIT_POM_HARVEST)
 
 
 class Misc:
