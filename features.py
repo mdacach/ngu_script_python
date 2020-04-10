@@ -551,7 +551,7 @@ class Misc:
     @staticmethod
     def reclaimAll():
         """ Reclaim all resources. """
-        if Navigation.currentMeu == 'adventure':
+        if Navigation.currentMenu == 'adventure':
             Navigation.menu('basicTraining')
         pyautogui.press('r')
         pyautogui.press('t')
