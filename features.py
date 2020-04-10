@@ -561,7 +561,7 @@ class Misc:
         """ Sets input resource to {amount}. 
 
         Keyword arguments: \n
-        amount -- amount to input, half or cap.  \n
+        amount -- cap, half or quarter.  \n
         idle -- if True will consider only the idle energy. 
         """
         possibleMenus = ['basicTraining', 'augments', 'advTraining',
@@ -570,10 +570,17 @@ class Misc:
         if Navigation.currentMenu not in possibleMenus:
             Navigation.menu('basicTraining')
         # click(*coords.BASIC_TRAINING)
-        if amount == 'cap':
-            click(*coords.ENERGY_CUSTOM_AMOUNT_CAP)
-        elif amount == 'half':
-            if idle:
-                click(*coords.ENERGY_CUSTOM_AMOUNT_HALF_IDLE)
-            else:
+        if idle:
+            if amount == 'cap':
+                click(*coords.ENERGY_CUSTOM_AMOUNT_CAP)
+            if amount == 'half':
                 click(*coords.ENERGY_CUSTOM_AMOUNT_HALF)
+            if amount == 'quarter':
+                click(*coords.ENERGY_CUSTOM_AMOUNT_QUARTER)
+        else:
+            if amount == 'cap':
+                click(*coords.ENERGY_CUSTOM_AMOUNT_CAP)
+            if amount == 'half':
+                click(*coords.ENERGY_CUSTOM_AMOUNT_HALF_IDLE)
+            if amount == 'quarter':
+                click(*coords.ENERGY_CUSTOM_AMOUNT_QUARTER_IDLE)
