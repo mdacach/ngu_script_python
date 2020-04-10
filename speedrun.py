@@ -88,12 +88,14 @@ def run10():
     loopCounter = 0
     # TIME MACHINE LOOP
     f.Misc.inputResource()
+
+    print(f'Time Machine loop for 4 minutes')
     while (time.time() - start < 240):
-        print(f'Time Machine loop for 4 minutes')
         f.TimeMachine.addEnergy()
         f.TimeMachine.addMagic()
 
     f.Misc.reclaimAll()
+    print(f'Main loop until 10 minutes')
     while (time.time() - start < 600):
         f.FightBosses.fightBosses()
         f.Misc.inputResource(amount='half')
