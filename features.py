@@ -31,6 +31,13 @@ class FightBosses:        # click(*coords.BASIC_TRAINING)
         click(*coords.NUKE)
 
     @staticmethod
+    def fightBoss():
+        """ Click fight boss. """
+        if Navigation.currentMenu != 'fightBoss':
+            raise Exception('should be in Fight Boss menu!')
+        click(*coords.FIGHT)
+
+    @staticmethod
     def fightBosses():
         """ Clicks Nuke and then Fight Boss for 10 more seconds. """
         # click(*coords.FIGHT_BOSS)
