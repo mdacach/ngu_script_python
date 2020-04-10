@@ -7,7 +7,7 @@ import time
 import pyautogui
 
 
-def invManagement(slots):
+def invManagement(slots=10):
     Inventory.boostAndMergeEquipped()
     Inventory.mergeInventory(slots=slots)
     Inventory.boostInventory(slots=slots)
