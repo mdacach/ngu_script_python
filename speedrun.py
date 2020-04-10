@@ -17,14 +17,14 @@ print(args.duration)
 
 def main():
     if (args.duration == 3):
-        print('3 minute runs!')
+        print('10 minute runs!')
         start = time.time()
         counter = 0
         while True:
             counter += 1
             print(f'run {counter}')
             print(f'time: {round((time.time() - start))} sec')
-            run3()
+            run10()
 
 
 def run3():
@@ -86,26 +86,22 @@ def run10():
     f.Adventure.adventureZone()
     # 10 min is 600 sec
     loopCounter = 0
-    while (time.time() - start < 540):  # until 9 min
-        loopCounter += 1
-        f.Misc.inputResource(amount='half', idle=True)
+    # TIME MACHINE LOOP
+    f.Misc.inputResource()
+    while (time.time() - start < 240):
+        print(f'Time Machine loop for 4 minutes')
         f.TimeMachine.addEnergy()
-        f.Augmentation.augmentation()
-        f.BloodMagic.addMagic(cap=True)
-        f.Adventure.itopodFarm()
-        f.FightBosses.fightBosses()
-        if (loopCounter % 10 == 0):
-            f.Adventure.adventureZone()
-            print('sleeping for overall check')
-            sleep(30)  # 30 sec to check on the run
+        f.TimeMachine.addMagic()
 
-    f.Misc.reclaimEnergy()
-    f.Misc.reclaimMagic()
-    f.Augmentation.augmentation(upgrade=True)
-    f.FightBosses.fightBosses()
-    f.MoneyPit.moneyPit()
+    f.Misc.reclaimAll()
     while (time.time() - start < 600):
-        f.FightBosses()
+        f.FightBosses.fightBosses()
+        f.Misc.inputResource(amount='half')
+        f.Augmentation.augmentation()
+        f.Augmentation.augmentation(upgrade=True)
+        f.BloodMagic.addMagic(cap=True)
+
+    f.MoneyPit.moneyPit()
     f.Rebirth.rebirth()
 
 
