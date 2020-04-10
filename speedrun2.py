@@ -9,6 +9,14 @@ from helper import sleep
 from features import Adventure, Augmentation, BloodMagic, BasicTraining, FightBosses, Inventory, Misc, MoneyPit, Rebirth, TimeMachine
 from navigation import Navigation
 
+# commandline arguments
+parser = argparse.ArgumentParser()
+parser.add_argument('--duration', help='duration for the runs', default='10')
+args = parser.parse_args()
+
+print(f'called with arguments {args}')
+
+
 def run7():
     """ Perform a 7 minute run."""
     start = time.time()
@@ -113,13 +121,15 @@ def run10():
 
 if __name__ == "__main__":
     print()
-    print(f'speedrun script')
-    print(f'10 minutes runs')
+    print(f'{args.duration} minutes run')
 
     runCounter = 0
     while True:
         print('*' * 15)
         runCounter += 1
         print(f'run {runCounter}')
-        run10()
+        if args.duration == '10':
+            run10()
+        elif args.duration == '7':
+            run7()
         print('*' * 15)
