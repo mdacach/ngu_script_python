@@ -81,6 +81,7 @@ def run7():
 def run10():
     """ Performs a 10 minute run. """
     start = time.time()
+    f.Inventory.loadout(2)
     f.BasicTraining.basicTraining()
     f.FightBosses.fightBosses()
     f.Adventure.adventureZone()
@@ -94,11 +95,19 @@ def run10():
         f.TimeMachine.addEnergy()
         f.TimeMachine.addMagic()
 
+    f.Inventory.loadout(1)
+    f.BasicTraining.basicTraining()
+
     f.Misc.reclaimAll()
     print(f'Main loop until 10 minutes')
+    loop = 0
     while (time.time() - start < 600):
+        print(f'sleeping for 30 seconds')
+        sleep(30)
         f.FightBosses.fightBosses()
         f.Misc.inputResource(amount='half')
+        f.Augmentation.augmentation()
+        f.Misc.inputResource(amount='half', idle=True)
         f.Augmentation.augmentation()
         f.Augmentation.augmentation(upgrade=True)
         f.BloodMagic.addMagic(cap=True)
