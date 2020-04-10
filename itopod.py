@@ -41,8 +41,12 @@ while True:
             f.Inventory.boostInventory(slots=10)
             f.Inventory.boostCube()
             f.Inventory.mergeInventory(slots=24)
+            print('ygg stuff')
             f.Yggdrasil.harvestAll()
+            f.Misc.reclaimMagic()
             f.Yggdrasil.activatePom()
+            f.BloodMagic.addMagic(magic=3)
+            print('ygg stuff done')
             Navigation.menu('adventure')
             f.Adventure.turnIdleOff()
 
