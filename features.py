@@ -509,9 +509,7 @@ class Rebirth:
     @staticmethod
     def rebirth():
         """ Rebirth. """
-        # click(*coords.REBIRTH_MENU)
         Navigation.menu('rebirth')
-        sleep(5)  # to see the number
         click(*coords.REBIRTH_BUTTON)
         click(*coords.REBIRTH_CONFIRMATION)
 
