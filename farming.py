@@ -66,11 +66,14 @@ while True:
             print(f'time: {round((time.time() - start))/60} minutes')
             Adventure.turnIdleOn()
 
-            invManagement()
+            invManagement(slots=5)
 
             if killCounter % 300 == 0:
                 Yggdrasil.harvestAll()
+                # TEMPORARY FIX
+                Misc.reclaimMagic()
                 Yggdrasil.activatePom()
+                BloodMagic.addMagic(magic=3)
 
             print(f'going back to adventure')
             Navigation.menu('adventure')
