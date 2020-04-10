@@ -20,6 +20,7 @@ class Navigation:
         'ngu': coords.NGU,
         'yggdrasil': coords.YGGDRASIL,
         'rebirth': coords.REBIRTH_MENU,
+        'exp': coords.EXP_MENU
     }
 
     currentMenu = ''
