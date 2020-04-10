@@ -4,6 +4,7 @@ from helper import *
 from coords import *
 import pytesseract as ocr
 from PIL import Image
+from navigation import Navigation
 
 
 class Statistics:
@@ -17,6 +18,7 @@ class Statistics:
     @staticmethod
     def getEXP():
         """ Get current EXP from spend EXP menu. """
+        Navigation.menu('exp')
         x, y = getCoords(EXP_REGION[0], EXP_REGION[1])
         img = pyautogui.screenshot(region=(x, y, 100, 20))
         # img.save('exp-screenshot.png')
