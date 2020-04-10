@@ -178,47 +178,6 @@ class Adventure:
         Adventure.turnIdleOn()
 
     @staticmethod
-    def killMonsters(zone='latest', bossOnly=False, kills=20):  # REWORK
-        """ kills {kills} monsters in {zone} and returns"""
-        Adventure.adventureZone(zone)
-        # pyautogui.press('q')  # idle mode
-        Adventure.turnIdleOff()
-        counter = 0
-        currentZone = zone
-        while True:
-            if currentZone == 'safe':
-                Adventure.adventureZone(zone)
-                currentZone = zone
-            # print('checking spawn')
-            if Adventure.enemySpawn():
-                # print('spawned')
-                if (not bossOnly):
-                    Adventure.kill()
-                    if Adventure.isPlayerLow():
-                        Adventure.healHP()
-                        currentZone = 'safe'
-                    counter += 1
-                    sleep(1)
-                    pyautogui.press('d')  # heal
-                else:
-                    if Adventure.isBoss():
-                        Adventure.kill()
-                        if (Adventure.isPlayerLow()):
-                            Adventure.healHP()
-                            currentZone = 'safe'
-                        counter += 1
-                        sleep(1)
-                        pyautogui.press('d')  # heal
-                    else:
-                        Adventure.refreshZone()
-            else:
-                sleep(0.1)  # wait a little
-            if (counter > 0 and counter % kills == 0):
-                # pyautogui.press('q')  # after 15 fights
-                Adventure.turnIdleOn()
-                return
-
-    @staticmethod
     def kill(fast=False):
         """ Kills the current enemy. """
         if Navigation.currentMenu != 'adventure':
