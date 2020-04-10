@@ -549,6 +549,14 @@ class Misc:
         pyautogui.press('t')
 
     @staticmethod
+    def reclaimAll():
+        """ Reclaim all resources. """
+        if Navigation.currentMeu == 'adventure':
+            Navigation.menu('basicTraining')
+        pyautogui.press('r')
+        pyautogui.press('t')
+
+    @staticmethod
     def inputResource(amount='cap', idle=False):
         """ Sets input resource to {amount}. 
 
