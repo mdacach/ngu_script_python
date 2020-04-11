@@ -8,6 +8,7 @@ import coords
 from helper import sleep
 from features import Adventure, Augmentation, BloodMagic, BasicTraining, FightBosses, Inventory, Misc, MoneyPit, Rebirth, TimeMachine
 from navigation import Navigation
+from statistics import Statistics
 
 # commandline arguments
 parser = argparse.ArgumentParser()
@@ -124,6 +125,7 @@ if __name__ == "__main__":
     print(f'{args.duration} minutes run')
 
     runCounter = 0
+    print(f'exp before: {Statistics.getExp()}')
     while True:
         print('*' * 15)
         runCounter += 1
@@ -132,4 +134,5 @@ if __name__ == "__main__":
             run10()
         elif args.duration == '7':
             run7()
+        print(f'exp: {Statistics.getExp()}')
         print('*' * 15)
