@@ -64,7 +64,8 @@ def run7():
 
     MoneyPit.moneyPit()
     Navigation.menu('rebirth')
-    while time.time() - start < 600:
+    print('waiting for time')
+    while time.time() - start < 420:
         sleep(1)
     Rebirth.rebirth()
 
@@ -125,7 +126,7 @@ if __name__ == "__main__":
     print(f'{args.duration} minutes run')
 
     runCounter = 0
-    print(f'exp before: {Statistics.getExp()}')
+    print(f'exp before: {Statistics.getEXP()}')
     while True:
         print('*' * 15)
         runCounter += 1
@@ -134,5 +135,5 @@ if __name__ == "__main__":
             run10()
         elif args.duration == '7':
             run7()
-        print(f'exp: {Statistics.getExp()}')
+        print(f'exp: {Statistics.getEXP()}')
         print('*' * 15)
