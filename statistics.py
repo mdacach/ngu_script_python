@@ -32,7 +32,8 @@ class Statistics:
         for letter in text:
             if str.isdigit(letter):
                 exp += letter
-        print(f"{exp} exp")
+        # print(f"{exp} exp")
+        return f"{exp} exp"
 
     @staticmethod
     def getBoss():
@@ -47,3 +48,8 @@ class Statistics:
             print('could not read boss number')
             return
         print(text)
+
+    @staticmethod
+    def getPP():
+        """ Get the current pp amount from itopod. """
+        # x, y
