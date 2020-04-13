@@ -33,7 +33,12 @@ class Statistics:
             if str.isdigit(letter):
                 exp += letter
         # print(f"{exp} exp")
-        return f"{exp} exp"
+        try:
+            return int(exp)
+        except:
+            print('could not return exp correctly')
+        # return exp
+        # return f"{exp} exp"
 
     @staticmethod
     def getBoss():
