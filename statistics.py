@@ -37,6 +37,7 @@ class Statistics:
             return int(exp)
         except:
             print('could not return exp correctly')
+            return -1
         # return exp
         # return f"{exp} exp"
 
