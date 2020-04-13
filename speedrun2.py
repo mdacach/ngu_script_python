@@ -127,6 +127,7 @@ if __name__ == "__main__":
 
     runCounter = 0
     print(f'exp before: {Statistics.getEXP()}')
+    start = time.time()
     while True:
         print('*' * 15)
         runCounter += 1
@@ -137,3 +138,4 @@ if __name__ == "__main__":
             run7()
         print(f'exp: {Statistics.getEXP()}')
         print('*' * 15)
+        print(f'total time: {round((time.time() - start)/60)} minutes')
