@@ -29,14 +29,18 @@ def run7():
     Misc.inputResource()  # all energy
 
     print(f'Time Machine loop for 4 minutes')
+    inv1 = False
     while time.time() - start < 240:
         TimeMachine.addEnergy()
         TimeMachine.addMagic()
         print(f'sleeping for 30 seconds')
-        sleep(30)
-
-    Inventory.loadout(1)
-    BasicTraining.basicTraining()
+        if time.time() - start > 180 and not inv1:
+            Inventory.loadout(1)
+            BasicTraining.basicTraining()
+        startTime = time.time()
+        while time.time() - startTime < 30:
+            Adventure.adventureZone()
+            Adventure.kill()
 
     Misc.reclaimAll()  # reclaim energy and magic from TM
 
