@@ -9,11 +9,11 @@ from navigation import Navigation
 
 class Statistics:
     @staticmethod
-    def screenshot():
+    def screenshot(name='game-screenshot.png'):
         """ Saves a screenshot of the game. """
         img = pyautogui.screenshot(
             region=(CORNER[0], CORNER[1], GAME_WIDTH, GAME_HEIGHT))
-        img.save('game-screenshot.png')
+        img.save(name)
 
     @staticmethod
     def getEXP():
