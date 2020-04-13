@@ -69,6 +69,7 @@ def run7():
     MoneyPit.moneyPit()
     Navigation.menu('rebirth')
     print('waiting for time')
+    Statistics.screenshot('rebirth.png')
     while time.time() - start < 420:
         sleep(1)
     Rebirth.rebirth()
