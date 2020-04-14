@@ -530,17 +530,14 @@ class Yggdrasil:
         return pyautogui.pixelMatchesColor(*pix, (255, 255, 255))
 
     @staticmethod
-    def activatePower():
-        """ Activates power fruit. """
-        # click(*coords.YGGDRASIL)
-        Navigation.menu('yggdrasil')
-        click(*coords.FRUIT_POWER_HARVEST)
+    def activate(fruit):
+        """ Activate fruit in yggdrasil menu.
 
-    @staticmethod
-    def activatePom():
-        """ Activates pomegranate. """
+        If there is not enough resources idle, nothing happens.   
+        If fruit is already activated, will harvest it. 
+        """
         Navigation.menu('yggdrasil')
-        click(*coords.FRUIT_POM_HARVEST)
+        click(*coords.FRUITS[fruit.upper()])
 
 
 class Misc:
