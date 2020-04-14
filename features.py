@@ -101,7 +101,7 @@ class Adventure:
     def itopodFarm(floor='optimal'):
         """ Enters ITOPOD in {floor} floor.
 
-        Keyword arguments
+        Keyword arguments:  
         floor -- floor to stay on.
         """
         # click(*coords.ADVENTURE)
@@ -120,7 +120,7 @@ class Adventure:
     def itopodPush(floor='200'):
         """ Enters ITOPOD with starting floor MAX and ending floor {floor}.
 
-        Keyword arguments
+        Keyword arguments:  
         floor -- ending floor to farm.
         """
         # click(*coords.ADVENTURE)
@@ -135,7 +135,7 @@ class Adventure:
     def adventureZone(zone='latest'):
         """ Navigates to adventure zone {zone}.
 
-        Keyword arguments
+        Keyword arguments:  
         zone -- zone to go to, by name specified in showZones.
         """
         # click(*coords.ADVENTURE)
@@ -266,8 +266,8 @@ class Augmentation:
     def augmentation(aug=1, upgrade=False):
         """ Allocates energy to augmentation.
 
-        Keyword arguments
-        aug -- augmentation number, 1 is Danger Scissors.
+        Keyword arguments:  
+        aug -- augmentation number, 1 is Danger Scissors.  
         upgrade -- if True, will allocate energy to aug update instead.
         """
         # click(*coords.AUGMENTATION)
@@ -347,7 +347,7 @@ class Inventory:
     def boostInventory(slots=36):
         """ Boost first {slots} slots of inventory. 
 
-        Keyword arguments: 
+        Keyword arguments:  : 
         slots -- number of slots to boost. 
         """
         Navigation.menu('inventory')
@@ -371,7 +371,7 @@ class Inventory:
     def mergeInventory(slots=36):
         """ Merge first slots of inventory. 
 
-        Keyword arguments: 
+        Keyword arguments:  : 
         slots -- number of slots to merge, starting from first one. 
         """
         Navigation.menu('inventory')
@@ -478,7 +478,7 @@ class BloodMagic:
     def addMagic(magic=1, cap=False):
         """ Adds magic to Blood Magic. 
 
-        Keyword arguments:
+        Keyword arguments:  :
         magic -- magic number, starts at 1. 
         cap -- if True, will try to cap magic instead. 
         """
@@ -565,8 +565,8 @@ class Misc:
     def inputResource(amount='cap', idle=False):
         """ Sets input resource to {amount}. 
 
-        Keyword arguments: \n
-        amount -- cap, half or quarter.  \n
+        Keyword arguments:   
+        amount -- cap, half or quarter.  
         idle -- if True will consider only the idle energy. 
         """
         possibleMenus = ['basicTraining', 'augments', 'advTraining',
