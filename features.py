@@ -523,6 +523,13 @@ class Yggdrasil:
         click(*coords.HARVEST_ALL_MAX_TIER)
 
     @staticmethod
+    def isHarvested(fruit):
+        """ Return True if fruit is harvested. """
+        Navigation.menu('yggdrasil')
+        pix = getCoords(*coords.FRUITS_IS_HARVESTED[fruit.upper()])
+        return pyautogui.pixelMatchesColor(*pix, (255, 255, 255))
+
+    @staticmethod
     def activatePower():
         """ Activates power fruit. """
         # click(*coords.YGGDRASIL)
