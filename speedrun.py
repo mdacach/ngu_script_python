@@ -1,120 +1,151 @@
 """ Speedrun script with command line arguments. """
-import argparse
-from helper import *
-import coords
-import features as f
-from navigation import Navigation
-import time
-import pyautogui
 
+import argparse
+import pyautogui
+import time
+
+import coords
+from helper import sleep
+from features import Adventure, Augmentation, BloodMagic, BasicTraining, FightBosses, Inventory, Misc, MoneyPit, Rebirth, TimeMachine
+from navigation import Navigation
+from statistics import Statistics
+
+# commandline arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--duration', help='duration of the run',
-                    default=3)
+parser.add_argument('--duration', help='duration for the runs', default='10')
 args = parser.parse_args()
 
-print(args.duration)
-
-
-def main():
-    if (args.duration == 3):
-        print('10 minute runs!')
-        start = time.time()
-        counter = 0
-        while True:
-            counter += 1
-            print(f'run {counter}')
-            print(f'time: {round((time.time() - start))} sec')
-            run10()
-
-
-def run3():
-    """ Performs a 3 minute run. """
-    start = time.time()
-    f.BasicTraining.basicTraining()
-    f.Inventory.loadout(2)
-    f.FightBosses.fightBosses()
-    f.Adventure.adventureZone()
-    sleep(10)
-    loopCounter = 0
-    while (time.time() - start < 150):
-        loopCounter += 1
-        f.Misc.inputResource(amount='half', idle=True)
-        f.TimeMachine.addEnergy()
-        f.Augmentation.augmentation()
-        f.BloodMagic.addMagic(cap=True)
-        f.FightBosses.fightBosses()
-        if loopCounter % 5 == 0:
-            f.Adventure.adventureZone()
-            f.Inventory.loadout(1)
-        # if (loopCounter % 10 == 0):
-        #     f.Adventure.adventureZone()
-        #     print('sleeping for overall check')
-        #     sleep(30)  # 30 sec to check on the run
-
-    f.Misc.reclaimEnergy()
-    f.Misc.reclaimMagic()
-    f.Misc.inputResource(amount='cap', idle=True)
-    f.Augmentation.augmentation(upgrade=True)
-    f.FightBosses.fightBosses()
-    f.MoneyPit.moneyPit()
-    while (time.time() - start < 180):
-        f.FightBosses()
-    f.Rebirth.rebirth()
+print(f'called with arguments {args}')
 
 
 def run7():
-    """ Perfoms a 7 minute run. """
+    """ Perform a 7 minute run."""
     start = time.time()
-    f.BasicTraining.basicTraining()
-    f.FightBosses.fightBosses()
-    f.Adventure.adventureZone()
-    # basic loop
-    loopCounter = 0
-    while (time.time() - start < 360):
-        loopCounter += 1
-        f.Misc.inputResource(amount='half', idle=True)
-        f.TimeMachine.addEnergy()
-        f.Augmentation.augmentation()
-        f.BloodMagic.addMagic(cap=True)
+    Inventory.loadout(2)  # loadout 2 is bars-heavy
+    BasicTraining.basicTraining()
+    FightBosses.fightBosses()
+    Adventure.adventureZone()  # go to latest zone
+
+    Misc.inputResource()  # all energy
+
+    print(f'Time Machine loop for 4 minutes')
+    inv1 = False
+    lastZone = False
+    while time.time() - start < 240:
+        TimeMachine.addEnergy()
+        TimeMachine.addMagic()
+        print(f'sleeping for 30 seconds')
+        if time.time() - start > 180 and not inv1:
+            Inventory.loadout(1)
+            BasicTraining.basicTraining()
+            inv1 = True
+        if not lastZone:
+            Adventure.adventureZone()
+            lastZone = True
+        startTime = time.time()
+        while time.time() - startTime < 30:
+            Navigation.menu('adventure')
+            Adventure.kill()
+
+    Misc.reclaimAll()  # reclaim energy and magic from TM
+
+    print(f'Main loop until 7 minutes')
+    mainStart = time.time()
+    pushAdventure = False
+    while time.time() - start < 390:
+        # push to new adventure zone
+        if time.time() - mainStart > 120 and not pushAdventure:
+            Adventure.adventureZone()
+            pushAdventure = True
+        print(f'sleeping 30 seconds')
+        sleep(30)
+        # fight bosses
+        FightBosses.nuke()
+        for _ in range(5):
+            FightBosses.fightBoss()
+        # augments
+        Misc.inputResource(amount='quarter', idle=True)
+        for _ in range(3):
+            Augmentation.augmentation()
+        Augmentation.augmentation(upgrade=True)
+        # blood magic
+        BloodMagic.addMagic(cap=True)
+
+    MoneyPit.moneyPit()
+    Navigation.menu('rebirth')
+    print('waiting for time')
+    Statistics.screenshot('rebirth.png')
+    while time.time() - start < 420:
+        sleep(1)
+    Rebirth.rebirth()
 
 
 def run10():
-    """ Performs a 10 minute run. """
+    """ Perform a 10 minute run. """
     start = time.time()
-    f.Inventory.loadout(2)
-    f.BasicTraining.basicTraining()
-    f.FightBosses.fightBosses()
-    f.Adventure.adventureZone()
-    # 10 min is 600 sec
-    loopCounter = 0
-    # TIME MACHINE LOOP
-    f.Misc.inputResource()
+    Inventory.loadout(2)  # loadout 2 is bars-heavy
+    BasicTraining.basicTraining()
+    FightBosses.fightBosses()
+    Adventure.adventureZone()  # go to latest zone
 
-    print(f'Time Machine loop for 4 minutes')
-    while (time.time() - start < 240):
-        f.TimeMachine.addEnergy()
-        f.TimeMachine.addMagic()
+    Misc.inputResource()  # all energy
 
-    f.Inventory.loadout(1)
-    f.BasicTraining.basicTraining()
-
-    f.Misc.reclaimAll()
-    print(f'Main loop until 10 minutes')
-    loop = 0
-    while (time.time() - start < 600):
+    print(f'Time Machine loop for 5 minutes')
+    while time.time() - start < 300:
+        TimeMachine.addEnergy()
+        TimeMachine.addMagic()
         print(f'sleeping for 30 seconds')
         sleep(30)
-        f.FightBosses.fightBosses()
-        f.Misc.inputResource(amount='half')
-        f.Augmentation.augmentation()
-        f.Misc.inputResource(amount='half', idle=True)
-        f.Augmentation.augmentation()
-        f.Augmentation.augmentation(upgrade=True)
-        f.BloodMagic.addMagic(cap=True)
 
-    f.MoneyPit.moneyPit()
-    f.Rebirth.rebirth()
+    Inventory.loadout(1)
+    BasicTraining.basicTraining()
+
+    Misc.reclaimAll()  # reclaim energy and magic from TM
+
+    print(f'Main loop until 10 minutes')
+    mainStart = time.time()
+    pushAdventure = False
+    while time.time() - start < 570:
+        # push to new adventure zone
+        if time.time() - mainStart > 120 and not pushAdventure:
+            Adventure.adventureZone()
+            pushAdventure = True
+        print(f'sleeping 30 seconds')
+        sleep(30)
+        # fight bosses
+        FightBosses.nuke()
+        for _ in range(5):
+            FightBosses.fightBoss()
+        # augments
+        Misc.inputResource(amount='quarter', idle=True)
+        for _ in range(3):
+            Augmentation.augmentation()
+        Augmentation.augmentation(upgrade=True)
+        # blood magic
+        BloodMagic.addMagic(cap=True)
+
+    MoneyPit.moneyPit()
+    Navigation.menu('rebirth')
+    while time.time() - start < 600:
+        sleep(1)
+    Rebirth.rebirth()
 
 
 if __name__ == "__main__":
-    main()
+    print()
+    print(f'{args.duration} minutes run')
+
+    runCounter = 0
+    print(f'exp before: {Statistics.getEXP()}')
+    start = time.time()
+    while True:
+        print('*' * 15)
+        runCounter += 1
+        print(f'run {runCounter}')
+        if args.duration == '10':
+            run10()
+        elif args.duration == '7':
+            run7()
+        print(f'exp: {Statistics.getEXP()}')
+        print('*' * 15)
+        print(f'total time: {round((time.time() - start)/60)} minutes')
