@@ -35,7 +35,7 @@ while True:
         killCounter += 1
         print(f'kill counter: {killCounter}')
 
-        if killCounter % 100 == 0:  # at every 100 kills
+        if killCounter % 500 == 0:  # at every 100 kills
             f.Adventure.turnIdleOn()
             f.Inventory.boostAndMergeEquipped()
             f.Inventory.boostInventory(slots=10)
