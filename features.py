@@ -63,7 +63,9 @@ class Adventure:
              '2d': 10,
              'ab': 11,
              'jake': 12,
-             'avsp': 13}
+             'avsp': 13,
+             'mega': 14,
+             'uug': 15}
 
     @staticmethod
     def turnIdleOn():
