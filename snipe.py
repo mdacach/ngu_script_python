@@ -13,11 +13,27 @@ parser.add_argument('zone', help='zone to snipe', default='latest')
 
 args = parser.parse_args()
 
-Adventure.adventureZone(args.zone)
 
 print(f'sniping {args.zone}')
 
 start = time.time()
 killCounter = 0
-
-# while True:
+print('buffing')
+Adventure.adventureZone('safe')
+Adventure.buff()
+Adventure.adventureZone(args.zone)
+killed = False  # kill flag to only take action after kills
+while True:
+    if Adventure.enemySpawn() and Adventure.isBoss():
+        Adventure.kill()
+        sleep(1)
+        press('w')
+        killed = True
+        Adventure.adventureZone('safe')
+        while not Adventure.isPlayerFull():
+            sleep(1)
+        Adventure.buff()
+        Adventure.adventureZone(args.zone)
+    elif Adventure.enemySpawn() and not Adventure.isBoss():
+        Adventure.refreshZone()
+        killed = False
