@@ -73,7 +73,10 @@ while True:
             Adventure.adventureZone('safe')
 
             Navigation.menu('inventory')
-            invManagement(slots=5)
+            emptySlots = Inventory.getEmptySlots()
+            print(f'empty slots: {emptySlots}')
+            if emptySlots < 10:
+                invManagement(slots=5)
 
             if killCounter % 300 == 0:
                 Yggdrasil.harvestAll()
