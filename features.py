@@ -467,6 +467,14 @@ class Inventory:
         return locations
 
     @staticmethod
+    def getEmptySlots():
+        """ Return number of empty slots on first page of inventory. """
+        if Navigation.currentMenu != 'inventory':
+            raise Exception('should be in Inventory menu!')
+        empty = Inventory.locateAll('images/empty-slot.png')
+        return len(list(empty))  # empty is a generator
+
+    @staticmethod
     def checkTransformable():
         """ Check if item being highlighted is transformable. """
         if Navigation.currentMenu != 'inventory':
