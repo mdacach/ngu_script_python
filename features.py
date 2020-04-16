@@ -225,6 +225,14 @@ class Adventure:
             return False
 
     @staticmethod
+    def isPlayerFull():
+        """ Return True if player life is above 95%. """
+        if Navigation.currentMenu != 'adventure':
+            raise Exception('should be in Adventure menu!')
+        pix = getCoords(*coords.MY_HEALTH_BAR_FULL)
+        return pyautogui.pixelMatchesColor(*pix, coords.HEALTH_BAR_RED, tolerance=10)
+
+    @staticmethod
     def healHP():
         """ Heal HP in the Safe Zone. """
         if Navigation.currentMenu != 'adventure':
