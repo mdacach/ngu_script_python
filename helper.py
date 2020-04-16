@@ -18,6 +18,11 @@ print('success')
 pyautogui.PAUSE = 0.01
 
 
+def sleep(time):
+    """ Sleeps for {time} amount of seconds. """
+    pyautogui.sleep(time)
+
+
 def getCoords(x, y):
     """ Return coordinates relative to top-left corner. """
     return (CORNER[0] + x, CORNER[1] + y - 25)
@@ -40,11 +45,19 @@ def rawClick(x, y, button="left"):
     pyautogui.click(x, y, button=button)
 
 
-def click(x, y, button="left"):
-    """ Click on coordinates x, y relative to top-left corner. """
+def click(x, y, button="left", delay="medium"):
+    """ Click on coordinates x, y relative to top-left corner. 
+
+    Keyword arguments:  
+    button -- button to click. {left, right}  
+    delay -- time to wait after click {fast, medium}.  
+    """
     moveTo(x, y)
     pyautogui.click(button=button)
-    sleep(0.2)
+    if delay == "medium":
+        sleep(0.2)
+    elif delay == "fast":
+        sleep(0.1)
 
 
 def ctrlClick():
@@ -56,6 +69,13 @@ def ctrlClick():
     pyautogui.keyUp('ctrl')
 
 
-def sleep(time):
-    """ Sleeps for {time} amount of seconds. """
-    pyautogui.sleep(time)
+def press(letters, delay=0):
+    """ Send letters to window. 
+
+    Keyword arguments:  
+    delay -- optional delay between letters, in seconds.
+    """
+    for letter in letters:
+        pyautogui.press(letter)
+        if delay:
+            pyautogui.sleep(delay)
