@@ -43,8 +43,10 @@ while True:
             f.Inventory.mergeInventory(slots=24)
             print('ygg stuff')
             f.Yggdrasil.harvestAll()
-            f.Misc.reclaimMagic()
-            f.Yggdrasil.activatePom()
+            if f.Yggdrasil.isHarvested('pomegranate'):
+                f.Misc.reclaimMagic()
+                f.Yggdrasil.activate('pomegranate')
+                sleep(180)
             f.BloodMagic.addMagic(magic=3)
             print('ygg stuff done')
             Navigation.menu('adventure')

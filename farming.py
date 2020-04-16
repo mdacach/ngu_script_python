@@ -35,6 +35,7 @@ if args.verbose:
     print(f'kills until inv management: {args.kills}')
 
 start = time.time()
+Adventure.turnIdleOff()
 while True:
     if Adventure.enemySpawn():
         if args.boss:
@@ -48,7 +49,9 @@ while True:
                     print(f'kill count: {killCounter}')
                 sleep(1)
                 pyautogui.press('d')
+                killed = True
             else:
+                killed = False
                 Adventure.refreshZone()
         else:
             if args.fast:
@@ -60,21 +63,28 @@ while True:
                 print(f'kill count: {killCounter}')
             sleep(1)
             pyautogui.press('d')
+            killed = True
 
-        if killCounter > 0 and killCounter % args.kills == 0:
+        if killed and killCounter > 0 and killCounter % args.kills == 0:
+
             print(f'inv management')
             print(f'time: {round((time.time() - start))/60} minutes')
             Adventure.turnIdleOn()
+            Adventure.adventureZone('safe')
 
+            Navigation.menu('inventory')
             invManagement(slots=5)
 
             if killCounter % 300 == 0:
                 Yggdrasil.harvestAll()
                 # TEMPORARY FIX
                 Misc.reclaimMagic()
-                Yggdrasil.activatePom()
-                BloodMagic.addMagic(magic=3)
-
+                if Yggdrasil.isHarvested('pomegranate'):
+                    Yggdrasil.activate('pomegranate')
+                    sleep(180)
+                    BloodMagic.addMagic(magic=3, cap=True)
+                Inventory.trashItems()
             print(f'going back to adventure')
             Navigation.menu('adventure')
+            Adventure.adventureZone(args.zone)
             Adventure.turnIdleOff()

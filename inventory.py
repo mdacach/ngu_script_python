@@ -8,6 +8,8 @@ import pyautogui
 
 
 def invManagement(slots=10):
+    print(f'should go to inventory!!')
+    Navigation.menu('inventory')
     Inventory.boostAndMergeEquipped()
     Inventory.mergeInventory(slots=slots)
     Inventory.boostInventory(slots=slots)
