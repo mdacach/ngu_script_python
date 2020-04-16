@@ -150,7 +150,7 @@ class Adventure:
         else:
             times = Adventure.zones[zone]
             for _ in range(times):
-                click(*coords.ADVANCE_ZONE)
+                click(*coords.ADVANCE_ZONE, delay="fast")
         Navigation.adventureZone = zone
 
     @staticmethod
@@ -269,6 +269,17 @@ class Adventure:
 
         click(*coords.GO_BACK_ZONE)
         click(*coords.ADVANCE_ZONE)
+
+    @staticmethod
+    def buff():
+        """ Use adventure buffs. 
+
+        Order:  
+        Charge -> Defensive -> Offensive -> Ultimate
+        """
+        if Navigation.currentMenu != 'adventure':
+            raise Exception('should be in Adventure menu!')
+        press('gsfh', delay=1.1)
 
 
 class Augmentation:
