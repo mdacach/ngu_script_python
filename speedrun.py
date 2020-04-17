@@ -18,6 +18,57 @@ args = parser.parse_args()
 print(f'called with arguments {args}')
 
 
+def run3():
+    """ Perform a 3 minute run. """
+    start = time.time()
+    Inventory.loadout(2)
+    BasicTraining.basicTraining()
+    FightBosses.nuke()
+    Adventure.adventureZone()
+
+    Misc.inputResource()
+
+    print(f'TM loop (1:30 min)')
+    inv1 = False
+    lastZone = False
+    while time.time() - start < 90:
+        TimeMachine.addEnergy()
+        TimeMachine.addMagic()
+        if time.time() - start > 60 and not inv1:
+            Inventory.loadout(1)
+            BasicTraining.basicTraining()
+            inv1 = True
+            if not lastZone:
+                Adventure.adventureZone()
+                lastZone = True
+        print(f'sleeping for 15 sec')
+
+    Misc.reclaimAll()
+
+    print(f'Main loop (1:30 min)')
+    pushAdventure = False
+    while time.time() - start < 170:
+        if not pushAdventure and time.time() - mainStart > 120:
+            Adventure.adventureZone()
+            pushAdventure = True
+        FightBosses.nuke()
+
+        Misc.inputResource(amount='quarter', idle=True)
+        for _ in range(3):
+            Augmentation.augmentation()
+        Augmentation.augmentation(upgrade=True)
+
+        BloodMagic.addMagic(cap=True)
+        BloodMagic.addMagic(magic=2)
+    MoneyPit.moneyPit()
+    Navigation.menu('rebirth')
+    print('waiting for time')
+    Statistics.screenshot('rebirth.png')
+    while time.time() - start < 180:
+        sleep(1)
+    Rebirth.rebirth()
+
+
 def run7():
     """ Perform a 7 minute run."""
     start = time.time()
@@ -146,6 +197,8 @@ if __name__ == "__main__":
             run10()
         elif args.duration == '7':
             run7()
+        elif args.duration == '3':
+            run3()
         print(f'exp: {Statistics.getEXP()}')
         print('*' * 15)
         print(f'total time: {round((time.time() - start)/60)} minutes')
