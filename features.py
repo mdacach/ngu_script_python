@@ -222,8 +222,12 @@ class Adventure:
         # after this, player may be dead
 
     @staticmethod
-    def getReadyAbilities():
-        """ Return the ready abilities as a list. """
+    def getReadyAbilities(buffs=False):
+        """ Return the ready abilities as a list. 
+
+        Keyword arguments:  
+        buffs -- if you want to use buffs also (not recommended).
+        """
         ready = set()
         image = getScreenshot()
 
@@ -252,10 +256,16 @@ class Adventure:
 
         if getPixelColor(*coords.MY_HEALTH_BAR_THRESHOLD, image=image) != (236, 52, 52):
             # priority needing to heal
-            priority = [8, 13, 10, 7, 9, 11, 5, 4, 3, 6, 2]
+            if buffs:
+                priority = [8, 13, 10, 7, 9, 11, 5, 4, 3, 6, 2]
+            else:
+                priority = [8, 13, 10, 5, 4, 3, 6, 2]
         else:
             # priority not needing to heal
-            priority = [10, 7, 9, 11, 5, 4, 3, 6, 2]
+            if buffs:
+                priority = [10, 7, 9, 11, 5, 4, 3, 6, 2]
+            else:
+                priority = [10, 5, 4, 3, 6, 2]
 
         # TODO
         # use an actual priority queue
@@ -270,19 +280,29 @@ class Adventure:
         return myQueue
 
     @staticmethod
-    def snipe():
-        """ Snipe a boss using ready rotations. """
+    def snipe(buffs=False):
+        """ Snipe a boss using ready rotations. 
+
+        Keyword arguments:  
+        buffs -- if you want to use buffs also (not recommended).
+        """
         # turn off idle
         print(f'getting abilities queue')
         start = time.time()
-        queue = deque(Adventure.getReadyAbilities())
+        if buffs:
+            queue = deque(Adventure.getReadyAbilities(buffs=True))
+        else:
+            queue = deque(Adventure.getReadyAbilities())
         print(f'time: {time.time() - start}')
         while not Adventure.isEnemyDead():
             if not queue:
                 print('rotation over')
                 print(f'getting abilities queue')
                 start = time.time()
-                queue = deque(Adventure.getReadyAbilities())
+                if buffs:
+                    queue = deque(Adventure.getReadyAbilities(buffs=True))
+                else:
+                    queue = deque(Adventure.getReadyAbilities())
                 print(f'time: {time.time() - start}')
                 print(f'ABILITIES: {queue}')
             ability = queue.popleft()
