@@ -1,4 +1,5 @@
 """ Module for various features handling."""
+from collections import deque
 
 from helper import *
 # from coords import *
@@ -65,7 +66,23 @@ class Adventure:
              'jake': 12,
              'avsp': 13,
              'mega': 14,
-             'uug': 15}
+             'uug': 15,
+             'beardverse': 16}
+
+    abilities_keys = {
+        1: 'w',
+        2: 'e',
+        3: 'r',
+        4: 't',
+        5: 'y',
+        6: 'a',
+        7: 's',
+        8: 'd',
+        9: 'f',
+        10: 'g',
+        11: 'h',
+        13: 'x'
+    }
 
     @staticmethod
     def turnIdleOn():
@@ -208,6 +225,8 @@ class Adventure:
     def getReadyAbilities():
         """ Return the ready abilities as a list. """
         ready = set()
+        image = getScreenshot()
+
         x0 = coords.ABILITY_1[0]
         y0 = coords.ABILITY_1[1]
         i = 0
@@ -227,19 +246,16 @@ class Adventure:
             i += 1
             # print(f'ability: {getPixelColor(x, y)}')
             # print(f'color: {color}')
-            if getPixelColor(x, y) == color:
+            if getPixelColor(x, y, image=image) == color:
                 # print(f'{i} ready')
                 ready.add(i)
-            # else:
-                # print(f'{i} not ready')
 
-                # priority is a list with all attacks in priority order
-        if getPixelColor(*coords.MY_HEALTH_BAR_THRESHOLD) != (236, 52, 52):
+        if getPixelColor(*coords.MY_HEALTH_BAR_THRESHOLD, image=image) != (236, 52, 52):
             # priority needing to heal
-            priority = [8, 13, 7, 9, 11, 10, 5, 4, 3, 6, 2, 1]
+            priority = [8, 13, 10, 7, 9, 11, 5, 4, 3, 6, 2]
         else:
             # priority not needing to heal
-            priority = [9, 11, 10, 5, 4, 3, 6, 2, 7, 1]
+            priority = [10, 7, 9, 11, 5, 4, 3, 6, 2]
 
         # TODO
         # use an actual priority queue
@@ -249,8 +265,50 @@ class Adventure:
         for ability in priority:
             if ability in ready:
                 myQueue.append(ability)
-
+        if not myQueue:
+            myQueue.append(1)
         return myQueue
+
+    @staticmethod
+    def snipe():
+        """ Snipe a boss using ready rotations. """
+        # turn off idle
+        print(f'getting abilities queue')
+        start = time.time()
+        queue = deque(Adventure.getReadyAbilities())
+        print(f'time: {time.time() - start}')
+        while not Adventure.isEnemyDead():
+            if not queue:
+                print('rotation over')
+                print(f'getting abilities queue')
+                start = time.time()
+                queue = deque(Adventure.getReadyAbilities())
+                print(f'time: {time.time() - start}')
+                print(f'ABILITIES: {queue}')
+            ability = queue.popleft()
+            press(Adventure.abilities_keys[ability])
+
+            # WORK AROUND - SLEEP 1s (MY CD TIME)
+            sleep(1.1)
+
+            """
+            # WAIT FOR COOLDOWN
+            # sleep(0.3)
+            # start = time.time()
+            # print(f'taking screenshot')
+            # image = getScreenshot(coords.ABILITY_1_REGION)
+            # color = getPixelColor(1, 1, image=image)
+            color = getPixelColor(*coords.ABILITY_1)
+            # print(f'time: {time.time() - start}')
+            while color != coords.ABILITY_ROW_1_READY_COLOR:
+                # print('waiting for cd')
+                # print(f'taking screenshot')
+                # image = getScreenshot(coords.ABILITY_1_REGION)
+                # color = getPixelColor(1, 1, image=image)
+                color = getPixelColor(*coords.ABILITY_1)
+                # print(f'time: {time.time() - start}')
+                sleep(0.05)
+            """
 
     @staticmethod
     def isEnemyDead():
