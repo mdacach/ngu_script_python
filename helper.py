@@ -81,7 +81,25 @@ def press(letters, delay=0):
             pyautogui.sleep(delay)
 
 
-def getPixelColor(x, y):
-    """ Get color of pixel at (x, y) (relative). """
-    x, y = getCoords(x, y)
-    return pyautogui.pixel(x, y)
+def getScreenshot(region=None):
+    """ Get screenshot of actual screen. 
+
+    To be used with get pixel color when you want to get multiple pixels at the same time.
+    """
+    if region:
+        x, y = getCoords(region[0], region[1])
+        region = (x, y, region[2], region[3])
+        return pyautogui.screenshot(region=region)
+
+    return pyautogui.screenshot()
+
+
+def getPixelColor(x, y, image=None):
+    """ Get color of pixel at (x, y) (relative). 
+
+    Keyword arguments:  
+    image -- screenshot, if you want to get multiple pixels. """
+    pix = getCoords(x, y)
+    if image:
+        return image.getpixel(pix)
+    return pyautogui.pixel(*pix)
