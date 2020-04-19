@@ -154,15 +154,18 @@ class Adventure:
         Navigation.adventureZone = zone
 
     @staticmethod
-    def sendAttacks():
-        """ Cycles through attacks in adventure mode. """
+    def sendAttacks(buffs=False):
+        """ Cycle through attacks in adventure mode.
+
+        Keyword arguments:  
+        buffs - if set to True, will use buffs and heal when available.
+        """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
-        pyautogui.press('y')
-        pyautogui.press('t')
-        # pyautogui.press('r')
-        pyautogui.press('e')
-        pyautogui.press('w')
+        if buffs:
+            press('gsfhdxytrew')
+        else:
+            press('ytew')
 
     @staticmethod
     def killTitan():  # REWORK
@@ -187,13 +190,15 @@ class Adventure:
         Adventure.turnIdleOn()
 
     @staticmethod
-    def kill(fast=False):
-        """ Kills the current enemy. """
+    def kill(fast=False, buffs=False):
+        """ Kill the current enemy. """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
         while not Adventure.isEnemyDead():
             if fast:
                 pyautogui.press('w')
+            if buffs:
+                Adventure.sendAttacks(buffs=True)
             else:
                 Adventure.sendAttacks()
                 sleep(0.1)
