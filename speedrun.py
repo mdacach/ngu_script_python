@@ -42,13 +42,14 @@ def run3():
                 Adventure.adventureZone()
                 lastZone = True
         print(f'sleeping for 15 sec')
+        sleep(15)
 
     Misc.reclaimAll()
 
     print(f'Main loop (1:30 min)')
     pushAdventure = False
     while time.time() - start < 170:
-        if not pushAdventure and time.time() - mainStart > 120:
+        if not pushAdventure and time.time() - start > 120:
             Adventure.adventureZone()
             pushAdventure = True
         FightBosses.nuke()
