@@ -47,6 +47,8 @@ ADVENTURE = 231, 128
 ABILITY_OFFSET_X = 104
 ABILITY_OFFSET_Y = 35
 ABILITY_1 = 463, 119  # Regular attack
+# Ability 1 pixel is to take a screenshot only of the pixel we need to check
+ABILITY_1_REGION = (463, 119, 2, 2)
 ABILITY_ROW_1_READY_COLOR = 248, 155, 155
 ABILITY_ROW_2_READY_COLOR = 102, 135, 163
 ABILITY_ROW_3_READY_COLOR = 15, 15, 15
