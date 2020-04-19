@@ -205,8 +205,56 @@ class Adventure:
         # after this, player may be dead
 
     @staticmethod
+    def getReadyAbilities():
+        """ Return the ready abilities as a list. """
+        ready = set()
+        x0 = coords.ABILITY_1[0]
+        y0 = coords.ABILITY_1[1]
+        i = 0
+        while i <= 15:  # 16 abilities (MOVE 69 LOCKED)
+            if i < 5:  # row 1
+                x = x0 + i * coords.ABILITY_OFFSET_X
+                y = y0
+                color = coords.ABILITY_ROW_1_READY_COLOR
+            elif i < 11:  # row 2
+                x = x0 + (i - 6) * coords.ABILITY_OFFSET_X
+                y = y0 + coords.ABILITY_OFFSET_Y
+                color = coords.ABILITY_ROW_2_READY_COLOR
+            else:  # row 3
+                x = x0 + (i - 12) * coords.ABILITY_OFFSET_X
+                y = y0 + 2 * coords.ABILITY_OFFSET_Y
+                color = coords.ABILITY_ROW_3_READY_COLOR
+            i += 1
+            # print(f'ability: {getPixelColor(x, y)}')
+            # print(f'color: {color}')
+            if getPixelColor(x, y) == color:
+                # print(f'{i} ready')
+                ready.add(i)
+            # else:
+                # print(f'{i} not ready')
+
+                # priority is a list with all attacks in priority order
+        if getPixelColor(*coords.MY_HEALTH_BAR_THRESHOLD) != (236, 52, 52):
+            # priority needing to heal
+            priority = [8, 13, 7, 9, 11, 10, 5, 4, 3, 6, 2, 1]
+        else:
+            # priority not needing to heal
+            priority = [9, 11, 10, 5, 4, 3, 6, 2, 7, 1]
+
+        # TODO
+        # use an actual priority queue
+        myQueue = []
+
+        #
+        for ability in priority:
+            if ability in ready:
+                myQueue.append(ability)
+
+        return myQueue
+
+    @staticmethod
     def isEnemyDead():
-        """ Returns True if current enemy is dead, false otherwise. """
+        """ Return True if current enemy is dead, false otherwise. """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
         border = getCoords(*coords.ENEMY_HEALTH_BAR_BORDER)
