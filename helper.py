@@ -55,7 +55,7 @@ def click(x, y, button="left", delay="medium"):
     moveTo(x, y)
     pyautogui.click(button=button)
     if delay == "medium":
-        sleep(0.2)
+        sleep(0.3)
     elif delay == "fast":
         sleep(0.1)
 
