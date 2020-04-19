@@ -79,3 +79,9 @@ def press(letters, delay=0):
         pyautogui.press(letter)
         if delay:
             pyautogui.sleep(delay)
+
+
+def getPixelColor(x, y):
+    """ Get color of pixel at (x, y) (relative). """
+    x, y = getCoords(x, y)
+    return pyautogui.pixel(x, y)
