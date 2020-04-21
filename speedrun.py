@@ -41,19 +41,15 @@ def run3():
             if not lastZone:
                 Adventure.adventureZone()
                 lastZone = True
-        print(f'sleeping for 15 sec')
-        sleep(15)
+        print(f'sleeping for 5 sec')
+        # sleep(15)
+        sleep(5)
 
     Misc.reclaimAll()
 
     print(f'Main loop (1:30 min)')
     pushAdventure = False
     while time.time() - start < 170:
-        if not pushAdventure and time.time() - start > 120:
-            Adventure.adventureZone()
-            pushAdventure = True
-        FightBosses.nuke()
-
         Misc.inputResource(amount='quarter', idle=True)
         for _ in range(3):
             Augmentation.augmentation()
@@ -61,6 +57,12 @@ def run3():
 
         BloodMagic.addMagic(cap=True)
         BloodMagic.addMagic(magic=2)
+
+        if not pushAdventure and time.time() - start > 120:
+            Adventure.adventureZone()
+            pushAdventure = True
+        FightBosses.nuke()
+
     MoneyPit.moneyPit()
     Navigation.menu('rebirth')
     print('waiting for time')
