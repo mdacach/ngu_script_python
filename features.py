@@ -254,14 +254,16 @@ class Adventure:
                 # print(f'{i} ready')
                 ready.add(i)
 
-        if getPixelColor(*coords.MY_HEALTH_BAR_THRESHOLD, image=image) != (236, 52, 52):
+        if getPixelColor(*coords.MY_HEALTH_BAR_THRESHOLD) != (236, 52, 52):
             # priority needing to heal
+            print('needs healing')
             if buffs:
                 priority = [8, 13, 10, 7, 9, 11, 5, 4, 3, 6, 2]
             else:
                 priority = [8, 13, 10, 5, 4, 3, 6, 2]
         else:
             # priority not needing to heal
+            print('no need to heal')
             if buffs:
                 priority = [10, 7, 9, 11, 5, 4, 3, 6, 2]
             else:
@@ -271,12 +273,12 @@ class Adventure:
         # use an actual priority queue
         myQueue = []
 
-        #
         for ability in priority:
             if ability in ready:
                 myQueue.append(ability)
-        if not myQueue:
-            myQueue.append(1)
+        # for _ in range(3):  # experimental -> 3 regular attacks afterwards
+        #     myQueue.append(1)
+        myQueue.append(1)
         return myQueue
 
     @staticmethod
@@ -306,6 +308,7 @@ class Adventure:
                 print(f'time: {time.time() - start}')
                 print(f'ABILITIES: {queue}')
             ability = queue.popleft()
+            print(ability)
             press(Adventure.abilities_keys[ability])
 
             # WORK AROUND - SLEEP 1s (MY CD TIME)
