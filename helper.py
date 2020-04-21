@@ -4,6 +4,7 @@
 """
 
 import pyautogui
+import d3dshot
 # get the game corner coordinates
 CORNER = None
 print('searching for corner...')
@@ -79,6 +80,15 @@ def press(letters, delay=0):
         pyautogui.press(letter)
         if delay:
             pyautogui.sleep(delay)
+
+
+def getScreenshot2():
+    """ Get and return screenshot of actual screen. 
+
+    Uses d3dshot module instead of pyautogui. 
+    """
+    d = d3dshot.create()
+    return d.screenshot()
 
 
 def getScreenshot(region=None):
