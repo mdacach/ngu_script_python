@@ -1,5 +1,6 @@
 """ Statistics module. """
 import pyautogui
+import d3dshot
 from helper import *
 from coords import *
 import pytesseract as ocr
@@ -57,5 +58,33 @@ class Statistics:
 
     @staticmethod
     def getPP():
-        """ Get the current pp amount from itopod. """
-        # x, y
+        """ Get the current pp amount from itopod. 
+
+        Uses d3dshot for screenshot. 
+        """
+        Navigation.menu('adventure')
+        click(*ITOPOD_PERKS)
+        x, y = getCoords(ITOPOD_PP_REGION[0], ITOPOD_PP_REGION[1])
+        d = d3dshot.create()
+        image = d.screenshot(region=(x, y, x+100, y+30))
+        print(image)
+        image = d.screenshot_to_disk(
+            file_name="pp-screenshot.png", region=(x, y, x+100, y+30))
+        try:
+            text = ocr.image_to_string(image)
+        except:
+            print('could not read pp')
+            text = 0
+        pp = ""
+        for letter in text:
+            if str.isdigit(letter):
+                pp += letter
+        # print(f"{exp} exp")
+        print(f'read {text}')
+        try:
+            return int(pp)
+        except:
+            print('could not return pp correctly')
+            return -1
+        # return exp
+        # return f"{exp} exp"
