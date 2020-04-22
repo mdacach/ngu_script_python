@@ -5,6 +5,7 @@ from coords import *
 from features import *
 from navigation import Navigation
 from inventory import invManagement
+from yggdrasil import ygg
 import time
 import pyautogui
 
@@ -77,16 +78,8 @@ while True:
             print(f'empty slots: {emptySlots}')
             if emptySlots < 10:
                 invManagement(slots=5)
+                ygg()
 
-            if killCounter % 300 == 0:
-                Yggdrasil.harvestAll()
-                # TEMPORARY FIX
-                Misc.reclaimMagic()
-                if Yggdrasil.isHarvested('pomegranate'):
-                    Yggdrasil.activate('pomegranate')
-                    sleep(180)
-                    BloodMagic.addMagic(magic=3, cap=True)
-                Inventory.trashItems()
             print(f'going back to adventure')
             Navigation.menu('adventure')
             Adventure.adventureZone(args.zone)
