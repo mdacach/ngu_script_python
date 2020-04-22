@@ -22,22 +22,6 @@ print('success')
 pyautogui.PAUSE = 0.01
 
 
-def sleep(time: int) -> None:
-    """ Sleep for x amount of seconds. """
-    pyautogui.sleep(time)
-
-
-def getCoords(x: int, y: int) -> Tuple[int]:
-    """ Return coordinates relative to top-left corner of the game. """
-    return (CORNER[0] + x, CORNER[1] + y - 25)
-
-
-def moveTo(x: int, y: int) -> None:
-    """ Move mouse to coordinates x, y relative to game. """
-    x, y = getCoords(x, y)
-    pyautogui.moveTo(x, y)
-
-
 def rawMove(x: int, y: int) -> None:
     """ Move mouse to absolute coordinates x, y. 
 
@@ -53,6 +37,22 @@ def rawClick(x: int, y: int, button: str = "left") -> None:
     button -- left or right.
     """
     pyautogui.click(x, y, button=button)
+
+
+def sleep(time: int) -> None:
+    """ Sleep for x amount of seconds. """
+    pyautogui.sleep(time)
+
+
+def getCoords(x: int, y: int) -> Tuple[int]:
+    """ Return coordinates relative to top-left corner of the game. """
+    return (CORNER[0] + x, CORNER[1] + y - 25)
+
+
+def moveTo(x: int, y: int) -> None:
+    """ Move mouse to coordinates x, y relative to game. """
+    x, y = getCoords(x, y)
+    pyautogui.moveTo(x, y)
 
 
 def click(x: int, y: int, button: str = "left", delay: str = "medium") -> None:
