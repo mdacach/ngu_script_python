@@ -20,6 +20,9 @@ while CORNER == None:
 print('success')
 # our coordinates are shifted 25 px up because of steam border
 
+# normalize to standard int:
+CORNER = list(map(int, CORNER))
+
 # lower pyautogui.PAUSE constant
 pyautogui.PAUSE = 0.01
 
@@ -146,7 +149,9 @@ if __name__ == '__main__':
     print(f'CORNER: {CORNER}')
     print(f'CORNER[0] = {CORNER[0]}')
     print(f'type: {type(CORNER[0])}')
-    print(f'should work: ')
-    pyautogui.pixelMatchesColor(100, 100, (255, 255, 255))
-    print(f'should not work: ')
-    pyautogui.pixelMatchesColor(*getCoords(100, 100), (255, 255, 255))
+    for x in CORNER:
+        print(x)
+    # print(f'should work: ')
+    # pyautogui.pixelMatchesColor(100, 100, (255, 255, 255))
+    # print(f'should not work: ')
+    # pyautogui.pixelMatchesColor(*getCoords(100, 100), (255, 255, 255))
