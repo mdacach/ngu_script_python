@@ -539,7 +539,7 @@ class Inventory:
             raise Exception('should be in Inventory menu!')
 
         click(x, y)
-        sleep(coords.MEDIUM_SLEEP)
+        # sleep(coords.MEDIUM_SLEEP)
         pyautogui.press('d')
         sleep(coords.FAST_SLEEP)
         pyautogui.press('d')
@@ -551,7 +551,7 @@ class Inventory:
             raise Exception('should be in Inventory menu!')
 
         click(x, y)
-        sleep(coords.MEDIUM_SLEEP)
+        # sleep(coords.MEDIUM_SLEEP)
         pyautogui.press('a')
         sleep(coords.FAST_SLEEP)
         pyautogui.press('a')
