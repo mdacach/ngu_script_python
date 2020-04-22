@@ -5,6 +5,7 @@ from helper import *
 # from coords import *
 import coords
 from navigation import Navigation
+from statistics import Statistics
 import time
 
 
@@ -134,6 +135,37 @@ class Adventure:
             click(*coords.ITOPOD_END_INPUT)
             pyautogui.write(floor, interval=0.2)
         click(*coords.ITOPOD_ENTER_CONFIRMATION)
+
+    @staticmethod
+    def itopodExperimental():
+        """ Abuse a bug in itopod floors to higher exp/hr. """
+        # tiers = {1: 0,
+        #          2: 50,
+        #          3: 100,
+        #          4: 150,
+        #          5: 200}
+        # only from 150 on
+        tiers = {4: 150,
+                 5: 200}
+
+        Navigation.menu('adventure')
+        tierKillsCount = {}
+        for tier, floor in tiers.items():
+            print(tier, floor)
+            click(*coords.ITOPOD_ENTER)
+            click(*coords.ITOPOD_START_INPUT)
+            pyautogui.write(str(floor))
+            click(*coords.ITOPOD_ENTER_CONFIRMATION)
+            print(f'getting tier kills: ')
+            tierKills = Statistics.getTierKills()
+
+            if tierKills == -1:
+                print('could not detect tier kills')
+            else:
+                print(f'tier kills: {tierKills}')
+                tierKillsCount[tier] = tierKills
+
+        print(tierKillsCount)
 
     @staticmethod
     def itopodPush(floor='200'):
