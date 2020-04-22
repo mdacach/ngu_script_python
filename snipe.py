@@ -30,6 +30,11 @@ while True:
         sleep(1)
         press('w')
         killed = True
+        killCounter += 1
+        print(f'killed: {killCounter}')
+        if killCounter % 5 == 0:
+            print(f'inventory management')
+            invManagement()
         Adventure.adventureZone('safe')
         while not Adventure.isPlayerFull():
             sleep(1)
