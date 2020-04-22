@@ -1,7 +1,9 @@
 """ Statistics module. """
+from typing import Tuple
+
 import pyautogui
 import d3dshot
-import cv2
+# import cv2
 from helper import *
 from coords import *
 import pytesseract as ocr
@@ -11,11 +13,24 @@ from navigation import Navigation
 
 class Statistics:
     @staticmethod
-    def screenshot(name='game-screenshot.png'):
-        """ Saves a screenshot of the game. """
-        img = pyautogui.screenshot(
-            region=(CORNER[0], CORNER[1], GAME_WIDTH, GAME_HEIGHT))
-        img.save(name)
+    def getScreenshot(name: str = 'game-screenshot.png', save: bool = False, region: Tuple[int, int, int, int] = None) -> Image:
+        """ Capture/save a screenshot of the game. 
+
+        Keyword arguments:  
+        name -- file name if saving. (default game-screenshot.png).  
+        save -- set to True if want to save to disk instead.  
+        region -- region to take screenshot. If none, will take screenshot of all game screen.  
+        """
+        d = d3dshot.create(capture_output='numpy')
+        if region:
+            region = getRegion(*region)
+        else:  # all game screen
+            region = (CORNER[0], CORNER[1], CORNER[0] +
+                      GAME_WIDTH, CORNER[1] + GAME_HEIGHT)
+        if save:
+            d.screenshot_to_disk(file_name=name, region=region)
+        else:
+            return d.screenshot(region=region)
 
     @staticmethod
     def getEXP():
@@ -104,13 +119,13 @@ class Statistics:
         # image = d.screenshot_to_disk(
         # file_name = "itopod-tier.png", region = (x, y, x + 77, y + 18))
         print(f"x: {x} y: {y}")
-        # image = d.screenshot(region=(x, y, x + 77, y + 18))
-        image = d.screenshot()
+        # image = d.screenshot()
         # print(f'image before: {image}')
         # image = image.resize((50, 35))
+        # image.save('itopod-ss.png')
+        image = d.screenshot(region=(x, y, x + 77, y + 18))
         image = cv2.resize(image, None, fx=1.5, fy=1.5,
                            interpolation=cv2.INTER_CUBIC)
-        # image.save('itopod-ss.png')
         print(f'image after: {image}')
         try:
             text = ocr.image_to_string(image)
@@ -125,9 +140,11 @@ class Statistics:
         try:
             return int(count)
         except:
-            print('could not read itopod tier count properly. returning 40')
+            print('could not read itopod tier count properly. returning -1')
             return -1
 
 
-# (511, 49) -> (537, 142)
-# # region (77, 20)
+if __name__ == '__main__':
+    print(f'testing screenshot:')
+    Statistics.getScreenshot(save=True)
+    print(Statistics.getScreenshot(region=ITOPOD_PP_REGION))
