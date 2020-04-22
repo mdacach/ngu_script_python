@@ -1,12 +1,15 @@
 """ Module for sniping bosses. """
+import time
 import argparse
+
+import pyautogui
+
+import coords
 from helper import *
-from coords import *
 from features import *
 from navigation import Navigation
 from inventory import invManagement
-import time
-import pyautogui
+from yggdrasil import ygg
 
 parser = argparse.ArgumentParser()
 parser.add_argument('zone', help='zone to snipe', default='latest')
@@ -32,9 +35,11 @@ while True:
         killed = True
         killCounter += 1
         print(f'killed: {killCounter}')
-        if killCounter % 5 == 0:
+        if killCounter % 50 == 0:
             print(f'inventory management')
             invManagement()
+            print(f'harvesting ygg')
+            ygg()
         Adventure.adventureZone('safe')
         while not Adventure.isPlayerFull():
             sleep(1)
