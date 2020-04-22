@@ -3,6 +3,8 @@
     Intializes by getting position of top-left corner of the game. 
 """
 
+from typing import List, Set, Dict, Tuple
+
 import d3dshot
 import pyautogui
 
