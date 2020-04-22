@@ -1,48 +1,68 @@
-""" Module for various features handling."""
+""" Module for various features handling.
+
+Features:  
+    BasicTraining   
+    FightBoss 
+    MoneyPit  
+    Adventure  
+    Inventory  
+    Augmentation  
+    TimeMachine  
+    BloodMagic  
+    Wandoos  
+    Yggdrasil  
+
+Missing:  
+    AdvTraining  
+    NGU  
+    GoldDiggers  
+    Beards  
+    """
+
 from collections import deque
 
-from helper import *
-# from coords import *
+import time
+
 import coords
+from helper import *
 from navigation import Navigation
 from statistics import Statistics
-import time
 
 
 class BasicTraining:
-    """ Basic training handling. """
+    """ Add energy to basic training. """
     @staticmethod
-    def basicTraining():
+    def basicTraining() -> None:
         """ Right clicks on add energy to ATK1.
 
             Requires training auto advance to be bought.
         """
-        # click(*coords.BASIC_TRAINING)
         Navigation.menu('basicTraining')
         # training auto advance
         click(*coords.BASIC_TRAINING_ADD, button="right")
 
 
-class FightBosses:        # click(*coords.BASIC_TRAINING)
-    """ Fighthing bosses handling. """
+class FightBosses:
+    """ Nuke and Fight story bosses. """
     @staticmethod
-    def nuke():
-        """ Clicks Nuke in Fight Boss menu. """
-        # click(*coords.FIGHT_BOSS)
+    def nuke() -> None:
+        """ Nuke in Fight Boss menu. """
         Navigation.menu('fightBoss')
         click(*coords.NUKE)
 
     @staticmethod
-    def fightBoss():
-        """ Click fight boss. """
+    def fightBoss() -> None:
+        """ Click Fight Boss once. 
+
+        Should be in Fight Boss menu.  
+        """
         if Navigation.currentMenu != 'fightBoss':
             raise Exception('should be in Fight Boss menu!')
         click(*coords.FIGHT)
 
     @staticmethod
-    def fightBosses():
-        """ Clicks Nuke and then Fight Boss for 10 more seconds. """
-        # click(*coords.FIGHT_BOSS)
+    def fightBosses() -> None:
+        """ Wrapper for nuke and fight bosses in sucession. """
         Navigation.menu('fightBoss')
         click(*coords.NUKE)
         for _ in range(5):  # wait for boss to die
@@ -51,7 +71,8 @@ class FightBosses:        # click(*coords.BASIC_TRAINING)
 
 
 class Adventure:
-    """ Features to handle adventure progression. """
+    """ Various features related to Adventure menu. """
+    # adventure zones
     zones = {'safe': 0,
              'tutorial': 1,
              'sewers': 2,
@@ -70,61 +91,68 @@ class Adventure:
              'uug': 15,
              'beardverse': 16}
 
-    abilities_keys = {
-        1: 'w',
-        2: 'e',
-        3: 'r',
-        4: 't',
-        5: 'y',
-        6: 'a',
-        7: 's',
-        8: 'd',
-        9: 'f',
-        10: 'g',
-        11: 'h',
-        13: 'x'
-    }
+    # abilities mapping
+    abilities_keys = {1: 'w',
+                      2: 'e',
+                      3: 'r',
+                      4: 't',
+                      5: 'y',
+                      6: 'a',
+                      7: 's',
+                      8: 'd',
+                      9: 'f',
+                      10: 'g',
+                      11: 'h',
+                      13: 'x'}
 
     @staticmethod
-    def turnIdleOn():
-        """ Enables Idle mode. """
+    def turnIdleOn() -> None:
+        """ Enable Idle mode in Adventure. 
+
+        Should be in Adventure menu already.  
+        """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
         if (not Adventure.isIdle()):
             pyautogui.press('q')
 
     @staticmethod
-    def turnIdleOff():
-        """ Disables Idle mode. """
+    def turnIdleOff() -> None:
+        """ Disable Idle mode. 
+
+        Should be in Adventure menu already.  
+        """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
         if (Adventure.isIdle()):
             pyautogui.press('q')
 
     @staticmethod
-    def showZones():
-        """ Prints the adventure zones to the screen. """
+    def showZones() -> None:
+        """ Print the available adventure zones to the screen. """
         z = ""
         for zone in Adventure.zones:
             z += zone + " "
         print(z)
 
     @staticmethod
-    def isIdle():
-        """ Returns true if Idle Mode is enabled, false otherwise. """
+    def isIdle() -> bool:
+        """ Return true if Idle Mode is enabled, false otherwise. 
+
+        Should be in Adventure menu already.  
+        """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
         pix = getCoords(*coords.IS_IDLE)
         return pyautogui.pixelMatchesColor(*pix, coords.IS_IDLE_COLOR)
 
     @staticmethod
-    def itopodFarm(floor='optimal'):
-        """ Enters ITOPOD in {floor} floor.
+    def itopodFarm(floor: str = 'optimal') -> None:
+        """ Enter ITOPOD in floor x.
 
         Keyword arguments:  
-        floor -- floor to stay on.
+        floor -- floor to enter.
         """
-        # click(*coords.ADVENTURE)
         Navigation.menu('adventure')
         click(*coords.ITOPOD_ENTER)
         if floor == 'optimal':
@@ -137,7 +165,7 @@ class Adventure:
         click(*coords.ITOPOD_ENTER_CONFIRMATION)
 
     @staticmethod
-    def itopodExperimental():
+    def itopodExperimental() -> None:  # TODO
         """ Abuse a bug in itopod floors to higher exp/hr. """
         # tiers = {1: 0,
         #          2: 50,
@@ -168,13 +196,12 @@ class Adventure:
         print(tierKillsCount)
 
     @staticmethod
-    def itopodPush(floor='200'):
-        """ Enters ITOPOD with starting floor MAX and ending floor {floor}.
+    def itopodPush(floor: str = '200') -> None:
+        """ Enter ITOPOD with starting floor MAX and ending floor x.
 
         Keyword arguments:  
-        floor -- ending floor to farm.
+        floor -- ending floor.
         """
-        # click(*coords.ADVENTURE)
         Navigation.menu('adventure')
         click(*coords.ITOPOD_ENTER)
         click(*coords.ITOPOD_MAX)
@@ -183,16 +210,15 @@ class Adventure:
         click(*coords.ITOPOD_ENTER_CONFIRMATION)
 
     @staticmethod
-    def adventureZone(zone='latest'):
-        """ Navigates to adventure zone {zone}.
+    def adventureZone(zone: str = 'latest') -> None:
+        """ Go to adventure zone x.
 
         Keyword arguments:  
         zone -- zone to go to, by name specified in showZones.
         """
-        # click(*coords.ADVENTURE)
         Navigation.menu('adventure')
         # if (Navigation.adventureZone == zone):
-        #     return
+        #     return # TODO
         click(*coords.GO_BACK_ZONE, button="right")   # start at 0
         if zone == 'latest':
             click(*coords.ADVANCE_ZONE, button="right")
@@ -200,24 +226,26 @@ class Adventure:
             times = Adventure.zones[zone]
             for _ in range(times):
                 click(*coords.ADVANCE_ZONE, delay="fast")
-        Navigation.adventureZone = zone
+        Navigation.adventureZone = zone  # update adventureZone variable
 
     @staticmethod
-    def sendAttacks(buffs=False):
+    def sendAttacks(buffs: bool = False) -> None:
         """ Cycle through attacks in adventure mode.
 
         Keyword arguments:  
-        buffs - if set to True, will use buffs and heal when available.
+        buffs - if set to True, will use buffs and heal when available.  
+
+        Should be in Adventure menu already.  
         """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
         if buffs:
-            press('gsfhdxytrew')
+            press('gsfhdxytrew')  # all attacks and buffs
         else:
-            press('ytew')
+            press('ytew')  # only attacks
 
     @staticmethod
-    def killTitan():  # REWORK
+    def killTitan():  # REWORK #TODO
         """ Go to latest zone and attempts to kill the titan.
          """
         # click(*coords.ADVENTURE)
@@ -239,22 +267,26 @@ class Adventure:
         Adventure.turnIdleOn()
 
     @staticmethod
-    def kill(fast=False, buffs=False):
-        """ Kill the current enemy. """
+    def kill(fast: bool = False, buffs: bool = False) -> None:
+        """ Kill the current enemy. 
+
+        Should be in Adventure menu already.  """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
+
         while not Adventure.isEnemyDead():
-            if fast:
+            if fast:  # use only regular attacks
                 pyautogui.press('w')
-            if buffs:
+            elif buffs:  # use all attacks and buffs
                 Adventure.sendAttacks(buffs=True)
-            else:
+            else:  # use all attacks
                 Adventure.sendAttacks()
                 sleep(0.1)
         # after this, player may be dead
 
     @staticmethod
-    def getReadyAbilities(buffs=False):
+    # EXPERIMENTAL # TODO
+    def getReadyAbilities(buffs: bool = False) -> List[int]:
         """ Return the ready abilities as a list. 
 
         Keyword arguments:  
@@ -314,7 +346,7 @@ class Adventure:
         return myQueue
 
     @staticmethod
-    def snipe(buffs=False):
+    def snipe(buffs=False):  # EXPERIMENTAL #TODO
         """ Snipe a boss using ready rotations. 
 
         Keyword arguments:  
@@ -366,10 +398,14 @@ class Adventure:
             """
 
     @staticmethod
-    def isEnemyDead():
-        """ Return True if current enemy is dead, false otherwise. """
+    def isEnemyDead() -> bool:
+        """ Return True if current enemy is dead, false otherwise. 
+
+        Should be in Adventure menu already.  
+        """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
+
         border = getCoords(*coords.ENEMY_HEALTH_BAR_BORDER)
         # check if border of enemy health bar is white
         if (pyautogui.pixelMatchesColor(*border, (255, 255, 255))):
@@ -380,10 +416,14 @@ class Adventure:
             # print('not dead')
 
     @staticmethod
-    def isPlayerLow():
-        """ Returns True if player life is below 30%. """
+    def isPlayerLow() -> bool:
+        """ Returns True if player life is below 30% (approximately). 
+
+        Should be in Adventure menu already.  
+        """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
+
         border = getCoords(*coords.MY_HEALTH_BAR)
         if (pyautogui.pixelMatchesColor(*border, (255, 255, 255))):
             return True
@@ -391,15 +431,16 @@ class Adventure:
             return False
 
     @staticmethod
-    def isPlayerFull():
-        """ Return True if player life is above 95%. """
+    def isPlayerFull() -> bool:
+        """ Return True if player life is above 95% (approximately). """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
+
         pix = getCoords(*coords.MY_HEALTH_BAR_FULL)
         return pyautogui.pixelMatchesColor(*pix, coords.HEALTH_BAR_RED, tolerance=10)
 
     @staticmethod
-    def healHP():
+    def healHP() -> None:  # DEPRECATED
         """ Heal HP in the Safe Zone. """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
@@ -408,8 +449,13 @@ class Adventure:
         # click(*ADVANCE_ZONE, button="right")
 
     @staticmethod
-    def enemySpawn():
-        """ Returns True if enemy in adventure zone is spawned. """
+    def enemySpawn() -> bool:
+        """ Return True if there is an enemy in adventure zone. 
+
+        May return false if enemy hp is low enough for the color check.  
+
+        Should be in Adventure menu already. 
+        """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
 
@@ -417,8 +463,13 @@ class Adventure:
         return pyautogui.pixelMatchesColor(*enemy_hp, coords.HEALTH_BAR_RED)
 
     @staticmethod
-    def isBoss():
-        """ Returns True if current enemy is a Boss. """
+    def isBoss() -> bool:
+        """ Return True if current enemy is a Boss. 
+
+        Will check for the yellow crown on the adventure enemy.  
+
+        Should be in Adventure menu already.  
+        """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
 
@@ -428,8 +479,11 @@ class Adventure:
         return pyautogui.pixelMatchesColor(*crown, coords.CROWN_COLOR)
 
     @staticmethod
-    def refreshZone():
-        """ Go to another zone and back. """
+    def refreshZone() -> None:
+        """ Go to another zone and back for a new enemy to spawn. 
+
+        Should be in Adventure menu already.  
+        """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
 
@@ -437,7 +491,7 @@ class Adventure:
         click(*coords.ADVANCE_ZONE)
 
     @staticmethod
-    def buff():
+    def buff() -> None:
         """ Use adventure buffs. 
 
         Order:  
