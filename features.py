@@ -684,9 +684,9 @@ class Inventory:
         """ Returns a generator of the (absolute) locations of all items {image}. """
         Navigation.menu('inventory')
         region = (CORNER[0], CORNER[1], coords.GAME_WIDTH, coords.GAME_HEIGHT)
-        print(region[0])
-        print(type(region[0]))
-        locations = pyautogui.locateAllOnScreen(image, region=region)
+        print(region)
+        locations = pyautogui.locateAllOnScreen(
+            image, region=region, confidence=0.5)
         return locations
 
     @staticmethod
