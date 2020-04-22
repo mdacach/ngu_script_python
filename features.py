@@ -541,7 +541,7 @@ class Inventory:
         click(x, y)
         # sleep(coords.MEDIUM_SLEEP)
         pyautogui.press('d')
-        sleep(coords.FAST_SLEEP)
+        # sleep(coords.FAST_SLEEP)
         pyautogui.press('d')
 
     @staticmethod
@@ -553,7 +553,7 @@ class Inventory:
         click(x, y)
         # sleep(coords.MEDIUM_SLEEP)
         pyautogui.press('a')
-        sleep(coords.FAST_SLEEP)
+        # sleep(coords.FAST_SLEEP)
         pyautogui.press('a')
 
     @staticmethod
@@ -690,11 +690,19 @@ class Inventory:
         return locations
 
     @staticmethod
-    def getEmptySlots():
-        """ Return number of empty slots on first page of inventory. """
+    def getEmptySlots(debug: bool = False):
+        """ Return number of empty slots on first page of inventory. 
+
+        Keyword arguments:  
+        debug -- if set to True will hover onto all empty slots found.  
+        """
         if Navigation.currentMenu != 'inventory':
             raise Exception('should be in Inventory menu!')
         empty = Inventory.locateAll('images/empty-slot.png')
+        if debug:
+            for slot in empty:
+                moveTo(slot[0], slot[1])
+                sleep(0.3)
         return len(list(empty))  # empty is a generator
 
     @staticmethod
