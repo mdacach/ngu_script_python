@@ -23,10 +23,10 @@ Adventure.adventureZone(args.zone)
 killed = False  # kill flag to only take action after kills
 while True:
     if Adventure.enemySpawn() and Adventure.isBoss():
-        # Adventure.kill(buffs=True)
-        Adventure.buff()  # first thing every fight
-        sleep(1.1)
-        Adventure.snipe()
+        Adventure.kill(buffs=True)
+        # Adventure.buff()  # first thing every fight
+        # sleep(1.1)
+        # Adventure.snipe()
         sleep(1)
         press('w')
         killed = True
