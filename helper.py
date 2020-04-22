@@ -46,9 +46,13 @@ def sleep(time: int) -> None:
     pyautogui.sleep(time)
 
 
-def getCoords(x: int, y: int) -> Tuple[int]:
+def getCoords(x: int, y: int) -> Tuple[int, int]:
     """ Return coordinates relative to top-left corner of the game. """
-    return (CORNER[0] + x, CORNER[1] + y - 25)
+
+    # due to pyautogui and opencv interation, CORNER returns a box with numpy.int64 type numbers.
+    # this breaks all other parts of the code and pyautogui itself.
+    # as a workaround, I recast every coordinate as standard int.
+    return (int(CORNER[0] + x), int(CORNER[1] + y - 25))
 
 
 def moveTo(x: int, y: int) -> None:
@@ -117,7 +121,7 @@ def getScreenshot(region: Tuple[int, int, int, int] = None) -> None:
     return pyautogui.screenshot()
 
 
-def getPixelColor(x: int, y: int, image: Image = None) -> None:
+def getPixelColor(x: int, y: int, image=None) -> None:
     """ Get color of pixel at (x, y) (relative). 
 
     Keyword arguments:  
@@ -134,3 +138,7 @@ if __name__ == '__main__':
     print(f'CORNER: {CORNER}')
     print(f'CORNER[0] = {CORNER[0]}')
     print(f'type: {type(CORNER[0])}')
+    print(f'should work: ')
+    pyautogui.pixelMatchesColor(100, 100, (255, 255, 255))
+    print(f'should not work: ')
+    pyautogui.pixelMatchesColor(*getCoords(100, 100), (255, 255, 255))
