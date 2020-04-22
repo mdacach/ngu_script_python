@@ -1,7 +1,7 @@
 """ Yggdrasil management script. """
 import coords
 from features import Yggdrasil
-from nagivation import Navigation
+from navigation import Navigation
 
 
 def ygg():
