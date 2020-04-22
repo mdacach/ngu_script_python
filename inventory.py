@@ -1,10 +1,12 @@
 """ Inventory management script. """
+import time
+
+import pyautogui
+
+import coords
 from helper import *
-from coords import *
 from features import Inventory
 from navigation import Navigation
-import time
-import pyautogui
 
 
 def invManagement(slots=10):
@@ -18,5 +20,5 @@ def invManagement(slots=10):
 
 if __name__ == '__main__':
     Navigation.menu('inventory')
-    empty = Inventory.getEmptySlots()
+    empty = Inventory.getEmptySlots(debug=True)
     print(f'empty slots: {empty}')
