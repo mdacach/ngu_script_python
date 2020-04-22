@@ -15,7 +15,7 @@ while CORNER == None:
 print('success')
 # our coordinates are shifted 25 px up because of steam border
 
-# lower pyautogui.PAUSE constant for more efficiency
+# lower pyautogui.PAUSE constant
 pyautogui.PAUSE = 0.01
 
 
@@ -113,3 +113,10 @@ def getPixelColor(x, y, image=None):
     if image:
         return image.getpixel(pix)
     return pyautogui.pixel(*pix)
+
+
+if __name__ == '__main__':
+    print(f'debugging: ')
+    print(f'CORNER: {CORNER}')
+    print(f'CORNER[0] = {CORNER[0]}')
+    print(f'type: {type(CORNER[0])}')
