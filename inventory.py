@@ -14,3 +14,9 @@ def invManagement(slots=10):
     Inventory.mergeInventory(slots=slots)
     Inventory.boostInventory(slots=slots)
     Inventory.boostCube()
+
+
+if __name__ == '__main__':
+    Navigation.menu('inventory')
+    empty = Inventory.getEmptySlots()
+    print(f'empty slots: {empty}')
