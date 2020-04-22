@@ -55,6 +55,14 @@ def getCoords(x: int, y: int) -> Tuple[int, int]:
     return (int(CORNER[0] + x), int(CORNER[1] + y - 25))
 
 
+def getRegion(x: int, y: int, x2: int, y2: int) -> Tuple[int, int, int, int]:
+    """ Return coordinates for a region of the screen normalized by the game corner. """
+    # with d3dshot, regions are specified by left, top, right, bottom
+    x, y = getCoords(x, y)
+    x2, y2 = getCoords(x2, y2)
+    return (int(x), int(y), int(x2), int(y2))
+
+
 def moveTo(x: int, y: int) -> None:
     """ Move mouse to coordinates x, y relative to game. """
     x, y = getCoords(x, y)
