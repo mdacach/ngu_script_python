@@ -85,10 +85,9 @@ def run7():
     print(f'Time Machine loop for 4 minutes')
     inv1 = False
     lastZone = False
-    while time.time() - start < 240:
+    while time.time() - start < 180:
         TimeMachine.addEnergy()
         TimeMachine.addMagic()
-        print(f'sleeping for 30 seconds')
         if time.time() - start > 180 and not inv1:
             Inventory.loadout(1)
             BasicTraining.basicTraining()
@@ -97,9 +96,6 @@ def run7():
             Adventure.adventureZone()
             lastZone = True
         startTime = time.time()
-        while time.time() - startTime < 30:
-            Navigation.menu('adventure')
-            Adventure.kill()
 
     Misc.reclaimAll()  # reclaim energy and magic from TM
 
@@ -111,8 +107,6 @@ def run7():
         if time.time() - mainStart > 120 and not pushAdventure:
             Adventure.adventureZone()
             pushAdventure = True
-        print(f'sleeping 30 seconds')
-        sleep(30)
         # fight bosses
         FightBosses.nuke()
         for _ in range(5):
@@ -120,17 +114,24 @@ def run7():
         # augments
         Misc.inputResource(amount='quarter', idle=True)
         for _ in range(3):
-            Augmentation.augmentation()
-        Augmentation.augmentation(upgrade=True)
+            Augmentation.augmentation(aug=2)
+        Augmentation.augmentation(aug=2, upgrade=True)
         # blood magic
         BloodMagic.addMagic(cap=True)
+        BloodMagic.addMagic(magic=2, cap=True)
+        BloodMagic.addMagic(magic=3, cap=True)
+        print(f'sleeping 30 seconds')
+        sleep(30)
 
     MoneyPit.moneyPit()
+    FightBosses.nuke()
     Navigation.menu('rebirth')
     print('waiting for time')
-    Statistics.screenshot('rebirth.png')
+    # Statistics.screenshot('rebirth.png')
     while time.time() - start < 420:
         sleep(1)
+        Navigation.menu('fightBoss')
+        FightBosses.fightBoss()
     Rebirth.rebirth()
 
 
