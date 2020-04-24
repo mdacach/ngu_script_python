@@ -171,7 +171,7 @@ REBIRTH_CONFIRMATION = 439, 344
 
 # OCR
 EXP_MENU = 91, 480  # EXPERIMENTAL
-EXP_REGION = (592, 99, 100, 20)  # pyautogui
-EXP_REGION = (592, 99, 692, 119)  # d3dshot
-BOSS_NUMBER_REGION = (785, 334, 80, 20)  # pyautogui
+# EXP_REGION = (592, 99, 100, 20)  # pyautogui
+EXP_REGION = (592, 99, 742, 119)  # d3dshot
+# BOSS_NUMBER_REGION = (785, 334, 80, 20)  # pyautogui
 BOSS_NUMBER_REGION = (785, 334, 865, 354)  # d3dshot
