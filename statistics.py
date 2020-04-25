@@ -1,9 +1,10 @@
 """ Statistics module. """
 from typing import Tuple
+import time
 
 import pyautogui
 import d3dshot
-# import cv2
+import cv2
 from helper import *
 from coords import *
 import pytesseract as ocr
@@ -13,12 +14,16 @@ from navigation import Navigation
 
 class Statistics:
     @staticmethod
-    def getScreenshot(name: str = 'game-screenshot.png', save: bool = False, region: Tuple[int, int, int, int] = None) -> Image:
+    def getScreenshot(
+        name: str = 'game-screenshot.png',
+        save: bool = False,
+        region: Tuple[int, int, int, int] = None
+    ) -> Image:
         """ Capture/save a screenshot of the game. 
 
         Keyword arguments:  
         name -- file name if saving. (default game-screenshot.png).  
-        save -- set to True if want to save to disk instead.  
+        save -- set to True if want to save to disk also (will take two screenshots).  
         region -- region to take screenshot. If none, will take screenshot of all game screen.  
         """
         d = d3dshot.create(capture_output='numpy')
@@ -29,34 +34,33 @@ class Statistics:
                       GAME_WIDTH, CORNER[1] + GAME_HEIGHT)
         if save:
             d.screenshot_to_disk(file_name=name, region=region)
-        else:
-            return d.screenshot(region=region)
+        return d.screenshot(region=region)
 
     @staticmethod
     def getEXP():
         """ Get current EXP from spend EXP menu. """
         Navigation.menu('exp')
-        x, y = getCoords(EXP_REGION[0], EXP_REGION[1])
-        img = pyautogui.screenshot(region=(x, y, 100, 20))
-        # img.save('exp-screenshot.png')
-        # print(ocr.image_to_string(img))
+        # x, y = getCoords(EXP_REGION[0], EXP_REGION[1])
+        # img = Statistics.getScreenshot(
+        # name='exp.png', region=EXP_REGION, save=True)
+        img = Statistics.getScreenshot(region=EXP_REGION)
+        img = cv2.resize(img, None, fx=1.5, fy=1.5,
+                         interpolation=cv2.INTER_CUBIC)
+        # cv2.imwrite('exp-after.png', img)
         try:
             text = ocr.image_to_string(img)
         except:
             print('could not read exp')
-            return
+            return -1
         exp = ""
         for letter in text:
             if str.isdigit(letter):
                 exp += letter
-        # print(f"{exp} exp")
         try:
             return int(exp)
         except:
             print('could not return exp correctly')
             return -1
-        # return exp
-        # return f"{exp} exp"
 
     @staticmethod
     def getBoss():
@@ -146,5 +150,10 @@ class Statistics:
 
 if __name__ == '__main__':
     print(f'testing screenshot:')
-    Statistics.getScreenshot(save=True)
-    print(Statistics.getScreenshot(region=ITOPOD_PP_REGION))
+    # Statistics.getScreenshot(save=True)
+    # print(Statistics.getScreenshot(region=ITOPOD_PP_REGION))
+    for i in range(5):
+        start = time.time()
+        print(f'current exp: {Statistics.getEXP()}')
+        end = time.time()
+        print(f'time: {end - start}')
