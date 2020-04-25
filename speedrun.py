@@ -5,7 +5,7 @@ import pyautogui
 import time
 
 import coords
-from helper import sleep
+from helper import click, sleep
 from features import Adventure, Augmentation, BloodMagic, BasicTraining, FightBosses, Inventory, Misc, MoneyPit, Rebirth, TimeMachine
 from navigation import Navigation
 from statistics import Statistics
@@ -55,8 +55,9 @@ def run3():
             Augmentation.augmentation()
         Augmentation.augmentation(upgrade=True)
 
-        BloodMagic.addMagic(cap=True)
-        BloodMagic.addMagic(magic=2)
+        BloodMagic.addMagic(magic=1, cap=True)
+        BloodMagic.addMagic(magic=2, cap=True)
+        BloodMagic.addMagic(magic=3, cap=True)
 
         if not pushAdventure and time.time() - start > 120:
             Adventure.adventureZone()
@@ -64,11 +65,87 @@ def run3():
         FightBosses.nuke()
 
     MoneyPit.moneyPit()
-    Navigation.menu('rebirth')
+    FightBosses.nuke()
+    FightBosses.fightBoss()
+    # Navigation.menu('rebirth')
     print('waiting for time')
-    Statistics.screenshot('rebirth.png')
+    # Statistics.screenshot('rebirth.png')
     while time.time() - start < 180:
         sleep(1)
+    click(*coords.STOP)  # stop fighting
+    Navigation.menu('rebirth')
+    Rebirth.rebirth()
+
+
+def run5():
+    """ Perform a 5 minute run."""
+    start = time.time()
+    Inventory.loadout(2)  # loadout 2 is bars-heavy
+    BasicTraining.basicTraining()
+    Adventure.nuke()
+    sleep(3)
+    Adventure.adventureZone()  # go to latest zone
+
+    Misc.inputResource()  # all energy
+
+    print(f'Time Machine loop for 2:30 minutes')
+    inv1 = False
+    lastZone = False
+    loopCounter = 0
+    while time.time() - start < 150:
+        loopCounter += 1
+        TimeMachine.addEnergy()
+        TimeMachine.addMagic()
+        if time.time() - start > 120 and not inv1:
+            Inventory.loadout(1)
+            BasicTraining.basicTraining()
+            inv1 = True
+        if loopCounter == 10:
+            Adventure.itopodFarm()
+        # if not lastZone:
+        #     Adventure.adventureZone()
+        #     lastZone = True
+
+    Misc.reclaimAll()  # reclaim energy and magic from TM
+
+    print(f'Main loop until 5 minutes')
+    mainStart = time.time()
+    pushAdventure = False
+    loopCounter = 0
+    while time.time() - start < 280:
+        loopCounter += 1
+        # push to new adventure zone
+        # if time.time() - mainStart > 30 and not pushAdventure:
+        #     Adventure.adventureZone()
+        #     pushAdventure = True
+        # fight bosses
+        if loopCounter == 2:
+            Adventure.itopodFarm()
+
+        FightBosses.nuke()
+        for _ in range(5):
+            FightBosses.fightBoss()
+        # augments
+        Misc.inputResource(amount='quarter', idle=True)
+        for _ in range(3):
+            Augmentation.augmentation(aug=1)
+        Augmentation.augmentation(aug=1, upgrade=True)
+        # blood magic
+        BloodMagic.addMagic(cap=True)
+        BloodMagic.addMagic(magic=2, cap=True)
+        BloodMagic.addMagic(magic=3, cap=True)
+        print(f'sleeping 15 seconds')
+        sleep(15)
+
+    MoneyPit.moneyPit()
+    FightBosses.nuke()
+    FightBosses.fightBoss()
+    print('waiting for time')
+    # Statistics.screenshot('rebirth.png')
+    while time.time() - start < 300:
+        sleep(1)
+    click(*coords.STOP)  # stop fighting bosses
+    Navigation.menu('rebirth')
     Rebirth.rebirth()
 
 
@@ -125,13 +202,13 @@ def run7():
 
     MoneyPit.moneyPit()
     FightBosses.nuke()
-    Navigation.menu('rebirth')
+    FightBosses.fightBoss()
     print('waiting for time')
     # Statistics.screenshot('rebirth.png')
     while time.time() - start < 420:
         sleep(1)
-        Navigation.menu('fightBoss')
-        FightBosses.fightBoss()
+    click(*coords.STOP)  # stop fighting
+    Navigation.menu('rebirth')
     Rebirth.rebirth()
 
 
@@ -191,7 +268,8 @@ if __name__ == "__main__":
     print(f'{args.duration} minutes run')
 
     runCounter = 0
-    print(f'exp before: {Statistics.getEXP()}')
+    previousExp = Statistics.getEXP()
+    print(f'exp before: {previousExp}')
     start = time.time()
     while True:
         print('*' * 15)
@@ -201,8 +279,13 @@ if __name__ == "__main__":
             run10()
         elif args.duration == '7':
             run7()
+        elif args.duration == '5':
+            run5()
         elif args.duration == '3':
             run3()
-        print(f'exp: {Statistics.getEXP()}')
+        currentExp = Statistics.getEXP()
+        print(f'exp: {currentExp}')
+        print(f'run exp: {currentExp - previousExp}')
+        previousExp = currentExp
         print('*' * 15)
         print(f'total time: {round((time.time() - start)/60)} minutes')
