@@ -140,13 +140,17 @@ def run5():
     MoneyPit.moneyPit()
     FightBosses.nuke()
     FightBosses.fightBoss()
-    print('waiting for time')
+    print('getting exp')
     # Statistics.screenshot('rebirth.png')
+    exp = Statistics.getEXP()
+    print('waiting for time')
     while time.time() - start < 300:
         sleep(1)
+    Navigation.menu('fightBoss')
     click(*coords.STOP)  # stop fighting bosses
     Navigation.menu('rebirth')
     Rebirth.rebirth()
+    return exp
 
 
 def run7():
@@ -280,10 +284,10 @@ if __name__ == "__main__":
         elif args.duration == '7':
             run7()
         elif args.duration == '5':
-            run5()
+            currentExp = run5()  # run now returns current exp
         elif args.duration == '3':
             run3()
-        currentExp = Statistics.getEXP()
+        # currentExp = Statistics.getEXP()
         print(f'exp: {currentExp}')
         print(f'run exp: {currentExp - previousExp}')
         previousExp = currentExp
