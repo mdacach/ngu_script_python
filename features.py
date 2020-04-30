@@ -90,7 +90,7 @@ class Adventure:
              'avsp': 13,
              'mega': 14,
              'uug': 15,
-             'beardverse': 16}
+             'bv': 16}
 
     # abilities mapping
     abilities_keys = {1: 'w',
@@ -538,7 +538,7 @@ class Inventory:
         if Navigation.currentMenu != 'inventory':
             raise Exception('should be in Inventory menu!')
 
-        click(x, y)
+        click(x, y, delay='fast')
         # sleep(coords.MEDIUM_SLEEP)
         pyautogui.press('d')
         # sleep(coords.FAST_SLEEP)
@@ -550,7 +550,7 @@ class Inventory:
         if Navigation.currentMenu != 'inventory':
             raise Exception('should be in Inventory menu!')
 
-        click(x, y)
+        click(x, y, delay='fast')
         # sleep(coords.MEDIUM_SLEEP)
         pyautogui.press('a')
         # sleep(coords.FAST_SLEEP)
