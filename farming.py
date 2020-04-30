@@ -24,6 +24,11 @@ parser.add_argument('--verbose', '-v',
 parser.add_argument('--fast', '-f', help='use only regular attacks',
                     action='store_true')
 
+parser.add_argument('--slots',
+                    help='slots to boost/merge',
+                    type=int,
+                    default=10)
+
 args = parser.parse_args()
 print(args)
 
@@ -44,7 +49,9 @@ while True:
                 if args.fast:
                     Adventure.kill(fast=True)
                 else:
-                    Adventure.kill()
+                    Adventure.kill(buffs=True)
+                sleep(1)
+                pyautogui.press('w')
                 killCounter += 1
                 if args.verbose:
                     print(f'kill count: {killCounter}')
@@ -77,7 +84,9 @@ while True:
             emptySlots = Inventory.getEmptySlots()
             print(f'empty slots: {emptySlots}')
             if emptySlots < 10:
-                invManagement(slots=5)
+                # Inventory.mergeInventory(slots=10)
+                invManagement(slots=args.slots)
+                # Inventory.trashItems()
                 ygg()
 
             print(f'going back to adventure')
