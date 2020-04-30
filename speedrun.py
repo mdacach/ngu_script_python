@@ -28,28 +28,36 @@ def run3():
 
     Misc.inputResource()
 
-    print(f'TM loop (1:30 min)')
+    print(f'TM loop (2 min)')
     inv1 = False
-    lastZone = False
-    while time.time() - start < 90:
+    lc = 0
+    while time.time() - start < 120:
+        lc += 1
+        if lc == 3:
+            Adventure.itopodFarm()
+
         TimeMachine.addEnergy()
         TimeMachine.addMagic()
-        if time.time() - start > 60 and not inv1:
+        if time.time() - start > 90 and not inv1:
             Inventory.loadout(1)
             BasicTraining.basicTraining()
             inv1 = True
-            if not lastZone:
-                Adventure.adventureZone()
-                lastZone = True
         print(f'sleeping for 5 sec')
         # sleep(15)
         sleep(5)
 
     Misc.reclaimAll()
 
-    print(f'Main loop (1:30 min)')
+    print(f'Main loop (1 min)')
     pushAdventure = False
+    lc = 0
     while time.time() - start < 170:
+        lc += 1
+        if lc == 3:  # get kill in highest zone
+            Adventure.adventureZone()
+            sleep(5)
+            Adventure.itopodFarm()
+
         Misc.inputResource(amount='quarter', idle=True)
         for _ in range(3):
             Augmentation.augmentation()
@@ -59,22 +67,25 @@ def run3():
         BloodMagic.addMagic(magic=2, cap=True)
         BloodMagic.addMagic(magic=3, cap=True)
 
-        if not pushAdventure and time.time() - start > 120:
-            Adventure.adventureZone()
-            pushAdventure = True
         FightBosses.nuke()
+        print(f'sleeping 5 secs')
+        sleep(5)
 
     MoneyPit.moneyPit()
     FightBosses.nuke()
     FightBosses.fightBoss()
     # Navigation.menu('rebirth')
+    print('getting exp')
+    exp = Statistics.getEXP()
     print('waiting for time')
     # Statistics.screenshot('rebirth.png')
     while time.time() - start < 180:
         sleep(1)
+    Navigation.menu('fightBoss')
     click(*coords.STOP)  # stop fighting
     Navigation.menu('rebirth')
     Rebirth.rebirth()
+    return exp
 
 
 def run5():
@@ -82,7 +93,7 @@ def run5():
     start = time.time()
     Inventory.loadout(2)  # loadout 2 is bars-heavy
     BasicTraining.basicTraining()
-    Adventure.nuke()
+    FightBosses.nuke()
     sleep(3)
     Adventure.adventureZone()  # go to latest zone
 
@@ -128,11 +139,12 @@ def run5():
         # augments
         Misc.inputResource(amount='quarter', idle=True)
         for _ in range(3):
-            Augmentation.augmentation(aug=1)
-        Augmentation.augmentation(aug=1, upgrade=True)
+            Augmentation.augmentation(aug=2)
+        Augmentation.augmentation(aug=2, upgrade=True)
         # blood magic
-        BloodMagic.addMagic(cap=True)
-        BloodMagic.addMagic(magic=2, cap=True)
+        # BloodMagic.addMagic(cap=True)
+        # BloodMagic.addMagic(magic=2, cap=True)
+        # BloodMagic.addMagic(magic=3, cap=True)
         BloodMagic.addMagic(magic=3, cap=True)
         print(f'sleeping 15 seconds')
         sleep(15)
@@ -142,7 +154,10 @@ def run5():
     FightBosses.fightBoss()
     print('getting exp')
     # Statistics.screenshot('rebirth.png')
+    expStart = time.time()
     exp = Statistics.getEXP()
+    expEnd = time.time()
+    print(f'time: {round(expStart - expEnd, 3)}')
     print('waiting for time')
     while time.time() - start < 300:
         sleep(1)
@@ -195,8 +210,8 @@ def run7():
         # augments
         Misc.inputResource(amount='quarter', idle=True)
         for _ in range(3):
-            Augmentation.augmentation(aug=2)
-        Augmentation.augmentation(aug=2, upgrade=True)
+            Augmentation.augmentation(aug=3)
+        Augmentation.augmentation(aug=3, upgrade=True)
         # blood magic
         BloodMagic.addMagic(cap=True)
         BloodMagic.addMagic(magic=2, cap=True)
@@ -255,10 +270,12 @@ def run10():
         # augments
         Misc.inputResource(amount='quarter', idle=True)
         for _ in range(3):
-            Augmentation.augmentation()
-        Augmentation.augmentation(upgrade=True)
+            Augmentation.augmentation(aug=4)
+        Augmentation.augmentation(aug=4, upgrade=True)
         # blood magic
         BloodMagic.addMagic(cap=True)
+        BloodMagic.addMagic(magic=2, cap=True)
+        BloodMagic.addMagic(magic=3, cap=True)
 
     MoneyPit.moneyPit()
     Navigation.menu('rebirth')
@@ -286,10 +303,10 @@ if __name__ == "__main__":
         elif args.duration == '5':
             currentExp = run5()  # run now returns current exp
         elif args.duration == '3':
-            run3()
+            currentExp = run3()
         # currentExp = Statistics.getEXP()
-        print(f'exp: {currentExp}')
-        print(f'run exp: {currentExp - previousExp}')
-        previousExp = currentExp
+        # print(f'exp: {currentExp}')
+        # print(f'run exp: {currentExp - previousExp}')
+        # previousExp = currentExp
         print('*' * 15)
         print(f'total time: {round((time.time() - start)/60)} minutes')
