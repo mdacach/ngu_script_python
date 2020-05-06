@@ -6,7 +6,7 @@ import time
 
 import coords
 from helper import click, sleep
-from features import Adventure, Augmentation, BloodMagic, BasicTraining, FightBosses, Inventory, Misc, MoneyPit, Rebirth, TimeMachine
+from features import Adventure, Augmentation, BloodMagic, BasicTraining, FightBosses, Inventory, Misc, MoneyPit, GoldDiggers, Rebirth, TimeMachine
 from navigation import Navigation
 from statistics import Statistics
 
@@ -24,34 +24,30 @@ def run3():
     Inventory.loadout(2)
     BasicTraining.basicTraining()
     FightBosses.nuke()
+    sleep(5)
     Adventure.adventureZone()
 
     Misc.inputResource()
 
-    print(f'TM loop (2 min)')
+    print(f'TM loop (1 min)')
     inv1 = False
     lc = 0
-    while time.time() - start < 120:
+    while time.time() - start < 90:
         lc += 1
         if lc == 3:
             Adventure.itopodFarm()
-
         TimeMachine.addEnergy()
         TimeMachine.addMagic()
-        if time.time() - start > 90 and not inv1:
-            Inventory.loadout(1)
-            BasicTraining.basicTraining()
-            inv1 = True
-        print(f'sleeping for 5 sec')
-        # sleep(15)
-        sleep(5)
+
+    Inventory.loadout(1)
+    BasicTraining.basicTraining() 
 
     Misc.reclaimAll()
 
     print(f'Main loop (1 min)')
     pushAdventure = False
     lc = 0
-    while time.time() - start < 170:
+    while time.time() - start < 160:
         lc += 1
         if lc == 3:  # get kill in highest zone
             Adventure.adventureZone()
@@ -60,27 +56,32 @@ def run3():
 
         Misc.inputResource(amount='quarter', idle=True)
         for _ in range(3):
-            Augmentation.augmentation()
-        Augmentation.augmentation(upgrade=True)
+            Augmentation.augmentation(aug=3)
+        Augmentation.augmentation(aug=3, upgrade=True)
 
-        BloodMagic.addMagic(magic=1, cap=True)
-        BloodMagic.addMagic(magic=2, cap=True)
-        BloodMagic.addMagic(magic=3, cap=True)
+
+        BloodMagic.addMagic(magic=4, cap=True)
+        if lc > 20:
+            BloodMagic.addMagic(magic=3, cap=True)
+            BloodMagic.addMagic(magic=2, cap=True)
+            BloodMagic.addMagic(magic=1, cap=True)
+
 
         FightBosses.nuke()
-        print(f'sleeping 5 secs')
-        sleep(5)
 
     MoneyPit.moneyPit()
+
+    Misc.reclaimAll() 
+    GoldDiggers.clearActive() 
+    GoldDiggers.statDigger() 
+
     FightBosses.nuke()
     FightBosses.fightBoss()
     # Navigation.menu('rebirth')
-    print('getting exp')
-    exp = Statistics.getEXP()
-    print('waiting for time')
-    # Statistics.screenshot('rebirth.png')
     while time.time() - start < 180:
-        sleep(1)
+        sleep(0.5)
+    exp = Statistics.getEXP()
+    # Statistics.screenshot('rebirth.png')
     Navigation.menu('fightBoss')
     click(*coords.STOP)  # stop fighting
     Navigation.menu('rebirth')
@@ -304,9 +305,9 @@ if __name__ == "__main__":
             currentExp = run5()  # run now returns current exp
         elif args.duration == '3':
             currentExp = run3()
-        # currentExp = Statistics.getEXP()
-        # print(f'exp: {currentExp}')
-        # print(f'run exp: {currentExp - previousExp}')
-        # previousExp = currentExp
+        currentExp = Statistics.getEXP()
+        print(f'exp: {currentExp}')
+        print(f'run exp: {currentExp - previousExp}')
+        previousExp = currentExp
         print('*' * 15)
         print(f'total time: {round((time.time() - start)/60)} minutes')

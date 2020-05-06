@@ -267,7 +267,7 @@ class Adventure:
         # pyautogui.press('q')
         Adventure.turnIdleOn()
 
-    @staticmethod
+    @staticmethod 
     def kill(fast: bool = False, buffs: bool = False) -> None:
         """ Kill the current enemy. 
 
@@ -404,17 +404,25 @@ class Adventure:
 
         Should be in Adventure menu already.  
         """
+
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
 
         border = getCoords(*coords.ENEMY_HEALTH_BAR_BORDER)
         # check if border of enemy health bar is white
-        if (pyautogui.pixelMatchesColor(*border, (255, 255, 255))):
+        #KONGREGATE COLOR IS DIFFERENT
+        if (pyautogui.pixelMatchesColor(*border, (250, 250, 250))):
             # print('dead')
             return True
         else:
-            return False
             # print('not dead')
+            return False
+        # if (pyautogui.pixelMatchesColor(*border, (255, 255, 255))):
+        #     print('dead')
+        #     return True
+        # else:
+        #     print('not dead')
+        #     return False
 
     @staticmethod
     def isPlayerLow() -> bool:
@@ -461,7 +469,7 @@ class Adventure:
             raise Exception('should be in Adventure menu!')
 
         enemy_hp = getCoords(*coords.ENEMY_HEALTH_BAR_BORDER)
-        return pyautogui.pixelMatchesColor(*enemy_hp, coords.HEALTH_BAR_RED)
+        return pyautogui.pixelMatchesColor(*enemy_hp, coords.ENEMY_HEALTH_BAR_RED)
 
     @staticmethod
     def isBoss() -> bool:
@@ -686,7 +694,7 @@ class Inventory:
         region = (CORNER[0], CORNER[1], coords.GAME_WIDTH, coords.GAME_HEIGHT)
         print(region)
         locations = pyautogui.locateAllOnScreen(
-            image, region=region, confidence=0.5)
+            image, region=region)
         return locations
 
     @staticmethod
@@ -799,6 +807,18 @@ class Yggdrasil:
         Navigation.menu('yggdrasil')
         click(*coords.FRUITS[fruit.upper()])
 
+class GoldDiggers:
+    @staticmethod 
+    def clearActive():
+        """ Clear active diggers. """ 
+        Navigation.menu('goldDiggers')
+        click(*coords.CLEAR_ACTIVE)
+    
+    @staticmethod 
+    def statDigger():
+        """ Activate stat digger. """ 
+        Navigation.menu('goldDiggers')
+        click(*coords.STAT_DIGGER)
 
 class Misc:
     @staticmethod
@@ -839,7 +859,7 @@ class Misc:
         if Navigation.currentMenu not in possibleMenus:
             Navigation.menu('basicTraining')
         # click(*coords.BASIC_TRAINING)
-        if idle:
+        if not idle:
             if amount == 'cap':
                 click(*coords.ENERGY_CUSTOM_AMOUNT_CAP)
             if amount == 'half':

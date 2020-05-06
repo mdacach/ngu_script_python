@@ -3,8 +3,8 @@ from typing import Tuple
 import time
 
 import pyautogui
-import d3dshot
-import cv2
+# import d3dshot
+# import cv2
 from helper import *
 from coords import *
 import pytesseract as ocr
@@ -26,41 +26,26 @@ class Statistics:
         save -- set to True if want to save to disk also (will take two screenshots).  
         region -- region to take screenshot. If none, will take screenshot of all game screen.  
         """
-        d = d3dshot.create(capture_output='numpy')
         if region:
             region = getRegion(*region)
         else:  # all game screen
-            region = (CORNER[0], CORNER[1], CORNER[0] +
-                      GAME_WIDTH, CORNER[1] + GAME_HEIGHT)
+            region = (CORNER[0], CORNER[1],
+                      GAME_WIDTH, GAME_HEIGHT)
+        print(f'region: {region}')
         if save:
-            d.screenshot_to_disk(file_name=name, region=region)
-        return d.screenshot(region=region)
+            pyautogui.screenshot("output/" + name, region=region)
+        return pyautogui.screenshot(region=region)
 
     @staticmethod
     def getEXP():
         """ Get current EXP from spend EXP menu. """
         Navigation.menu('exp')
-        # x, y = getCoords(EXP_REGION[0], EXP_REGION[1])
-        # img = Statistics.getScreenshot(
-        # name='exp.png', region=EXP_REGION, save=True)
         img = Statistics.getScreenshot(region=EXP_REGION)
-        img = cv2.resize(img, None, fx=1.5, fy=1.5,
-                         interpolation=cv2.INTER_CUBIC)
-        # cv2.imwrite('exp-after.png', img)
-        try:
-            text = ocr.image_to_string(img)
-        except:
-            print('could not read exp')
-            return -1
-        exp = ""
-        for letter in text:
-            if str.isdigit(letter):
-                exp += letter
-        try:
-            return int(exp)
-        except:
-            print('could not return exp correctly')
-            return -1
+        text = ocr.image_to_string(img)
+        text = [x for x in text.split() if x[0].isdigit()]
+        text = [x for x in text[0] if x.isdigit()]
+        return int("".join(text))
+
 
     @staticmethod
     def getBoss():
@@ -157,3 +142,6 @@ if __name__ == '__main__':
         print(f'current exp: {Statistics.getEXP()}')
         end = time.time()
         print(f'time: {end - start}')
+        # img = Statistics.getScreenshot(region=EXP_REGION)
+        # print(img)
+        # print(ocr.image_to_string(img))

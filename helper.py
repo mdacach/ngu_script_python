@@ -5,7 +5,7 @@
 
 from typing import List, Set, Dict, Tuple
 
-import d3dshot
+# import d3dshot
 import pyautogui
 
 import constants
@@ -60,9 +60,7 @@ def getCoords(x: int, y: int) -> Tuple[int, int]:
 
 def getRegion(x: int, y: int, x2: int, y2: int) -> Tuple[int, int, int, int]:
     """ Return coordinates for a region of the screen normalized by the game corner. """
-    # with d3dshot, regions are specified by left, top, right, bottom
     x, y = getCoords(x, y)
-    x2, y2 = getCoords(x2, y2)
     return (int(x), int(y), int(x2), int(y2))
 
 

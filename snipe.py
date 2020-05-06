@@ -4,7 +4,7 @@ import argparse
 
 import pyautogui
 
-import coords
+import coords 
 from helper import *
 from features import *
 from navigation import Navigation
@@ -14,36 +14,48 @@ from yggdrasil import ygg
 parser = argparse.ArgumentParser()
 parser.add_argument('zone', help='zone to snipe', default='latest')
 
+parser.add_argument('--verbose', help='verbose', default=False, action='store_true')
+
 args = parser.parse_args()
 
 
-print(f'sniping {args.zone}')
+def main(): 
+    print(f'sniping {args.zone}')
 
-start = time.time()
-killCounter = 0
-print('buffing')
-Adventure.adventureZone(args.zone)
-killed = False  # kill flag to only take action after kills
-while True:
-    if Adventure.enemySpawn() and Adventure.isBoss():
-        Adventure.kill(buffs=True)
-        # Adventure.buff()  # first thing every fight
-        # sleep(1.1)
-        # Adventure.snipe()
-        sleep(1)
-        press('w')
-        killed = True
-        killCounter += 1
-        print(f'killed: {killCounter}')
-        if killCounter % 50 == 0:
-            print(f'inventory management')
-            invManagement()
-            print(f'harvesting ygg')
-            ygg()
-        Adventure.adventureZone('safe')
-        while not Adventure.isPlayerFull():
+    start = time.time()
+    killCounter = 0
+    print('buffing')
+    Adventure.adventureZone(args.zone)
+    killed = False  # kill flag to only take action after kills
+    while True:
+        if Adventure.enemySpawn() and Adventure.isBoss():
+            if args.verbose:
+                print('spawn boss')
+            Adventure.kill(buffs=True)
+            if args.verbose:
+                print('killed')
+            # Adventure.buff()  # first thing every fight
+            # sleep(1.1)
+            # Adventure.snipe()
             sleep(1)
-        Adventure.adventureZone(args.zone)
-    elif Adventure.enemySpawn() and not Adventure.isBoss():
-        Adventure.refreshZone()
-        killed = False
+            press('w')
+            killed = True
+            killCounter += 1
+            print(f'killed: {killCounter}')
+            if killCounter % 50 == 0:
+                print(f'inventory management')
+                invManagement()
+                print(f'harvesting ygg')
+                ygg()
+            Adventure.adventureZone('safe')
+            while not Adventure.isPlayerFull():
+                sleep(1)
+            Adventure.adventureZone(args.zone)
+        elif Adventure.enemySpawn() and not Adventure.isBoss():
+            print('not boss')
+            Adventure.refreshZone()
+            killed = False
+        # print('here')
+
+if __name__ == "__main__":
+    main()

@@ -19,6 +19,7 @@ class Navigation:
         'wandoos': coords.WANDOOS,
         'ngu': coords.NGU,
         'yggdrasil': coords.YGGDRASIL,
+        'goldDiggers': coords.GOLD_DIGGERS,
         'rebirth': coords.REBIRTH_MENU,
         'exp': coords.EXP_MENU
     }
