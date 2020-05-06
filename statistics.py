@@ -3,8 +3,6 @@ from typing import Tuple
 import time
 
 import pyautogui
-# import d3dshot
-# import cv2
 from helper import *
 from coords import *
 import pytesseract as ocr
