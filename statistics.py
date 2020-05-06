@@ -3,8 +3,9 @@ from typing import Tuple
 import time
 
 import pyautogui
+
+import coords 
 from helper import *
-from coords import *
 import pytesseract as ocr
 from PIL import Image
 from navigation import Navigation
@@ -29,16 +30,16 @@ class Statistics:
         else:  # all game screen
             region = (CORNER[0], CORNER[1],
                       GAME_WIDTH, GAME_HEIGHT)
-        print(f'region: {region}')
+        # print(f'region: {region}')
         if save:
             pyautogui.screenshot("output/" + name, region=region)
         return pyautogui.screenshot(region=region)
 
     @staticmethod
     def getEXP():
-        """ Get current EXP from spend EXP menu. """
+        """ Get and return current EXP from spend EXP menu. """
         Navigation.menu('exp')
-        img = Statistics.getScreenshot(region=EXP_REGION)
+        img = Statistics.getScreenshot(region=coords.EXP_REGION)
         text = ocr.image_to_string(img)
         text = [x for x in text.split() if x[0].isdigit()]
         text = [x for x in text[0] if x.isdigit()]
@@ -46,7 +47,7 @@ class Statistics:
 
 
     @staticmethod
-    def getBoss():
+    def getBoss(): # TODO
         """ Get the next boss from Fight Boss menu. """
         x, y = getCoords(BOSS_NUMBER_REGION[0], BOSS_NUMBER_REGION[1])
         img = pyautogui.screenshot(region=(x, y, 80, 20))
@@ -60,7 +61,7 @@ class Statistics:
         print(text)
 
     @staticmethod
-    def getPP():
+    def getPP(): # TODO 
         """ Get the current pp amount from itopod.
 
         Uses d3dshot for screenshot.
@@ -93,7 +94,7 @@ class Statistics:
         # return f"{exp} exp"
 
     @staticmethod
-    def getTierKills():
+    def getTierKills(): # TODO 
         """ Get and return itopod tier remaining kills to AP.
 
         Must be in ITOPOD menu.
