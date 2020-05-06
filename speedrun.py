@@ -30,7 +30,6 @@ def run3():
     Misc.inputResource()
 
     print(f'TM loop (1 min)')
-    inv1 = False
     lc = 0
     while time.time() - start < 90:
         lc += 1
@@ -45,7 +44,6 @@ def run3():
     Misc.reclaimAll()
 
     print(f'Main loop (1 min)')
-    pushAdventure = False
     lc = 0
     while time.time() - start < 160:
         lc += 1
@@ -61,7 +59,7 @@ def run3():
 
 
         BloodMagic.addMagic(magic=4, cap=True)
-        if lc > 20:
+        if lc > 5:
             BloodMagic.addMagic(magic=3, cap=True)
             BloodMagic.addMagic(magic=2, cap=True)
             BloodMagic.addMagic(magic=1, cap=True)
