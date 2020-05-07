@@ -10,3 +10,6 @@ need to change user_settings.py in steam proton directory.
 Now it seems to be running well. 
 
 Note that kongregates colors and steam colors are slightly differente. I will need to tweak that once again, but for now, the speedrunning script is working.
+
+https://lists.devloop.org.uk/pipermail/shifter-users/2019-July/002365.html  
+https://github.com/ValveSoftware/Proton
