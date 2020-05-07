@@ -54,8 +54,8 @@ def run3():
 
         Misc.inputResource(amount='quarter', idle=True)
         for _ in range(3):
-            Augmentation.augmentation(aug=4)
-        Augmentation.augmentation(aug=4, upgrade=True)
+            Augmentation.augmentation(aug=3)
+        Augmentation.augmentation(aug=3, upgrade=True)
 
 
         BloodMagic.addMagic(magic=4, cap=True)
@@ -69,13 +69,12 @@ def run3():
 
     MoneyPit.moneyPit()
 
+    Misc.reclaimAll() 
     GoldDiggers.clearActive() 
     GoldDiggers.statDigger() 
 
     FightBosses.nuke()
-    for i in range(4): 
-	    FightBosses.fightBoss()
-	    sleep(1)
+    FightBosses.fightBoss()
     # Navigation.menu('rebirth')
     while time.time() - start < 180:
         sleep(0.5)
