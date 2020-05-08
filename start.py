@@ -1,6 +1,6 @@
 import subprocess 
 
-cmd = "xpra start-desktop :1 --start=openbox" 
+cmd = "xpra start-desktop :1 --start=kwin" 
 subprocess.run(cmd.split(" "))
 
 
