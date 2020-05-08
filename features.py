@@ -761,7 +761,27 @@ class BloodMagic:
                 (magic - 1) * coords.BM_DIFF
         click(x, y)
 
+class Wandoos: 
+    @staticmethod 
+    def addEnergy(cap=True): # TODO add 
+        """ Add energy to wandoos.  
 
+        Keyword arguments:  
+        cap -- if set to False, will click add. (default True)  
+        """ 
+        Navigation.menu('wandoos')
+        click(*coords.WANDOOS_ENERGY_CAP)
+
+    @staticmethod 
+    def addMagic(cap=True): # TODO add 
+        """ Add magic to wandoos. 
+
+        Keyword arguments:
+        cap -- if set to False, will click add. (default True)
+        """
+        Navigation.menu('wandoos')
+        click(*coords.WANDOOS_MAGIC_CAP)
+        
 class MoneyPit:
     @staticmethod
     def moneyPit():
