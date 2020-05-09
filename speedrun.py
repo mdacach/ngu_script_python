@@ -6,17 +6,94 @@ import time
 
 import coords
 from helper import click, sleep
-from features import Adventure, Augmentation, BloodMagic, BasicTraining, FightBosses, Inventory, Misc, MoneyPit, GoldDiggers, Rebirth, TimeMachine
+from features import Adventure, Augmentation, BloodMagic, BasicTraining, FightBosses, Inventory, Misc, MoneyPit, GoldDiggers, Rebirth, TimeMachine, Wandoos
 from navigation import Navigation
 from statistics import Statistics
 
 # commandline arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--duration', help='duration for the runs', default='10')
+parser.add_argument('--duration', help='duration for the runs', default='3')
 args = parser.parse_args()
 
 print(f'called with arguments {args}')
 
+def run3_test():
+    """ Perform a 3 minute run. """
+    start = time.time()
+    Inventory.loadout(2)
+    FightBosses.nuke()
+    sleep(5)
+    for i in range(3):
+        FightBosses.fightBoss() 
+
+    Adventure.adventureZone()
+    sleep(5)
+    Adventure.itopodFarm() 
+
+    Misc.inputResource()
+
+    bm = False
+    done = False
+    wandoos = False 
+    adv = False
+    while time.time() - start < 165:
+        Misc.inputResource(amount='quarter', idle=True)
+
+        if wandoos: 
+            Wandoos.addMagic() 
+            Wandoos.addEnergy()
+
+        TimeMachine.addEnergy()
+        TimeMachine.addMagic() 
+            
+        Augmentation.augmentation(aug=3)
+        Augmentation.augmentation(aug=3, upgrade=True)
+
+        Wandoos.addEnergy()
+        
+
+        if time.time() - start > 60 and not done: 
+            Inventory.loadout(1)
+            GoldDiggers.wandoosDigger() 
+            Adventure.adventureZone() 
+            sleep(5)
+            Adventure.itopodFarm() 
+            bm = True 
+        
+        
+        if bm and not done:
+            Misc.reclaimMagic() 
+            BloodMagic.addMagic(magic=4, cap=True)
+            BloodMagic.addMagic(magic=3, cap=True)
+            BloodMagic.addMagic(magic=2, cap=True)
+            BloodMagic.addMagic(magic=1, cap=True)
+            done = True
+            wandoos = True
+        
+        FightBosses.nuke() 
+        FightBosses.fightBoss() 
+        
+    GoldDiggers.clearActive()
+    GoldDiggers.statDigger() 
+        
+    MoneyPit.moneyPit()
+
+    FightBosses.nuke()
+    for i in range(4): 
+	    FightBosses.fightBoss()
+	    sleep(1)
+    # Navigation.menu('rebirth')
+    while time.time() - start < 175:
+        sleep(0.1)
+    exp = Statistics.getEXP()
+    # Statistics.screenshot('rebirth.png')
+    Navigation.menu('fightBoss')
+    click(*coords.STOP)  # stop fighting
+    Navigation.menu('rebirth')
+    while time.time() - start < 180:
+        sleep(0.1)
+    Rebirth.rebirth()
+    return exp
 
 def run3():
     """ Perform a 3 minute run. """
@@ -25,6 +102,9 @@ def run3():
     BasicTraining.basicTraining()
     FightBosses.nuke()
     sleep(5)
+    for i in range(3):
+        FightBosses.fightBoss() 
+
     Adventure.adventureZone()
 
     Misc.inputResource()
@@ -303,8 +383,7 @@ if __name__ == "__main__":
         elif args.duration == '5':
             currentExp = run5()  # run now returns current exp
         elif args.duration == '3':
-            currentExp = run3()
-        currentExp = Statistics.getEXP()
+            currentExp = run3_test()
         print(f'exp: {currentExp}')
         print(f'run exp: {currentExp - previousExp}')
         previousExp = currentExp
