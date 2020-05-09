@@ -839,6 +839,12 @@ class GoldDiggers:
         """ Activate stat digger. """ 
         Navigation.menu('goldDiggers')
         click(*coords.STAT_DIGGER)
+    
+    @staticmethod 
+    def wandoosDigger():
+        """ Activate wandoos digger. """ 
+        Navigation.menu('goldDiggers')
+        click(*coords.WANDOOS_DIGGER)
 
 class Misc:
     @staticmethod
@@ -893,3 +899,6 @@ class Misc:
                 click(*coords.ENERGY_CUSTOM_AMOUNT_HALF_IDLE)
             if amount == 'quarter':
                 click(*coords.ENERGY_CUSTOM_AMOUNT_QUARTER_IDLE)
+
+# if __name__ == "__main__":
+#     click(*coords.WANDOOS_DIGGER)
