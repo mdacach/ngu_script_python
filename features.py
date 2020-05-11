@@ -145,7 +145,7 @@ class Adventure:
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
         pix = getCoords(*coords.IS_IDLE)
-        return pyautogui.pixelMatchesColor(*pix, coords.IS_IDLE_COLOR)
+        return pyautogui.pixelMatchesColor(*pix, coords.IS_IDLE_COLOR, tolerance=10)
 
     @staticmethod
     def itopodFarm(floor: str = 'optimal') -> None:
@@ -411,18 +411,8 @@ class Adventure:
         border = getCoords(*coords.ENEMY_HEALTH_BAR_BORDER)
         # check if border of enemy health bar is white
         #KONGREGATE COLOR IS DIFFERENT
-        if (pyautogui.pixelMatchesColor(*border, (250, 250, 250))):
-            # print('dead')
-            return True
-        else:
-            # print('not dead')
-            return False
-        # if (pyautogui.pixelMatchesColor(*border, (255, 255, 255))):
-        #     print('dead')
-        #     return True
-        # else:
-        #     print('not dead')
-        #     return False
+        return pyautogui.pixelMatchesColor(*border, (250, 250, 250), tolerance=10)
+
 
     @staticmethod
     def isPlayerLow() -> bool:
@@ -434,7 +424,7 @@ class Adventure:
             raise Exception('should be in Adventure menu!')
 
         border = getCoords(*coords.MY_HEALTH_BAR)
-        if (pyautogui.pixelMatchesColor(*border, (255, 255, 255))):
+        if pyautogui.pixelMatchesColor(*border, (255, 255, 255), tolerance=10):
             return True
         else:
             return False
@@ -469,7 +459,7 @@ class Adventure:
             raise Exception('should be in Adventure menu!')
 
         enemy_hp = getCoords(*coords.ENEMY_HEALTH_BAR_BORDER)
-        return pyautogui.pixelMatchesColor(*enemy_hp, coords.ENEMY_HEALTH_BAR_RED)
+        return pyautogui.pixelMatchesColor(*enemy_hp, coords.ENEMY_HEALTH_BAR_RED, tolerance=10)
 
     @staticmethod
     def isBoss() -> bool:
@@ -485,7 +475,7 @@ class Adventure:
         # get the pixel of the crown
         # match it with yellow
         crown = getCoords(*coords.CROWN_LOCATION)
-        return pyautogui.pixelMatchesColor(*crown, coords.CROWN_COLOR)
+        return pyautogui.pixelMatchesColor(*crown, coords.CROWN_COLOR, tolerance=10)
 
     @staticmethod
     def refreshZone() -> None:
@@ -569,8 +559,8 @@ class Inventory:
         """ Wrapper function to boost and merge all equipped items. """
         # click(*coords.INVENTORY)
         Navigation.menu('inventory')
-        Inventory.mergeItem(*coords.WEAPON)
-        Inventory.boostItem(*coords.WEAPON)
+        Inventory.mergeItem(*coords.BOOTS)
+        Inventory.boostItem(*coords.BOOTS)
         Inventory.mergeItem(*coords.ACC1)
         Inventory.boostItem(*coords.ACC1)
         Inventory.mergeItem(*coords.ACC2)
@@ -583,8 +573,10 @@ class Inventory:
         Inventory.boostItem(*coords.CHEST)
         Inventory.mergeItem(*coords.LEGS)
         Inventory.boostItem(*coords.LEGS)
-        Inventory.mergeItem(*coords.BOOTS)
-        Inventory.boostItem(*coords.BOOTS)
+        # Inventory.mergeItem(*coords.BOOTS)
+        # Inventory.boostItem(*coords.BOOTS)
+        # Inventory.mergeItem(*coords.WEAPON)
+        # Inventory.boostItem(*coords.WEAPON)
 
     @staticmethod
     def boostCube():
