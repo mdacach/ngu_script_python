@@ -108,40 +108,6 @@ def press(letters: str, delay: int = 0) -> None:
             pyautogui.sleep(delay)
 
 
-def getScreenshot2():  # TODO
-    """ Get and return screenshot of actual screen. 
-
-    Uses d3dshot module instead of pyautogui. 
-    """
-    d = d3dshot.create()
-    return d.screenshot()
-
-
-def getScreenshot(region: Tuple[int, int, int, int] = None) -> None:
-    """ Get screenshot of actual screen. 
-
-    To be used with get pixel color when you want to get multiple pixels at the same time.
-    """
-    if region:
-        x, y = getCoords(region[0], region[1])
-        region = (x, y, region[2], region[3])
-        return pyautogui.screenshot(region=region)
-
-    return pyautogui.screenshot()
-
-
-def getPixelColor(x: int, y: int, image=None) -> None:
-    """ Get color of pixel at (x, y) (relative). 
-
-    Keyword arguments:  
-    image -- screenshot, if you want to get multiple pixels with the same image. 
-    """
-    pix = getCoords(x, y)
-    if image:
-        return image.getpixel(pix)
-    return pyautogui.pixel(*pix)
-
-
 if __name__ == '__main__':
     print(f'debugging: ')
     print(f'CORNER: {CORNER}')
