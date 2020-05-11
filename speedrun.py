@@ -46,8 +46,8 @@ def run3_test():
         TimeMachine.addEnergy()
         TimeMachine.addMagic() 
             
-        Augmentation.augmentation(aug=3)
-        Augmentation.augmentation(aug=3, upgrade=True)
+        Augmentation.augmentation(aug=2)
+        Augmentation.augmentation(aug=2, upgrade=True)
 
         Wandoos.addEnergy()
         
