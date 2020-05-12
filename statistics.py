@@ -3,6 +3,7 @@ from typing import Tuple
 import time
 
 import pyautogui
+import mss 
 
 import coords 
 from helper import *
@@ -31,10 +32,16 @@ class Statistics:
         else:  # all game screen
             region = (CORNER[0], CORNER[1],
                       coords.GAME_WIDTH, coords.GAME_HEIGHT)
-        # print(f'region: {region}')
-        if save:
-            pyautogui.screenshot("output/" + name, region=region)
-        return pyautogui.screenshot(region=region)
+        with mss.mss() as sct:
+            monitor = {}
+            monitor["left"], monitor["top"], monitor["width"], monitor["height"] = region 
+            img = sct.grab(monitor)
+            img = Image.frombytes("RGB", img.size, img.bgra, "raw", "BGRX") # from mss docs 
+            return img
+        # # print(f'region: {region}')
+        # if save:
+        #     pyautogui.screenshot("output/" + name, region=region)
+        # return pyautogui.screenshot(region=region)
 
     @staticmethod 
     def getPixelColor(x, y):
@@ -45,7 +52,7 @@ class Statistics:
     @staticmethod 
     def checkPixelColor(x, y, color, threshold=5):
         """ Check if pixel x, y has color z. """ 
-        print(Statistics.getPixelColor(x, y), color)
+        # print(Statistics.getPixelColor(x, y), color)
         pix = Statistics.getPixelColor(x, y) 
         for c1, c2 in zip(pix, color):
             if abs(c1 - c2) > threshold: 
@@ -99,8 +106,5 @@ class Statistics:
 
 
 if __name__ == '__main__':
-    Navigation.currentMenu = 'adventure'
-    while True:
-    #     print(Statistics.checkPixelColor(*coords.ENEMY_HEALTH_BAR_BORDER, coords.ENEMY_HEALTH_BAR_RED))
-        print(Adventure.isIdle())
+    print(Statistics.getScreenshot())
     
