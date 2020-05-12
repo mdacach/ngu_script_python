@@ -20,5 +20,5 @@ def invManagement(slots=10):
 
 if __name__ == '__main__':
     Navigation.menu('inventory')
-    empty = Inventory.getEmptySlots(debug=True)
+    empty = Inventory.getEmptySlots()
     print(f'empty slots: {empty}')

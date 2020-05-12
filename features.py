@@ -681,10 +681,8 @@ class Inventory:
     def locateAll(image):
         """ Returns a generator of the (absolute) locations of all items {image}. """
         Navigation.menu('inventory')
-        region = (CORNER[0], CORNER[1], coords.GAME_WIDTH, coords.GAME_HEIGHT)
-        print(region)
-        locations = pyautogui.locateAllOnScreen(
-            image, region=region)
+        inventory = Statistics.getScreenshot() 
+        locations = pyautogui.locateAll(image, inventory, confidence=0.6)
         return locations
 
     @staticmethod
@@ -696,11 +694,8 @@ class Inventory:
         """
         if Navigation.currentMenu != 'inventory':
             raise Exception('should be in Inventory menu!')
+
         empty = Inventory.locateAll('images/empty-slot.png')
-        if debug:
-            for slot in empty:
-                moveTo(slot[0], slot[1])
-                sleep(0.3)
         return len(list(empty))  # empty is a generator
 
     @staticmethod
