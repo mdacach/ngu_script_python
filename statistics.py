@@ -36,6 +36,22 @@ class Statistics:
         return pyautogui.screenshot(region=region)
 
     @staticmethod 
+    def getPixelColor(x, y):
+        """ Get and return pixel color at x, y. """ 
+        img = Statistics.getScreenshot() 
+        return img.getpixel((x, y-25)) # screenshot does not have steam border (~25pixels)
+
+    @staticmethod 
+    def checkPixelColor(x, y, color, threshold=5):
+        """ Check if pixel x, y has color z. """ 
+        print(Statistics.getPixelColor(x, y), color)
+        pix = Statistics.getPixelColor(x, y) 
+        for c1, c2 in zip(pix, color):
+            if abs(c1 - c2) > threshold: 
+                return False 
+        return True 
+
+    @staticmethod 
     def removeLetters(text: str) -> int:
         """ Remove letters from string for OCR.  
         
@@ -82,18 +98,5 @@ class Statistics:
 
 
 if __name__ == '__main__':
-    print(Statistics.getTierKills())
-    # N = 1 
-    # for i in range(N):
-    #     start = time.time() 
-    #     pyautogui.screenshot() 
-    #     end = time.time() 
-    # print(f'average time for pyautogui: {round((end - start)/N, 3)}')
-    # for i in range(N):
-    #     start = time.time() 
-    #     with mss() as sct:
-    #         sct.shot() 
-    #     end = time.time() 
-    # print(f'average time for mss: {round((end - start)/N, 3)}')
-
-
+    while True:
+        print(Statistics.checkPixelColor(*coords.ENEMY_HEALTH_BAR_BORDER, coords.ENEMY_HEALTH_BAR_RED))
