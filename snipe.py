@@ -47,10 +47,10 @@ def main():
                 invManagement()
                 print(f'harvesting ygg')
                 ygg()
-            Adventure.adventureZone('safe')
-            while not Adventure.isPlayerFull():
-                sleep(1)
-            Adventure.adventureZone(args.zone)
+            #Adventure.adventureZone('safe')
+            #while not Adventure.isPlayerFull():
+            #    sleep(1)
+            #Adventure.adventureZone(args.zone)
         elif Adventure.enemySpawn() and not Adventure.isBoss():
             print('not boss')
             Adventure.refreshZone()

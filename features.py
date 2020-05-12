@@ -559,8 +559,8 @@ class Inventory:
         """ Wrapper function to boost and merge all equipped items. """
         # click(*coords.INVENTORY)
         Navigation.menu('inventory')
-        Inventory.mergeItem(*coords.BOOTS)
-        Inventory.boostItem(*coords.BOOTS)
+        Inventory.mergeItem(*coords.WEAPON)
+        Inventory.boostItem(*coords.WEAPON)
         Inventory.mergeItem(*coords.ACC1)
         Inventory.boostItem(*coords.ACC1)
         Inventory.mergeItem(*coords.ACC2)
@@ -573,10 +573,8 @@ class Inventory:
         Inventory.boostItem(*coords.CHEST)
         Inventory.mergeItem(*coords.LEGS)
         Inventory.boostItem(*coords.LEGS)
-        # Inventory.mergeItem(*coords.BOOTS)
-        # Inventory.boostItem(*coords.BOOTS)
-        # Inventory.mergeItem(*coords.WEAPON)
-        # Inventory.boostItem(*coords.WEAPON)
+        Inventory.mergeItem(*coords.BOOTS)
+        Inventory.boostItem(*coords.BOOTS)
 
     @staticmethod
     def boostCube():

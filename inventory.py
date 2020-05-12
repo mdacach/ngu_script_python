@@ -12,10 +12,9 @@ from navigation import Navigation
 def invManagement(slots=10):
     print(f'should go to inventory!!')
     Navigation.menu('inventory')
-    Inventory.boostInventory(slots=1)
     Inventory.boostAndMergeEquipped()
-    Inventory.mergeInventory(slots=slots)
-    Inventory.boostInventory(slots=slots)
+    Inventory.mergeInventory(slots=8)
+    Inventory.boostInventory(slots=8)
     Inventory.boostCube()
 
 

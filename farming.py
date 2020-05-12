@@ -66,6 +66,8 @@ while True:
                 Adventure.kill(fast=True)
             else:
                 Adventure.kill()
+            sleep(1)
+            pyautogui.press('w') 
             killCounter += 1
             if args.verbose:
                 print(f'kill count: {killCounter}')

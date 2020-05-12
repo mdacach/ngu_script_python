@@ -35,21 +35,13 @@ while True:
         killCounter += 1
         print(f'kill counter: {killCounter}')
 
-        if killCounter % 500 == 0:  # at every 100 kills
+        if killCounter % 100 == 0:  # at every 100 kills
             f.Adventure.turnIdleOn()
             f.Inventory.boostAndMergeEquipped()
             f.Inventory.boostInventory(slots=10)
             f.Inventory.boostCube()
             f.Inventory.mergeInventory(slots=24)
-            print('ygg stuff')
             f.Yggdrasil.harvestAll()
-            if f.Yggdrasil.isHarvested('pomegranate'):
-                f.Misc.reclaimMagic()
-                f.Yggdrasil.activate('pomegranate')
-                sleep(180)
-            f.BloodMagic.addMagic(magic=3)
-            print('ygg stuff done')
             Navigation.menu('adventure')
             f.Adventure.turnIdleOff()
 
-# add support to yggdrasil (TODO)
