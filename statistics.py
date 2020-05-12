@@ -9,6 +9,7 @@ from helper import *
 import pytesseract as ocr
 from PIL import Image
 from navigation import Navigation
+from features import * 
 
 
 class Statistics:
@@ -98,5 +99,8 @@ class Statistics:
 
 
 if __name__ == '__main__':
+    Navigation.currentMenu = 'adventure'
     while True:
-        print(Statistics.checkPixelColor(*coords.ENEMY_HEALTH_BAR_BORDER, coords.ENEMY_HEALTH_BAR_RED))
+    #     print(Statistics.checkPixelColor(*coords.ENEMY_HEALTH_BAR_BORDER, coords.ENEMY_HEALTH_BAR_RED))
+        print(Adventure.isIdle())
+    

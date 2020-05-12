@@ -144,8 +144,9 @@ class Adventure:
         """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
-        pix = getCoords(*coords.IS_IDLE)
-        return pyautogui.pixelMatchesColor(*pix, coords.IS_IDLE_COLOR, tolerance=10)
+        return Statistics.checkPixelColor(*coords.IS_IDLE, coords.IS_IDLE_COLOR)
+        # pix = getCoords(*coords.IS_IDLE)
+        # return pyautogui.pixelMatchesColor(*pix, coords.IS_IDLE_COLOR, tolerance=10)
 
     @staticmethod
     def itopodFarm(floor: str = 'optimal') -> None:
@@ -408,10 +409,11 @@ class Adventure:
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
 
-        border = getCoords(*coords.ENEMY_HEALTH_BAR_BORDER)
+        return Statistics.checkPixelColor(*coords.ENEMY_HEALTH_BAR_BORDER, (250, 250, 250))
+        # border = getCoords(*coords.ENEMY_HEALTH_BAR_BORDER)
         # check if border of enemy health bar is white
         #KONGREGATE COLOR IS DIFFERENT
-        return pyautogui.pixelMatchesColor(*border, (250, 250, 250), tolerance=10)
+        # return pyautogui.pixelMatchesColor(*border, (250, 250, 250), tolerance=10)
 
 
     @staticmethod
@@ -423,11 +425,12 @@ class Adventure:
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
 
-        border = getCoords(*coords.MY_HEALTH_BAR)
-        if pyautogui.pixelMatchesColor(*border, (255, 255, 255), tolerance=10):
-            return True
-        else:
-            return False
+        return Statistics.checkPixelColor(*coords.MY_HEALTH_BAR_THRESHOLD, (255, 255, 255))
+        # border = getCoords(*coords.MY_HEALTH_BAR)
+        # if pyautogui.pixelMatchesColor(*border, (255, 255, 255), tolerance=10):
+        #     return True
+        # else:
+        #     return False
 
     @staticmethod
     def isPlayerFull() -> bool:
@@ -435,8 +438,9 @@ class Adventure:
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
 
-        pix = getCoords(*coords.MY_HEALTH_BAR_FULL)
-        return pyautogui.pixelMatchesColor(*pix, coords.HEALTH_BAR_RED, tolerance=10)
+        return Statistics.checkPixelColor(*coords.MY_HEALTH_BAR_FULL, coords.HEALTH_BAR_RED)
+        # pix = getCoords(*coords.MY_HEALTH_BAR_FULL)
+        # return pyautogui.pixelMatchesColor(*pix, coords.HEALTH_BAR_RED, tolerance=10)
 
     @staticmethod
     def healHP() -> None:  # DEPRECATED
@@ -458,8 +462,9 @@ class Adventure:
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
 
-        enemy_hp = getCoords(*coords.ENEMY_HEALTH_BAR_BORDER)
-        return pyautogui.pixelMatchesColor(*enemy_hp, coords.ENEMY_HEALTH_BAR_RED, tolerance=10)
+        return Statistics.checkPixelColor(*coords.ENEMY_HEALTH_BAR_BORDER, coords.ENEMY_HEALTH_BAR_RED)
+        # enemy_hp = getCoords(*coords.ENEMY_HEALTH_BAR_BORDER)
+        # return pyautogui.pixelMatchesColor(*enemy_hp, coords.ENEMY_HEALTH_BAR_RED, tolerance=10)
 
     @staticmethod
     def isBoss() -> bool:
@@ -474,8 +479,9 @@ class Adventure:
 
         # get the pixel of the crown
         # match it with yellow
-        crown = getCoords(*coords.CROWN_LOCATION)
-        return pyautogui.pixelMatchesColor(*crown, coords.CROWN_COLOR, tolerance=10)
+        return Statistics.checkPixelColor(*coords.CROWN_LOCATION, coords.CROWN_COLOR)
+        # crown = getCoords(*coords.CROWN_LOCATION)
+        # return pyautogui.pixelMatchesColor(*crown, coords.CROWN_COLOR, tolerance=10)
 
     @staticmethod
     def refreshZone() -> None:
