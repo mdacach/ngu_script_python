@@ -50,13 +50,13 @@ while True:
                     Adventure.kill(fast=True)
                 else:
                     Adventure.kill(buffs=True)
-                sleep(1)
+                sleep(0.8) # with redliquid cd -> 0.8s
                 pyautogui.press('w')
                 killCounter += 1
                 if args.verbose:
                     print(f'kill count: {killCounter}')
-                sleep(1)
-                pyautogui.press('d')
+                # sleep(1)
+                # pyautogui.press('d')
                 killed = True
             else:
                 killed = False
@@ -66,13 +66,13 @@ while True:
                 Adventure.kill(fast=True)
             else:
                 Adventure.kill()
-            sleep(1)
+            sleep(0.8)
             pyautogui.press('w') 
             killCounter += 1
             if args.verbose:
                 print(f'kill count: {killCounter}')
-            sleep(1)
-            pyautogui.press('d')
+            # sleep(1)
+            # pyautogui.press('d')
             killed = True
 
         if killed and killCounter > 0 and killCounter % args.kills == 0:
