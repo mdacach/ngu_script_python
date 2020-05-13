@@ -38,6 +38,7 @@ class Statistics:
             img = sct.grab(monitor)
             img = Image.frombytes("RGB", img.size, img.bgra, "raw", "BGRX") # from mss docs 
             return img
+        # TODO SAVE
         # # print(f'region: {region}')
         # if save:
         #     pyautogui.screenshot("output/" + name, region=region)
