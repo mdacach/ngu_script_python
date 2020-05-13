@@ -47,6 +47,7 @@ def main():
                 invManagement()
                 print(f'harvesting ygg')
                 ygg()
+            Navigation.menu('adventure')
             #Adventure.adventureZone('safe')
             #while not Adventure.isPlayerFull():
             #    sleep(1)
