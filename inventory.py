@@ -13,7 +13,7 @@ def invManagement(slots=10):
     print(f'should go to inventory!!')
     Navigation.menu('inventory')
     Inventory.boostAndMergeEquipped()
-    Inventory.mergeInventory(slots=8)
+    Inventory.mergeInventory(slots=24)
     Inventory.boostInventory(slots=8)
     Inventory.boostCube()
 
