@@ -90,7 +90,11 @@ class Adventure:
              'avsp': 13,
              'mega': 14,
              'uug': 15,
-             'bv': 16}
+             'bv': 16,
+             'walderp': 17,
+             'bdw': 18,
+             'bae': 19,}
+             
 
     # abilities mapping
     abilities_keys = {1: 'w',
