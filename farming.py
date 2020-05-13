@@ -80,7 +80,7 @@ while True:
             print(f'inv management')
             print(f'time: {round((time.time() - start))/60} minutes')
             Adventure.turnIdleOn()
-            Adventure.adventureZone('safe')
+            #Adventure.adventureZone('safe')
 
             Navigation.menu('inventory')
             emptySlots = Inventory.getEmptySlots()
@@ -93,5 +93,5 @@ while True:
 
             print(f'going back to adventure')
             Navigation.menu('adventure')
-            Adventure.adventureZone(args.zone)
+            #Adventure.adventureZone(args.zone)
             Adventure.turnIdleOff()
