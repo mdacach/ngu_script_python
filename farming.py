@@ -65,7 +65,7 @@ while True:
             if args.fast:
                 Adventure.kill(fast=True)
             else:
-                Adventure.kill()
+                Adventure.snipe()
             sleep(0.8)
             pyautogui.press('w') 
             killCounter += 1
