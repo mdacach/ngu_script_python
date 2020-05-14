@@ -29,16 +29,13 @@ def main():
     killed = False  # kill flag to only take action after kills
     while True:
         if Adventure.enemySpawn() and Adventure.isBoss():
-            if args.verbose:
-                print('spawn boss')
-            Adventure.kill(buffs=True)
-            if args.verbose:
-                print('killed')
+            Adventure.snipe(buffs=True)
             # Adventure.buff()  # first thing every fight
             # sleep(1.1)
             # Adventure.snipe()
-            sleep(1)
-            press('w')
+            for i in range(2):
+                sleep(0.9)
+                press('w')
             killed = True
             killCounter += 1
             print(f'killed: {killCounter}')
@@ -48,10 +45,10 @@ def main():
                 print(f'harvesting ygg')
                 ygg()
             Navigation.menu('adventure')
-            #Adventure.adventureZone('safe')
-            #while not Adventure.isPlayerFull():
-            #    sleep(1)
-            #Adventure.adventureZone(args.zone)
+            Adventure.adventureZone('safe')
+            while not Adventure.isPlayerFull():
+               sleep(1)
+            Adventure.adventureZone(args.zone)
         elif Adventure.enemySpawn() and not Adventure.isBoss():
             print('not boss')
             Adventure.refreshZone()
