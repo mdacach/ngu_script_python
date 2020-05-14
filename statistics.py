@@ -45,16 +45,20 @@ class Statistics:
         # return pyautogui.screenshot(region=region)
 
     @staticmethod 
-    def getPixelColor(x, y):
+    def getPixelColor(x, y, img = None):
         """ Get and return pixel color at x, y. """ 
-        img = Statistics.getScreenshot() 
+        if img == None: 
+            img = Statistics.getScreenshot() 
         return img.getpixel((x, y-25)) # screenshot does not have steam border (~25pixels)
 
     @staticmethod 
-    def checkPixelColor(x, y, color, threshold=5):
+    def checkPixelColor(x, y, color, threshold=5, img=None):
         """ Check if pixel x, y has color z. """ 
         # print(Statistics.getPixelColor(x, y), color)
-        pix = Statistics.getPixelColor(x, y) 
+        if img != None:
+            pix = Statistics.getPixelColor(x, y, img=img) 
+        else:
+            pix = Statistics.getPixelColor(x, y) 
         for c1, c2 in zip(pix, color):
             if abs(c1 - c2) > threshold: 
                 return False 
