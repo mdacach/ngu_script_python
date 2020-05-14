@@ -108,6 +108,7 @@ class Adventure:
                       9: 'f',
                       10: 'g',
                       11: 'h',
+                      12: 'z',
                       13: 'x'}
 
     @staticmethod
@@ -292,18 +293,23 @@ class Adventure:
 
     @staticmethod
     # EXPERIMENTAL # TODO
-    def getReadyAbilities(buffs: bool = False) -> List[int]:
+    def getReadyAbilities(buffs: bool = False, fast:bool = True) -> List[int]:
         """ Return the ready abilities as a list. 
 
         Keyword arguments:  
         buffs -- if you want to use buffs also (not recommended).
         """
         ready = set()
-        image = getScreenshot()
+        start = time.time() 
+        # sleep(0.1)
+        img = Statistics.getScreenshot()
+        end = time.time() 
+        print(f'screenshot time: {end - start}')
 
         x0 = coords.ABILITY_1[0]
         y0 = coords.ABILITY_1[1]
         i = 0
+        start = time.time() 
         while i <= 15:  # 16 abilities (MOVE 69 LOCKED)
             if i < 5:  # row 1
                 x = x0 + i * coords.ABILITY_OFFSET_X
@@ -320,24 +326,28 @@ class Adventure:
             i += 1
             # print(f'ability: {getPixelColor(x, y)}')
             # print(f'color: {color}')
-            if getPixelColor(x, y, image=image) == color:
-                # print(f'{i} ready')
+            if Statistics.checkPixelColor(x, y, color, img=img):
                 ready.add(i)
+        end = time.time() 
+        print(f'pixel color time: {end - start}')
 
-        if getPixelColor(*coords.MY_HEALTH_BAR_THRESHOLD) != (236, 52, 52):
+        if not Statistics.checkPixelColor(*coords.MY_HEALTH_BAR_THRESHOLD, (236, 52, 52), img=img):
+
             # priority needing to heal
             print('needs healing')
             if buffs:
-                priority = [8, 13, 10, 7, 9, 11, 5, 4, 3, 6, 2]
+                priority = [12, 8, 13, 10, 7, 9, 11, 5, 4, 3, 6, 2]
             else:
-                priority = [8, 13, 10, 5, 4, 3, 6, 2]
+                priority = [12, 8, 13, 10, 5, 4, 3, 6, 2]
         else:
             # priority not needing to heal
             print('no need to heal')
-            if buffs:
-                priority = [10, 7, 9, 11, 5, 4, 3, 6, 2]
+            if fast: 
+                priority = [5, 4, 2, 1]
+            elif buffs:
+                priority = [12, 10, 7, 9, 11, 5, 4, 3, 6, 2]
             else:
-                priority = [10, 5, 4, 3, 6, 2]
+                priority = [12, 10, 5, 4, 3, 6, 2]
 
         # TODO
         # use an actual priority queue
@@ -346,9 +356,8 @@ class Adventure:
         for ability in priority:
             if ability in ready:
                 myQueue.append(ability)
-        # for _ in range(3):  # experimental -> 3 regular attacks afterwards
-        #     myQueue.append(1)
-        myQueue.append(1)
+        if not myQueue:
+            myQueue.append(1)
         return myQueue
 
     @staticmethod
@@ -359,49 +368,35 @@ class Adventure:
         buffs -- if you want to use buffs also (not recommended).
         """
         # turn off idle
-        print(f'getting abilities queue')
-        start = time.time()
         if buffs:
             queue = deque(Adventure.getReadyAbilities(buffs=True))
         else:
             queue = deque(Adventure.getReadyAbilities())
-        print(f'time: {time.time() - start}')
+        print(f'ABILITIES: {queue}')
+        start = time.time() 
         while not Adventure.isEnemyDead():
             if not queue:
-                print('rotation over')
                 print(f'getting abilities queue')
-                start = time.time()
                 if buffs:
                     queue = deque(Adventure.getReadyAbilities(buffs=True))
                 else:
                     queue = deque(Adventure.getReadyAbilities())
-                print(f'time: {time.time() - start}')
                 print(f'ABILITIES: {queue}')
             ability = queue.popleft()
-            print(ability)
+            end = time.time() 
+            
             press(Adventure.abilities_keys[ability])
+            # print(f'time between attacks: {end - start}')
+            start = time.time() 
 
             # WORK AROUND - SLEEP 1s (MY CD TIME)
-            sleep(1.1)
-
-            """
-            # WAIT FOR COOLDOWN
-            # sleep(0.3)
-            # start = time.time()
-            # print(f'taking screenshot')
-            # image = getScreenshot(coords.ABILITY_1_REGION)
-            # color = getPixelColor(1, 1, image=image)
-            color = getPixelColor(*coords.ABILITY_1)
-            # print(f'time: {time.time() - start}')
-            while color != coords.ABILITY_ROW_1_READY_COLOR:
-                # print('waiting for cd')
-                # print(f'taking screenshot')
-                # image = getScreenshot(coords.ABILITY_1_REGION)
-                # color = getPixelColor(1, 1, image=image)
-                color = getPixelColor(*coords.ABILITY_1)
-                # print(f'time: {time.time() - start}')
+            
+            while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
+                # print(f'color:  {Statistics.getPixelColor(*coords.ABILITY_1)}')
                 sleep(0.05)
-            """
+            # sleep(0.9) # RED LIQUID GLOBAL CD
+
+
 
     @staticmethod
     def isEnemyDead() -> bool:
