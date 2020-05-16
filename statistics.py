@@ -74,7 +74,7 @@ class Statistics:
             return int("".join(text))
         except:
             print('error reading the text')
-            return 40
+            return -1
 
     @staticmethod
     def getEXP():
