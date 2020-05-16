@@ -17,7 +17,7 @@ args = parser.parse_args()
 
 print(f'called with arguments {args}')
 
-def run3_test():
+def run3():
     """ Perform a 3 minute run. """
     start = time.time()
     Inventory.loadout(2)
@@ -26,7 +26,7 @@ def run3_test():
     for i in range(3):
         FightBosses.fightBoss() 
 
-    Adventure.adventureZone()
+    Adventure.adventureZone('mega')
     sleep(5)
     Adventure.itopodFarm() 
 
@@ -46,8 +46,8 @@ def run3_test():
         TimeMachine.addEnergy()
         TimeMachine.addMagic() 
             
-        Augmentation.augmentation(aug=2)
-        Augmentation.augmentation(aug=2, upgrade=True)
+        Augmentation.augmentation(aug=4)
+        Augmentation.augmentation(aug=4, upgrade=True)
 
         Wandoos.addEnergy()
         
@@ -63,6 +63,7 @@ def run3_test():
         
         if bm and not done:
             Misc.reclaimMagic() 
+            BloodMagic.addMagic(magic=5, cap=True)
             BloodMagic.addMagic(magic=4, cap=True)
             BloodMagic.addMagic(magic=3, cap=True)
             BloodMagic.addMagic(magic=2, cap=True)
@@ -92,78 +93,6 @@ def run3_test():
     Navigation.menu('rebirth')
     while time.time() - start < 180:
         sleep(0.1)
-    Rebirth.rebirth()
-    return exp
-
-def run3():
-    """ Perform a 3 minute run. """
-    start = time.time()
-    Inventory.loadout(2)
-    BasicTraining.basicTraining()
-    FightBosses.nuke()
-    sleep(5)
-    for i in range(3):
-        FightBosses.fightBoss() 
-
-    Adventure.adventureZone()
-
-    Misc.inputResource()
-
-    print(f'TM loop (1 min)')
-    lc = 0
-    while time.time() - start < 90:
-        lc += 1
-        if lc == 3:
-            Adventure.itopodFarm()
-        TimeMachine.addEnergy()
-        TimeMachine.addMagic()
-
-    Inventory.loadout(1)
-    BasicTraining.basicTraining() 
-
-    Misc.reclaimAll()
-
-    print(f'Main loop (1 min)')
-    lc = 0
-    while time.time() - start < 160:
-        lc += 1
-        if lc == 3:  # get kill in highest zone
-            Adventure.adventureZone()
-            sleep(5)
-            Adventure.itopodFarm()
-
-        Misc.inputResource(amount='quarter', idle=True)
-        for _ in range(3):
-            Augmentation.augmentation(aug=4)
-        Augmentation.augmentation(aug=4, upgrade=True)
-
-
-        BloodMagic.addMagic(magic=4, cap=True)
-        if lc > 5:
-            BloodMagic.addMagic(magic=3, cap=True)
-            BloodMagic.addMagic(magic=2, cap=True)
-            BloodMagic.addMagic(magic=1, cap=True)
-
-
-        FightBosses.nuke()
-
-    MoneyPit.moneyPit()
-
-    GoldDiggers.clearActive() 
-    GoldDiggers.statDigger() 
-
-    FightBosses.nuke()
-    for i in range(4): 
-	    FightBosses.fightBoss()
-	    sleep(1)
-    # Navigation.menu('rebirth')
-    while time.time() - start < 180:
-        sleep(0.5)
-    exp = Statistics.getEXP()
-    # Statistics.screenshot('rebirth.png')
-    Navigation.menu('fightBoss')
-    click(*coords.STOP)  # stop fighting
-    Navigation.menu('rebirth')
     Rebirth.rebirth()
     return exp
 
@@ -383,7 +312,7 @@ if __name__ == "__main__":
         elif args.duration == '5':
             currentExp = run5()  # run now returns current exp
         elif args.duration == '3':
-            currentExp = run3_test()
+            currentExp = run3()
         print(f'exp: {currentExp}')
         print(f'run exp: {currentExp - previousExp}')
         previousExp = currentExp
