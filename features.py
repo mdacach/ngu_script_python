@@ -174,7 +174,7 @@ class Adventure:
         click(*coords.ITOPOD_ENTER_CONFIRMATION)
 
     @staticmethod
-    def itopodExperimental() -> None:  # TODO
+    def itopodExperimental(duration: float = 0, verbose:bool = False) -> None:  # TODO
         """ Abuse a bug in itopod floors to higher exp/hr. """
         # tiers = {1: 0,
         #          2: 50,
@@ -182,51 +182,92 @@ class Adventure:
         #          4: 150,
         #          5: 200}
         # only from 150 on
-        tiers = {4: 150,
+        tiers = {1: 0,
+                 2: 50,
+                 3: 100,
+                 4: 150,
                  5: 200,
-                 6: 250}
+                 6: 250,
+                 7: 300,}
+        
+        tiersEXP = {
+            1: 1,
+            2: 2,
+            3: 4,
+            4: 8,
+            5: 14,
+            6: 22,
+            7: 32,
+        }
 
         Navigation.menu('adventure')
         tierKillsCount = {}
         for tier, floor in tiers.items():
-            print(tier, floor)
-            click(*coords.ITOPOD_ENTER)
-            click(*coords.ITOPOD_START_INPUT)
-            pyautogui.write(str(floor))
-            click(*coords.ITOPOD_ENTER_CONFIRMATION)
-            print(f'getting tier kills: ')
-            tierKills = Statistics.getTierKills()
+            if verbose:
+                print(tier, floor)
+                print(f'getting tier kills: ')
+            tierKills = Statistics.getTierKills(str(floor))
 
             if tierKills == -1:
                 print('could not detect tier kills')
+                tierKillsCount[tier] = 40 
             else:
                 print(f'tier kills: {tierKills}')
                 tierKillsCount[tier] = tierKills
 
-        minimum = min(tierKillsCount, key=tierKillsCount.get)
         print(tierKillsCount)
-        print(minimum)
+
+        minimum = min(tierKillsCount, key=tierKillsCount.get)
+        print(f'minimum is tier {minimum} with {tierKillsCount[minimum]} kill count')
+
         click(*coords.ITOPOD_ENTER)
         click(*coords.ITOPOD_START_INPUT)
         pyautogui.write(str(tiers[minimum]))
         click(*coords.ITOPOD_ENTER_CONFIRMATION)
+
+        killCount = 0 
+        totalEXP = 0
+        totalAP = 0
+        start = time.time() 
         while tierKillsCount[minimum] > 0:
             while not Adventure.enemySpawn():
                 sleep(0.1)
             Adventure.kill() 
+            killCount += 1
+
             for tier in tierKillsCount:
                 tierKillsCount[tier] -= 1
+
                 if tierKillsCount[tier] == 0:
-                    tierKillsCount[tier] = 40 - tier
+                    tierKillsCount[tier] = 40 - tier # max tier formula 
+                    totalEXP += tiersEXP[tier]
+                    totalAP += 1
+
                     minimum = min(tierKillsCount, key=tierKillsCount.get)
+                    if verbose:
+                        print(f'minimum is tier {minimum} with {tierKillsCount[minimum]} kill count')
+                        print(f'total exp: {totalEXP}')
+
                     click(*coords.ITOPOD_ENTER)
                     click(*coords.ITOPOD_START_INPUT)
                     pyautogui.write(str(tiers[minimum]))
                     click(*coords.ITOPOD_ENTER_CONFIRMATION)
-                    print(tierKillsCount)
-                    print(minimum)
-                    print(f'starting again on floor {tiers[minimum]}')
-            print(tierKillsCount)
+
+                    if verbose:
+                        print(f'starting again on floor {tierKillsCount[minimum]}')
+                    print('*' * 20)
+            
+            if killCount % 50 == 0:
+                print(f'total kills: {killCount}')
+                print(f'total ap: {totalAP}')
+                print(f'time: {round(time.time() - start, 3)}')
+
+            if duration != 0 and time.time() - start > duration * 60:
+                return totalEXP
+
+            if verbose:
+                print(f'tiers: {tierKillsCount}')
+
 
 
 
