@@ -217,19 +217,45 @@ class Adventure:
 
         print(tierKillsCount)
 
+
+
         minimum = min(tierKillsCount, key=tierKillsCount.get)
         print(f'minimum is tier {minimum} with {tierKillsCount[minimum]} kill count')
 
-        click(*coords.ITOPOD_ENTER)
-        click(*coords.ITOPOD_START_INPUT)
-        pyautogui.write(str(tiers[minimum]))
-        click(*coords.ITOPOD_ENTER_CONFIRMATION)
+        next_tiers = [] 
+        minimum_value = min(tierKillsCount.values())
+        if verbose:
+            print(f'minimum value: {minimum_value}')
+
+        for tier in tierKillsCount:
+            if tierKillsCount[tier] == minimum_value: # go get its reward 
+                if verbose:
+                    print(f'minimum tier: {tier} with {tierKillsCount[tier]}')
+                next_tiers.append(tier)
+
+        print(f'next tiers: {next_tiers}')
+        if minimum_value == 1:
+            current_tier = max(next_tiers) # next tier I will go to 
+            click(*coords.ITOPOD_ENTER)
+            click(*coords.ITOPOD_START_INPUT)
+            pyautogui.write(str(tiers[current_tier])) 
+            click(*coords.ITOPOD_ENTER_CONFIRMATION)
+            optimal = False
+
+        else: # must be bigger than 1 
+            # can afford to go to optimal
+            current_tier = minimum 
+            click(*coords.ITOPOD_ENTER)
+            click(*coords.ITOPOD_START_INPUT)
+            click(*coords.ITOPOD_OPTIMAL)
+            click(*coords.ITOPOD_ENTER_CONFIRMATION)
+            optimal = True
 
         killCount = 0 
         totalEXP = 0
         totalAP = 0
         start = time.time() 
-        while tierKillsCount[minimum] > 0:
+        while tierKillsCount[current_tier] > 0:
             while not Adventure.enemySpawn():
                 sleep(0.1)
             Adventure.kill() 
@@ -237,32 +263,55 @@ class Adventure:
 
             for tier in tierKillsCount:
                 tierKillsCount[tier] -= 1
-
+                
+            for tier in tierKillsCount:
                 if tierKillsCount[tier] == 0:
-                    tierKillsCount[tier] = 40 - tier # max tier formula 
-                    totalEXP += tiersEXP[tier]
-                    totalAP += 1
+                    tierKillsCount[tier] = 40 - tier 
+                    if current_tier == tier:
+                        totalEXP += tiersEXP[tier]
+                        totalAP += 1 
 
-                    minimum = min(tierKillsCount, key=tierKillsCount.get)
+            next_tiers = [] 
+            minimum_value = min(tierKillsCount.values())
+            for tier in tierKillsCount:
+                if tierKillsCount[tier] == minimum_value: # go get its reward 
                     if verbose:
-                        print(f'minimum is tier {minimum} with {tierKillsCount[minimum]} kill count')
-                        print(f'total exp: {totalEXP}')
+                        print(f'minimum tier: {tier} with {tierKillsCount[tier]}')
+                    next_tiers.append(tier)
+            
+            if verbose:
+                print(f'next tiers: {next_tiers}')
+            if minimum_value == 1:
+                current_tier = max(next_tiers) # next tier I will go to 
 
-                    click(*coords.ITOPOD_ENTER)
-                    click(*coords.ITOPOD_START_INPUT)
-                    pyautogui.write(str(tiers[minimum]))
-                    click(*coords.ITOPOD_ENTER_CONFIRMATION)
+                click(*coords.ITOPOD_ENTER)
+                click(*coords.ITOPOD_START_INPUT)
+                pyautogui.write(str(tiers[current_tier])) 
+                click(*coords.ITOPOD_ENTER_CONFIRMATION)
+                optimal = False 
+            elif not optimal: # must be bigger than 1 
+                # can afford to go to optimal
+                current_tier = minimum
+                click(*coords.ITOPOD_ENTER)
+                click(*coords.ITOPOD_START_INPUT)
+                click(*coords.ITOPOD_OPTIMAL)
+                # pyautogui.write(str(tiers[current_tier])) 
+                click(*coords.ITOPOD_ENTER_CONFIRMATION)
+                optimal = True
 
-                    if verbose:
-                        print(f'starting again on floor {tierKillsCount[minimum]}')
-                    print('*' * 20)
+                # if verbose:
+                #     print(f'farming optimal floor, minimum is {tierKillsCount[minimum]}')
+                #     # print(f'starting again on floor {tierKillsCount[minimum]}')
+            # print('*' * 20)
             
             if killCount % 50 == 0:
                 print(f'total kills: {killCount}')
+                print(f'total exp: {totalEXP}')
                 print(f'total ap: {totalAP}')
-                print(f'time: {round(time.time() - start, 3)}')
+                print(f'time: {round((time.time() - start)/60, 3)}')
 
             if duration != 0 and time.time() - start > duration * 60:
+                print('over')
                 return totalEXP
 
             if verbose:
