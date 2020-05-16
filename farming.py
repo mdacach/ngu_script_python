@@ -32,25 +32,46 @@ parser.add_argument('--slots',
 args = parser.parse_args()
 print(args)
 
-Adventure.adventureZone(args.zone)
-print(Navigation.currentMenu)
-killCounter = 0
-if args.verbose:
-    print(f'farming zone {args.zone}')
-    print(f'boss only: {args.boss}')
-    print(f'kills until inv management: {args.kills}')
 
-start = time.time()
-Adventure.turnIdleOff()
-while True:
-    if Adventure.enemySpawn():
-        if args.boss:
-            if Adventure.isBoss():
+def main():
+    Adventure.adventureZone(args.zone)
+    print(Navigation.currentMenu)
+    killCounter = 0
+    if args.verbose:
+        print(f'farming zone {args.zone}')
+        print(f'boss only: {args.boss}')
+        print(f'kills until inv management: {args.kills}')
+    start = time.time()
+    Adventure.turnIdleOff()
+    while True:
+        if Adventure.enemySpawn():
+            if args.boss:
+                if Adventure.isBoss():
+                    if args.fast:
+                        Adventure.kill(fast=True)
+                    else:
+                        Adventure.kill(buffs=True)
+                    while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
+                        # print(f'color:  {Statistics.getPixelColor(*coords.ABILITY_1)}')
+                        sleep(0.05)
+                    pyautogui.press('w')
+                    killCounter += 1
+                    if args.verbose:
+                        print(f'kill count: {killCounter}')
+                    # sleep(1)
+                    # pyautogui.press('d')
+                    killed = True
+                else:
+                    killed = False
+                    Adventure.refreshZone()
+            else:
                 if args.fast:
                     Adventure.kill(fast=True)
                 else:
-                    Adventure.kill(buffs=True)
-                sleep(0.8) # with redliquid cd -> 0.8s
+                    Adventure.snipe(fast=True)
+                while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
+                    # print(f'color:  {Statistics.getPixelColor(*coords.ABILITY_1)}')
+                    sleep(0.05)
                 pyautogui.press('w')
                 killCounter += 1
                 if args.verbose:
@@ -58,40 +79,30 @@ while True:
                 # sleep(1)
                 # pyautogui.press('d')
                 killed = True
-            else:
-                killed = False
-                Adventure.refreshZone()
-        else:
-            if args.fast:
-                Adventure.kill(fast=True)
-            else:
-                Adventure.snipe()
-            sleep(0.8)
-            pyautogui.press('w') 
-            killCounter += 1
-            if args.verbose:
-                print(f'kill count: {killCounter}')
-            # sleep(1)
-            # pyautogui.press('d')
-            killed = True
 
-        if killed and killCounter > 0 and killCounter % args.kills == 0:
+            if killed and killCounter > 0 and killCounter % args.kills == 0:
 
-            print(f'inv management')
-            print(f'time: {round((time.time() - start))/60} minutes')
-            Adventure.turnIdleOn()
-            #Adventure.adventureZone('safe')
+                print(f'inv management')
+                print(f'time: {round((time.time() - start))/60} minutes')
+                Adventure.turnIdleOn()
+                #Adventure.adventureZone('safe')
 
-            Navigation.menu('inventory')
-            emptySlots = Inventory.getEmptySlots()
-            print(f'empty slots: {emptySlots}')
-            if emptySlots < 10:
-                # Inventory.mergeInventory(slots=10)
-                invManagement(slots=args.slots)
-                # Inventory.trashItems()
-                ygg()
+                Navigation.menu('inventory')
+                emptySlots = Inventory.getEmptySlots()
+                print(f'empty slots: {emptySlots}')
+                if emptySlots < 10:
+                    # Inventory.mergeInventory(slots=10)
+                    invManagement(slots=args.slots)
+                    # Inventory.trashItems()
+                    ygg()
 
-            print(f'going back to adventure')
-            Navigation.menu('adventure')
-            #Adventure.adventureZone(args.zone)
-            Adventure.turnIdleOff()
+                print(f'going back to adventure')
+                Navigation.menu('adventure')
+                #Adventure.adventureZone(args.zone)
+                # print(f'is idle: {Adventure.isIdle()}')
+
+                Adventure.turnIdleOff()
+                # print(f'is idle: {Adventure.isIdle()}')
+
+if __name__ == '__main__':
+    main()
