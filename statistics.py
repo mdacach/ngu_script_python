@@ -117,10 +117,10 @@ class Statistics:
         else:
             region = coords.ITOPOD_TIER_COUNT_REGION
         img = Statistics.getScreenshot(region=region)
-        print(f'img: {img}')
+        # print(f'img: {img}')
         w, h = img.size
-        print(w, h)
-        img = img.resize((w*10, h*10), Image.BICUBIC)
+        # print(w, h)
+        img = img.resize((w*6, h*6), Image.BICUBIC)
         img = img.filter(ImageFilter.SHARPEN)
         # img.show()
         text = ocr.image_to_string(img)
