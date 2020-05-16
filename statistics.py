@@ -100,16 +100,27 @@ class Statistics:
         return Statistics.removeLetters(text)
 
     @staticmethod
-    def getTierKills(): # TODO 
-        """ Get and return itopod tier remaining kills to AP.
+    def getTierKills(floor:str): # TODO 
+        """ Get and return itopod tier remaining kills to AP from FLOOR.
 
+        Enters ITOPOD at FLOOR and get remaining kills from tooltip.  
         Must be in ITOPOD menu.
         """
         # ONLY WORDS FOR TIERS ABOVE 150
+        click(*coords.ITOPOD_ENTER)
+        click(*coords.ITOPOD_START_INPUT)
+        pyautogui.write(floor)
+        click(*coords.ITOPOD_ENTER_CONFIRMATION)
         click(*coords.ITOPOD_CLICK_TOOLTIP)
-        img = Statistics.getScreenshot(region=coords.ITOPOD_TIER_COUNT_REGION)
+        if int(floor) < 150:
+            region = coords.ITOPOD_TIER_COUNT_REGION_LOWER_TIERS
+        else:
+            region = coords.ITOPOD_TIER_COUNT_REGION
+        img = Statistics.getScreenshot(region=region)
         print(f'img: {img}')
-        img = img.resize((77*4, 18*4), Image.BICUBIC)
+        w, h = img.size
+        print(w, h)
+        img = img.resize((w*10, h*10), Image.BICUBIC)
         img = img.filter(ImageFilter.SHARPEN)
         # img.show()
         text = ocr.image_to_string(img)
@@ -118,6 +129,7 @@ class Statistics:
 
 
 if __name__ == '__main__':
-    Adventure.itopodExperimental() 
+    # Adventure.itopodExperimental() 
+    Statistics.getTierKills('0')
     # Statistics.getTierKills()
     
