@@ -130,6 +130,8 @@ class Adventure:
         """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
+        click(*coords.MY_HEALTH_BAR_BORDER) # get rid of tooltip
+        sleep(1)
         if (Adventure.isIdle()):
             pyautogui.press('q')
 
@@ -181,7 +183,8 @@ class Adventure:
         #          5: 200}
         # only from 150 on
         tiers = {4: 150,
-                 5: 200}
+                 5: 200,
+                 6: 250}
 
         Navigation.menu('adventure')
         tierKillsCount = {}
@@ -200,7 +203,33 @@ class Adventure:
                 print(f'tier kills: {tierKills}')
                 tierKillsCount[tier] = tierKills
 
+        minimum = min(tierKillsCount, key=tierKillsCount.get)
         print(tierKillsCount)
+        print(minimum)
+        click(*coords.ITOPOD_ENTER)
+        click(*coords.ITOPOD_START_INPUT)
+        pyautogui.write(str(tiers[minimum]))
+        click(*coords.ITOPOD_ENTER_CONFIRMATION)
+        while tierKillsCount[minimum] > 0:
+            while not Adventure.enemySpawn():
+                sleep(0.1)
+            Adventure.kill() 
+            for tier in tierKillsCount:
+                tierKillsCount[tier] -= 1
+                if tierKillsCount[tier] == 0:
+                    tierKillsCount[tier] = 40 - tier
+                    minimum = min(tierKillsCount, key=tierKillsCount.get)
+                    click(*coords.ITOPOD_ENTER)
+                    click(*coords.ITOPOD_START_INPUT)
+                    pyautogui.write(str(tiers[minimum]))
+                    click(*coords.ITOPOD_ENTER_CONFIRMATION)
+                    print(tierKillsCount)
+                    print(minimum)
+                    print(f'starting again on floor {tiers[minimum]}')
+            print(tierKillsCount)
+
+
+
 
     @staticmethod
     def itopodPush(floor: str = '200') -> None:
@@ -293,7 +322,7 @@ class Adventure:
 
     @staticmethod
     # EXPERIMENTAL # TODO
-    def getReadyAbilities(buffs: bool = False, fast:bool = True) -> List[int]:
+    def getReadyAbilities(buffs: bool = False, fast:bool = True, verbose: bool = False) -> List[int]:
         """ Return the ready abilities as a list. 
 
         Keyword arguments:  
@@ -304,7 +333,8 @@ class Adventure:
         # sleep(0.1)
         img = Statistics.getScreenshot()
         end = time.time() 
-        print(f'screenshot time: {end - start}')
+        if verbose:
+            print(f'screenshot time: {end - start}')
 
         x0 = coords.ABILITY_1[0]
         y0 = coords.ABILITY_1[1]
@@ -329,19 +359,21 @@ class Adventure:
             if Statistics.checkPixelColor(x, y, color, img=img):
                 ready.add(i)
         end = time.time() 
-        print(f'pixel color time: {end - start}')
+        if verbose:
+            print(f'pixel color time: {end - start}')
 
         if not Statistics.checkPixelColor(*coords.MY_HEALTH_BAR_THRESHOLD, (236, 52, 52), img=img):
-
-            # priority needing to heal
-            print('needs healing')
+            #priority needing to heal
+            if verbose:
+                print('needs healing')
             if buffs:
                 priority = [12, 8, 13, 10, 7, 9, 11, 5, 4, 3, 6, 2]
             else:
                 priority = [12, 8, 13, 10, 5, 4, 3, 6, 2]
         else:
             # priority not needing to heal
-            print('no need to heal')
+            if verbose:
+                print('no need to heal')
             if fast: 
                 priority = [5, 4, 2, 1]
             elif buffs:
@@ -361,7 +393,7 @@ class Adventure:
         return myQueue
 
     @staticmethod
-    def snipe(buffs=False):  # EXPERIMENTAL #TODO
+    def snipe(buffs: bool = False, verbose: bool = False, fast: bool = False):  # EXPERIMENTAL #TODO
         """ Snipe a boss using ready rotations. 
 
         Keyword arguments:  
@@ -369,24 +401,28 @@ class Adventure:
         """
         # turn off idle
         if buffs:
-            queue = deque(Adventure.getReadyAbilities(buffs=True))
+            queue = deque(Adventure.getReadyAbilities(buffs=True, fast=fast))
         else:
-            queue = deque(Adventure.getReadyAbilities())
-        print(f'ABILITIES: {queue}')
+            queue = deque(Adventure.getReadyAbilities(fast=fast))
+        if verbose:
+            print(f'ABILITIES: {queue}')
         start = time.time() 
         while not Adventure.isEnemyDead():
             if not queue:
-                print(f'getting abilities queue')
+                if verbose:
+                    print(f'getting abilities queue')
                 if buffs:
-                    queue = deque(Adventure.getReadyAbilities(buffs=True))
+                    queue = deque(Adventure.getReadyAbilities(buffs=True, fast=fast))
                 else:
-                    queue = deque(Adventure.getReadyAbilities())
-                print(f'ABILITIES: {queue}')
+                    queue = deque(Adventure.getReadyAbilities(fast=fast))
+                if verbose:
+                    print(f'ABILITIES: {queue}')
             ability = queue.popleft()
             end = time.time() 
             
             press(Adventure.abilities_keys[ability])
-            # print(f'time between attacks: {end - start}')
+            if verbose:
+                print(f'time between attacks: {end - start}')
             start = time.time() 
 
             # WORK AROUND - SLEEP 1s (MY CD TIME)
@@ -564,14 +600,14 @@ class Inventory:
         """ Wrapper function to boost and merge all equipped items. """
         # click(*coords.INVENTORY)
         Navigation.menu('inventory')
-        Inventory.mergeItem(*coords.WEAPON)
-        Inventory.boostItem(*coords.WEAPON)
         Inventory.mergeItem(*coords.ACC1)
         Inventory.boostItem(*coords.ACC1)
         Inventory.mergeItem(*coords.ACC2)
         Inventory.boostItem(*coords.ACC2)
         Inventory.mergeItem(*coords.ACC3)
         Inventory.boostItem(*coords.ACC3)
+        Inventory.mergeItem(*coords.WEAPON)
+        Inventory.boostItem(*coords.WEAPON)
         Inventory.mergeItem(*coords.HEAD)
         Inventory.boostItem(*coords.HEAD)
         Inventory.mergeItem(*coords.CHEST)
