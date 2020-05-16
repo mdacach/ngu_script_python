@@ -8,7 +8,7 @@ import mss
 import coords 
 from helper import *
 import pytesseract as ocr
-from PIL import Image
+from PIL import Image, ImageFilter
 from navigation import Navigation
 from features import * 
 
@@ -36,13 +36,11 @@ class Statistics:
             monitor = {}
             monitor["left"], monitor["top"], monitor["width"], monitor["height"] = region 
             img = sct.grab(monitor)
+            if save: 
+                output = name + ".png"
+                mss.tools.to_png(img.rgb, img.size, output=output)
             img = Image.frombytes("RGB", img.size, img.bgra, "raw", "BGRX") # from mss docs 
             return img
-        # TODO SAVE
-        # # print(f'region: {region}')
-        # if save:
-        #     pyautogui.screenshot("output/" + name, region=region)
-        # return pyautogui.screenshot(region=region)
 
     @staticmethod 
     def getPixelColor(x, y, img = None):
@@ -72,7 +70,11 @@ class Statistics:
         text -- the text to use.  
         """ 
         text = [x for x in text if x.isdigit()]
-        return int("".join(text))
+        try:
+            return int("".join(text))
+        except:
+            print('error reading the text')
+            return 40
 
     @staticmethod
     def getEXP():
@@ -106,10 +108,16 @@ class Statistics:
         # ONLY WORDS FOR TIERS ABOVE 150
         click(*coords.ITOPOD_CLICK_TOOLTIP)
         img = Statistics.getScreenshot(region=coords.ITOPOD_TIER_COUNT_REGION)
+        print(f'img: {img}')
+        img = img.resize((77*4, 18*4), Image.BICUBIC)
+        img = img.filter(ImageFilter.SHARPEN)
+        # img.show()
         text = ocr.image_to_string(img)
+        print(f'ocr text: {text}')
         return Statistics.removeLetters(text)
 
 
 if __name__ == '__main__':
-    print(Statistics.getScreenshot())
+    Adventure.itopodExperimental() 
+    # Statistics.getTierKills()
     
