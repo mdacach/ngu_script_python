@@ -1,4 +1,11 @@
-""" Module for sniping bosses. """
+""" Module for sniping bosses. 
+
+Command-line arguments:  
+--zone: zone to snipe.  
+--verbose: print information.  
+--heal: heal between fights.  
+"""
+
 import time
 import argparse
 
@@ -12,9 +19,12 @@ from inventory import invManagement
 from yggdrasil import ygg
 
 parser = argparse.ArgumentParser()
-parser.add_argument('zone', help='zone to snipe', default='latest')
+parser.add_argument('--zone', help='zone to snipe (default: latest)', default='latest')
 
-parser.add_argument('--verbose', help='verbose', default=False, action='store_true')
+parser.add_argument('--verbose', help='print information (default: False)', default=False, action='store_true')
+
+parser.add_argument('--heal', help='go to safezone heal between each boss fight (default: True)', default=True)
+
 
 args = parser.parse_args()
 
@@ -45,10 +55,11 @@ def main():
                 print(f'harvesting ygg')
                 ygg()
             Navigation.menu('adventure')
-            Adventure.adventureZone('safe')
-            while not Adventure.isPlayerFull():
-               sleep(1)
-            Adventure.adventureZone(args.zone)
+            if args.heal:
+                Adventure.adventureZone('safe')
+                while not Adventure.isPlayerFull():
+                    sleep(1)
+                Adventure.adventureZone(args.zone)
         elif Adventure.enemySpawn() and not Adventure.isBoss():
             print('not boss')
             Adventure.refreshZone()
