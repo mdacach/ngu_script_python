@@ -111,6 +111,11 @@ class Adventure:
                       12: 'z',
                       13: 'x'}
 
+    # global variables for itopodExperimental
+    killCount = 0 
+    totalAP = 0
+    totalEXP = 0
+
     @staticmethod
     def turnIdleOn() -> None:
         """ Enable Idle mode in Adventure. 
@@ -176,10 +181,18 @@ class Adventure:
     @staticmethod
     def itopodExperimental(duration: float = 0, verbose:int = 0) -> None:  # TODO
         """ Abuse a bug in itopod floors to higher exp/hr. 
+
+        Farm optimal floor until there is only one kill remaining for a tier reward.  
+        If there is more than one tier with upcoming rewards, choose the upper one.  
         
+        Global arguments:  
+        killCount -- total kills between all floors.  
+        totalEXP -- total EXP gained since first call.  
+        totalAP -- total AP gained since first call.  
+
         Keyword arguments:  
         duration -- if not 0, the script will only run for that amount of time. (default 0) 
-        verbose -- 0 for no printing, 1 for normal printing and 2 for extra verbose. (default 0)   
+        verbose -- 0 for no printing, 1 for normal printing and 2 for extra verbose. (default 0)
         """
 
         tiers = {1: 0,
@@ -199,6 +212,7 @@ class Adventure:
             6: 22,
             7: 32,
         }
+
         if verbose > 1:
             print(f'tiers: {tiers}')
             print(f'exp: {tiersEXP}')
@@ -266,9 +280,6 @@ class Adventure:
             click(*coords.ITOPOD_ENTER_CONFIRMATION)
             optimal = True
 
-        killCount = 0 
-        totalEXP = 0
-        totalAP = 0
         start = time.time() 
         while tierKillsCount[current_tier] > 0:
 
@@ -278,7 +289,7 @@ class Adventure:
             while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
                 sleep(0.05)
             pyautogui.press('w') 
-            killCount += 1
+            Adventure.killCount += 1
 
             for tier in tierKillsCount:
                 tierKillsCount[tier] -= 1 # decrease all counters 
@@ -287,8 +298,8 @@ class Adventure:
                 if tierKillsCount[tier] == 0: 
                     tierKillsCount[tier] = 40 - tier  # formula for new kill counter 
                     if current_tier == tier: # if we are in this tier, get its reward 
-                        totalEXP += tiersEXP[tier]
-                        totalAP += 1 
+                        Adventure.totalEXP += tiersEXP[tier]
+                        Adventure.totalAP += 1 
 
             next_tiers = [] 
             minimum_value = min(tierKillsCount.values()) # minimum kill counter remaining
@@ -329,14 +340,14 @@ class Adventure:
             if verbose: 
                 print('*' * 20)
             
-            if killCount % 50 == 0:
-                print(f'total kills: {killCount}')
-                print(f'total exp: {totalEXP}')
-                print(f'total ap: {totalAP}')
+            if Adventure.killCount % 50 == 0:
+                print(f'total kills: {Adventure.killCount}')
+                print(f'total exp: {Adventure.totalEXP}')
+                print(f'total ap: {Adventure.totalAP}')
                 print(f'time: {round((time.time() - start)/60, 2)} minutes')
 
             if duration != 0 and time.time() - start > duration * 60:
-                return totalEXP
+                return
 
             if verbose:
                 print(f'tiers: {tierKillsCount}')
