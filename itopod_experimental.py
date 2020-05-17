@@ -2,16 +2,17 @@ from inventory import invManagement
 from features import Adventure, Yggdrasil
 from navigation import Navigation
 
-
-totalEXP = 0 
 totalTime = 0 
+duration = 10 
 while True:
     Navigation.menu('adventure')
     print('*' * 30)
-    totalEXP += Adventure.itopodExperimental(duration=10) 
-    totalTime += 20
-    print(f'total time: {totalTime}')
-    print(f'total exp: {totalEXP}')
+    Adventure.itopodExperimental(duration=duration) 
+    totalTime += duration 
+    print(f'total exp: {Adventure.totalEXP}')
+    print(f'total ap: {Adventure.totalAP}')
+    print(f'kills: {Adventure.killCount}')
+    print(f'total time: {totalTime} minutes')
     print('*' * 30)
     invManagement() 
     Yggdrasil.harvestAll() 
