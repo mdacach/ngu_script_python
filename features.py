@@ -174,14 +174,14 @@ class Adventure:
         click(*coords.ITOPOD_ENTER_CONFIRMATION)
 
     @staticmethod
-    def itopodExperimental(duration: float = 0, verbose:bool = False) -> None:  # TODO
-        """ Abuse a bug in itopod floors to higher exp/hr. """
-        # tiers = {1: 0,
-        #          2: 50,
-        #          3: 100,
-        #          4: 150,
-        #          5: 200}
-        # only from 150 on
+    def itopodExperimental(duration: float = 0, verbose:int = 0) -> None:  # TODO
+        """ Abuse a bug in itopod floors to higher exp/hr. 
+        
+        Keyword arguments:  
+        duration -- if not 0, the script will only run for that amount of time. (default 0) 
+        verbose -- 0 for no printing, 1 for normal printing and 2 for extra verbose. (default 0)   
+        """
+
         tiers = {1: 0,
                  2: 50,
                  3: 100,
@@ -199,12 +199,16 @@ class Adventure:
             6: 22,
             7: 32,
         }
+        if verbose > 1:
+            print(f'tiers: {tiers}')
+            print(f'exp: {tiersEXP}')
 
         Navigation.menu('adventure')
         tierKillsCount = {}
         for tier, floor in tiers.items():
             if verbose:
-                print(tier, floor)
+                if verbose > 1: 
+                    print(f'tier: {tier}, floor: {floor}')
                 print(f'getting tier kills: ')
             tierKills = Statistics.getTierKills(str(floor))
 
@@ -212,15 +216,18 @@ class Adventure:
                 print('could not detect tier kills')
                 tierKillsCount[tier] = 40 
             else:
-                print(f'tier kills: {tierKills}')
+                if verbose:
+                    print(f'tier kills: {tierKills}')
                 tierKillsCount[tier] = tierKills
 
-        print(tierKillsCount)
+        if verbose:
+            print(tierKillsCount)
 
 
 
         minimum = min(tierKillsCount, key=tierKillsCount.get)
-        print(f'minimum is tier {minimum} with {tierKillsCount[minimum]} kill count')
+        if verbose:
+            print(f'minimum is tier {minimum} with {tierKillsCount[minimum]} kill count')
 
         next_tiers = [] 
         minimum_value = min(tierKillsCount.values())
@@ -233,9 +240,15 @@ class Adventure:
                     print(f'minimum tier: {tier} with {tierKillsCount[tier]}')
                 next_tiers.append(tier)
 
-        print(f'next tiers: {next_tiers}')
+        if verbose:
+            print('next tiers:')
+            for tier in next_tiers:
+                print(f'{tier} at floor {tiers[tier]}')
+
         if minimum_value == 1:
             current_tier = max(next_tiers) # next tier I will go to 
+            if verbose > 1:
+                print(f'going to tier {current_tier} at floor {tiers[current_tier]}')
             click(*coords.ITOPOD_ENTER)
             click(*coords.ITOPOD_START_INPUT)
             pyautogui.write(str(tiers[current_tier])) 
@@ -245,6 +258,8 @@ class Adventure:
         else: # must be bigger than 1 
             # can afford to go to optimal
             current_tier = minimum 
+            if verbose > 1:
+                print(f'going to optimal floor')
             click(*coords.ITOPOD_ENTER)
             click(*coords.ITOPOD_START_INPUT)
             click(*coords.ITOPOD_OPTIMAL)
@@ -256,33 +271,42 @@ class Adventure:
         totalAP = 0
         start = time.time() 
         while tierKillsCount[current_tier] > 0:
+
             while not Adventure.enemySpawn():
                 sleep(0.1)
             Adventure.kill() 
+            while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
+                sleep(0.05)
+            pyautogui.press('w') 
             killCount += 1
 
             for tier in tierKillsCount:
-                tierKillsCount[tier] -= 1
+                tierKillsCount[tier] -= 1 # decrease all counters 
                 
-            for tier in tierKillsCount:
-                if tierKillsCount[tier] == 0:
-                    tierKillsCount[tier] = 40 - tier 
-                    if current_tier == tier:
+            for tier in tierKillsCount: 
+                if tierKillsCount[tier] == 0: 
+                    tierKillsCount[tier] = 40 - tier  # formula for new kill counter 
+                    if current_tier == tier: # if we are in this tier, get its reward 
                         totalEXP += tiersEXP[tier]
                         totalAP += 1 
 
             next_tiers = [] 
-            minimum_value = min(tierKillsCount.values())
+            minimum_value = min(tierKillsCount.values()) # minimum kill counter remaining
             for tier in tierKillsCount:
-                if tierKillsCount[tier] == minimum_value: # go get its reward 
+                if tierKillsCount[tier] == minimum_value: 
                     if verbose:
-                        print(f'minimum tier: {tier} with {tierKillsCount[tier]}')
+                        print(f'minimum tier: {tier} at floor {tiers[tier]} with {tierKillsCount[tier]} remaining kills')
                     next_tiers.append(tier)
             
             if verbose:
-                print(f'next tiers: {next_tiers}')
+                print('next tiers:')
+                for tier in next_tiers:
+                    print(f'tier {tier} at floor {tiers[tier]}')
+
             if minimum_value == 1:
                 current_tier = max(next_tiers) # next tier I will go to 
+                if verbose > 1:
+                    print(f'going to tier {current_tier} at floor {tiers[current_tier]}')
 
                 click(*coords.ITOPOD_ENTER)
                 click(*coords.ITOPOD_START_INPUT)
@@ -292,6 +316,9 @@ class Adventure:
             elif not optimal: # must be bigger than 1 
                 # can afford to go to optimal
                 current_tier = minimum
+                if verbose > 1:
+                    print(f'going to optimal floor')
+
                 click(*coords.ITOPOD_ENTER)
                 click(*coords.ITOPOD_START_INPUT)
                 click(*coords.ITOPOD_OPTIMAL)
@@ -299,19 +326,16 @@ class Adventure:
                 click(*coords.ITOPOD_ENTER_CONFIRMATION)
                 optimal = True
 
-                # if verbose:
-                #     print(f'farming optimal floor, minimum is {tierKillsCount[minimum]}')
-                #     # print(f'starting again on floor {tierKillsCount[minimum]}')
-            # print('*' * 20)
+            if verbose: 
+                print('*' * 20)
             
             if killCount % 50 == 0:
                 print(f'total kills: {killCount}')
                 print(f'total exp: {totalEXP}')
                 print(f'total ap: {totalAP}')
-                print(f'time: {round((time.time() - start)/60, 3)}')
+                print(f'time: {round((time.time() - start)/60, 2)} minutes')
 
             if duration != 0 and time.time() - start > duration * 60:
-                print('over')
                 return totalEXP
 
             if verbose:
