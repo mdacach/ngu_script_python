@@ -124,7 +124,7 @@ class Statistics:
         img = img.filter(ImageFilter.SHARPEN)
         # img.show()
         text = ocr.image_to_string(img)
-        print(f'ocr text: {text}')
+        # print(f'ocr text: {text}')
         return Statistics.removeLetters(text)
 
 
