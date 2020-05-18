@@ -844,11 +844,11 @@ class Inventory:
             Inventory.transformItem(loc)
 
     @staticmethod
-    def locateAll(image):
+    def locateAll(image, confidence=0.8):
         """ Returns a generator of the (absolute) locations of all items {image}. """
         Navigation.menu('inventory')
         inventory = Statistics.getScreenshot() 
-        locations = pyautogui.locateAll(image, inventory, confidence=0.6)
+        locations = pyautogui.locateAll(image, inventory, confidence=confidence)
         return locations
 
     @staticmethod
@@ -1050,6 +1050,27 @@ class Misc:
                 click(*coords.ENERGY_CUSTOM_AMOUNT_HALF_IDLE)
             if amount == 'quarter':
                 click(*coords.ENERGY_CUSTOM_AMOUNT_QUARTER_IDLE)
+
+class Questing:
+    # to find in questing text ocr 
+    zones = {
+             'sewers': 'sewers',
+             'forest': 'forest',
+             'security': 'hsb',
+             'universe': '2d',
+             'strange': 'avsp',
+             'mega': 'mega',
+             'beardverse': 'bv',
+            }
+
+    @staticmethod
+    def findZone(text:str):
+        """ Find the specified zone in questing text. """
+        for zone in Questing.zones:
+            if zone in text.lower():
+                return zone 
+
+
 
 # if __name__ == "__main__":
 #     click(*coords.WANDOOS_DIGGER)
