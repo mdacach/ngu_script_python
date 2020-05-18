@@ -1102,9 +1102,9 @@ class Questing:
     @staticmethod
     def isCompleted():
         """ Return True if current quest is completed. 
-        
-        Should be in Questing menu!
         """
+        Navigation.menu('questing')
+        click(640, 100, delay='long') # get rid of tooltip
         text = Questing.getProgress() 
         have, need = text.split('/')
         have = [x for x in have if x.isdigit()]
