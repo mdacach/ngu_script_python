@@ -850,6 +850,19 @@ class Inventory:
         inventory = Statistics.getScreenshot() 
         locations = pyautogui.locateAll(image, inventory, confidence=confidence)
         return locations
+    
+    @staticmethod 
+    def locateItem(image, confidence=0.8):
+        """ Return the position of item in inventory, if exists. 
+        
+        This is a relative position to the game itself, without borders. If you want to 
+        be able to click on this item, click at x, y+25 (25 px is the size of steam border).
+        """
+        Navigation.menu('inventory')
+        click(334, 80, delay='long')
+        inventory = Statistics.getScreenshot() 
+        loc = pyautogui.locate(image, inventory, confidence=confidence)
+        return loc 
 
     @staticmethod
     def getEmptySlots(debug: bool = False):
@@ -1069,6 +1082,16 @@ class Questing:
         for zone in Questing.zones:
             if zone in text.lower():
                 return zone 
+    
+    @staticmethod 
+    def turnInItems(item:str):
+        """ Find and right click on ITEM. """
+        img = 'images/' + item + '.png'
+        x, y, _, _ = Inventory.locateItem(img, confidence=0.9)
+        click(x, y+25, button='right')
+
+
+
 
 
 
