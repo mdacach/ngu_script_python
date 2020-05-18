@@ -4,8 +4,8 @@
 """
 
 from typing import List, Set, Dict, Tuple
+import time
 
-# import d3dshot
 import pyautogui
 
 import constants
@@ -26,6 +26,8 @@ CORNER = list(map(int, CORNER))
 # lower pyautogui.PAUSE constant
 pyautogui.PAUSE = 0.01
 
+def printTime():
+    print(time.strftime("%H:%M:%S", time.localtime()))
 
 def rawMove(x: int, y: int) -> None:
     """ Move mouse to absolute coordinates x, y. 
