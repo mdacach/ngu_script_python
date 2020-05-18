@@ -22,6 +22,7 @@ Missing:
 from collections import deque
 from typing import List, Set, Dict, Tuple
 
+import re 
 import time
 
 import coords
@@ -1088,8 +1089,12 @@ class Questing:
     def turnInItems(item:str):
         """ Find and right click on ITEM. """
         img = 'images/' + item + '.png'
-        x, y, _, _ = Inventory.locateItem(img, confidence=0.9)
-        click(x, y+25, button='right')
+        inv = Inventory.locateItem(img, confidence=0.9)
+        if inv: # it may be None if no item was located 
+            x, y, _, _ = inv 
+            click(x, y+25, button='right')
+        else:
+            print('did not locate item')
 
     @staticmethod 
     def getProgress():
@@ -1097,7 +1102,17 @@ class Questing:
         
         Should be in Questing menu!
         """
-        return Statistics.getText(coords.QUESTING_PROGRESS_REGION)
+        text = Statistics.getText(coords.QUESTING_TEXT_REGION)
+        lines = re.split('\n', text)
+        # print(f'lines: {lines}')
+        line = [line for line in lines if "PROGRESS" in line]
+        # print(f'progress line: {line}')
+        line = re.split('[/ ]', line[0])
+        # print(f'lines split: {lines}')
+        _, have, need = line
+        print(f'have: {have}, need: {need}')
+        return int(have), int(need) 
+        # return Statistics.getText(coords.QUESTING_PROGRESS_REGION)
 
     @staticmethod
     def isCompleted():
@@ -1105,12 +1120,7 @@ class Questing:
         """
         Navigation.menu('questing')
         click(640, 100, delay='long') # get rid of tooltip
-        text = Questing.getProgress() 
-        have, need = text.split('/')
-        have = [x for x in have if x.isdigit()]
-        need = [x for x in need if x.isdigit()]
-        have = int("".join(have))
-        need = int("".join(need))
+        have, need = Questing.getProgress() 
         return have == need 
     
     @staticmethod 
