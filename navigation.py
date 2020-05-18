@@ -20,6 +20,7 @@ class Navigation:
         'ngu': coords.NGU,
         'yggdrasil': coords.YGGDRASIL,
         'goldDiggers': coords.GOLD_DIGGERS,
+        'questing': coords.QUESTING_MENU,
         'rebirth': coords.REBIRTH_MENU,
         'exp': coords.EXP_MENU
     }
