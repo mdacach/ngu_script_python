@@ -43,6 +43,17 @@ class Statistics:
             return img
 
     @staticmethod 
+    def getText(region: Tuple[int, int, int, int]):
+        """ Get and return ocr of text in REGION. 
+
+        Keyword arguments:  
+        region -- region of the screen to perform ocr.  
+    """
+        img = Statistics.getScreenshot(region=region)
+        return ocr.image_to_string(img)
+
+
+    @staticmethod 
     def getPixelColor(x, y, img = None):
         """ Get and return pixel color at x, y. """ 
         if img == None: 
@@ -129,7 +140,8 @@ class Statistics:
 
 
 if __name__ == '__main__':
+    pass
     # Adventure.itopodExperimental() 
-    Statistics.getTierKills('0')
+    # Statistics.getTierKills('0')
     # Statistics.getTierKills()
     
