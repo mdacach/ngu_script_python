@@ -5,7 +5,7 @@ import coords
 
 from features import Adventure, Questing, Inventory 
 from navigation import Navigation 
-from helper import sleep 
+from helper import sleep, printTime 
 
 # start quest, get zone, farm zone, turn items, check if completed, if yes, repeat 
 def main():
@@ -34,16 +34,23 @@ def main():
                 # kill the enemy
                 Adventure.snipe(fast=True)
                 kc += 1 
+            print(f'killed 50 monsters')
+            print(f'time: ', end='')
+            printTime() 
             Navigation.menu('inventory')
+            Inventory.boostAndMergeEquipped() 
             Inventory.boostCube()
             Questing.turnInItems(zone)
             Navigation.menu('questing')
+            
             if Questing.isCompleted():
                 quests_completed += 1
                 Questing.complete() 
                 end = time.time()
+                break
         
 
 if __name__ == '__main__':
-    print(f'starting questing script at {time.strftime("%H:%M:%S", time.localtime())}')
+    print(f'starting questing script at ')
+    printTime() 
     main()
