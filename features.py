@@ -1077,11 +1077,12 @@ class Questing:
             }
 
     @staticmethod
-    def findZone(text:str):
+    def findZone():
         """ Find the specified zone in questing text. """
+        text = Statistics.getText(coords.QUESTING_TEXT_REGION)
         for zone in Questing.zones:
             if zone in text.lower():
-                return zone 
+                return Questing.zones[zone]
     
     @staticmethod 
     def turnInItems(item:str):
@@ -1092,12 +1093,18 @@ class Questing:
 
     @staticmethod 
     def getProgress():
-        """ Get and return current quest progress. """
+        """ Get and return current quest progress. 
+        
+        Should be in Questing menu!
+        """
         return Statistics.getText(coords.QUESTING_PROGRESS_REGION)
 
     @staticmethod
     def isCompleted():
-        """ Return True if current quest is completed. """
+        """ Return True if current quest is completed. 
+        
+        Should be in Questing menu!
+        """
         text = Questing.getProgress() 
         have, need = text.split('/')
         have = [x for x in have if x.isdigit()]
@@ -1105,7 +1112,30 @@ class Questing:
         have = int("".join(have))
         need = int("".join(need))
         return have == need 
+    
+    @staticmethod 
+    def complete():
+        """ Complete the current quest. 
+        
+        Should be in Questing menu!
+        """
+        click(*coords.QUESTING_COMPLETE_QUEST)
 
+    @staticmethod 
+    def skip():
+        """ Skip the current quest. 
+        
+        Should be in Questing menu!
+        """
+        click(*coords.QUESTING_SKIP_QUEST)
+
+    @staticmethod 
+    def start():
+        """ Start a quest. 
+
+        Should be in Questing menu!
+        """
+        click(*coords.QUESTING_COMPLETE_QUEST) # position is the same as complete
 
 
 
