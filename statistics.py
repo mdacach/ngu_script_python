@@ -43,13 +43,23 @@ class Statistics:
             return img
 
     @staticmethod 
-    def getText(region: Tuple[int, int, int, int]):
+    def getText(region: Tuple[int, int, int, int], save :bool = False, preprocess :bool = False):
         """ Get and return ocr of text in REGION. 
 
         Keyword arguments:  
         region -- region of the screen to perform ocr.  
+        save -- save the image it got.    
+        preprocess -- resize and filter the image beforehand.  
     """
-        img = Statistics.getScreenshot(region=region)
+        if save:
+            img = Statistics.getScreenshot(save=True, region=region)
+        else:
+            img = Statistics.getScreenshot(region=region)
+
+        if preprocess:
+            w, h = img.size
+            img = img.resize((w*6, h*6), Image.BICUBIC)
+            img = img.filter(ImageFilter.SHARPEN)
         return ocr.image_to_string(img)
 
 
