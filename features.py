@@ -1090,7 +1090,21 @@ class Questing:
         x, y, _, _ = Inventory.locateItem(img, confidence=0.9)
         click(x, y+25, button='right')
 
+    @staticmethod 
+    def getProgress():
+        """ Get and return current quest progress. """
+        return Statistics.getText(coords.QUESTING_PROGRESS_REGION)
 
+    @staticmethod
+    def isCompleted():
+        """ Return True if current quest is completed. """
+        text = Questing.getProgress() 
+        have, need = text.split('/')
+        have = [x for x in have if x.isdigit()]
+        need = [x for x in need if x.isdigit()]
+        have = int("".join(have))
+        need = int("".join(need))
+        return have == need 
 
 
 
