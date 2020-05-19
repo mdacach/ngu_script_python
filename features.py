@@ -1077,6 +1077,57 @@ class Questing:
              'beardverse': 'bv',
             }
 
+    quests_completed = 0 
+    items_turned = 0 
+    items_needed = 0
+    is_major = False  
+    quest_zone = ""
+    is_completed = False 
+    
+    @staticmethod 
+    def updateInfo():
+        """ Get and update Questing variables: items_turned,
+        items_needed, is_major, quest_zone.
+        
+        A quest must be active!
+        """
+        text = Statistics.getText(coords.QUESTING_TEXT_REGION)
+        if not text:
+            print('there is not an active quest')
+            return 
+
+        Questing.quest_zone = Questing.parseZone(text) # get zone 
+        Questing.items_turned, Questing.items_needed = Questing.parseProgress(text) # get progress 
+        Questing.is_completed = Questing.items_turned == Questing.items_needed # is quest completed
+        Questing.is_major = Questing.isMajor(text)
+        if Questing.is_completed:
+            Questing.quests_completed += 1
+
+    @staticmethod
+    def status():
+        """ Print general status of questing. """ 
+        msg = f'quest in {Questing.quest_zone}'
+        if Questing.is_major:
+            msg = 'Major ' + msg
+        else:
+            msg = 'Minor ' + msg
+        print(msg)
+        print(f'Progress: {Questing.items_turned}/{Questing.items_needed}')
+        print(f'Overall {Questing.quests_completed} quests completed.')
+
+    @staticmethod 
+    def isMajor(text: str):
+        """ Return True if current quest is major. """
+        return 'major' in text.lower()
+
+    @staticmethod 
+    def parseZone(text: str):
+        """ Return the zone specified by questing text. """ 
+        for zone in Questing.zones:
+            if zone in text.lower():
+                return Questing.zones[zone]
+    
+
     @staticmethod
     def findZone():
         """ Find the specified zone in questing text. """
@@ -1095,6 +1146,20 @@ class Questing:
             click(x, y+25, button='right')
         else:
             print('did not locate item')
+
+    @staticmethod 
+    def parseProgress(text: str):
+        """ Return the progress as a tuple (items_turned, items_needed). """
+        lines = re.split('\n', text)
+        # print(f'lines: {lines}')
+        line = [line for line in lines if "PROGRESS" in line]
+        # print(f'progress line: {line}')
+        line = re.split('[/ ]', line[0])
+        # print(f'lines split: {lines}')
+        _, items_turned, items_needed = line
+        print(f'turned: {items_turned}, needed: {items_needed}')
+        return int(items_turned), int(items_needed) 
+
 
     @staticmethod 
     def getProgress():
