@@ -736,10 +736,10 @@ class Inventory:
         Inventory.boostItem(*coords.WEAPON)
         Inventory.mergeItem(*coords.HEAD)
         Inventory.boostItem(*coords.HEAD)
-        Inventory.mergeItem(*coords.CHEST)
-        Inventory.boostItem(*coords.CHEST)
         Inventory.mergeItem(*coords.LEGS)
         Inventory.boostItem(*coords.LEGS)
+        Inventory.mergeItem(*coords.CHEST)
+        Inventory.boostItem(*coords.CHEST)
         Inventory.mergeItem(*coords.BOOTS)
         Inventory.boostItem(*coords.BOOTS)
 
@@ -1091,7 +1091,13 @@ class Questing:
         
         A quest must be active!
         """
+        Navigation.menu('questing')
+        click(100, 100) # get rid of tooltip
+        # print(f'getting text')
+        # sleep(5)
         text = Statistics.getText(coords.QUESTING_TEXT_REGION)
+
+        # print(f'text: {text}')
         if not text:
             print('there is not an active quest')
             return 
@@ -1157,7 +1163,7 @@ class Questing:
         line = re.split('[/ ]', line[0])
         # print(f'lines split: {lines}')
         _, items_turned, items_needed = line
-        print(f'turned: {items_turned}, needed: {items_needed}')
+        # print(f'turned: {items_turned}, needed: {items_needed}')
         return int(items_turned), int(items_needed) 
 
 
@@ -1203,6 +1209,7 @@ class Questing:
         Should be in Questing menu!
         """
         click(*coords.QUESTING_SKIP_QUEST)
+        click(*coords.QUESTING_SKIP_QUEST_CONFIRMATION)
 
     @staticmethod 
     def start():
