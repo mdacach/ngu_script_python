@@ -6,7 +6,15 @@ import coords
 from features import Adventure, Questing, Inventory 
 from navigation import Navigation 
 from helper import sleep, printTime 
+from yggdrasil import ygg 
 
+parser = argparse.ArgumentParser() 
+
+parser.add_argument('--force_zone',
+                    help='if the current quest is not major, will skip quests until one in the desired zone',
+                    default='')
+
+args = parser.parse_args() 
 # start quest, get zone, farm zone, turn items, check if completed, if yes, repeat 
 def main():
     while True:
@@ -15,6 +23,16 @@ def main():
         Questing.start() 
         Questing.updateInfo() 
         Questing.status()
+        if args.force_zone:
+            if Questing.is_major:
+                print('major quest. will not skip')
+            else:
+                while Questing.quest_zone != args.force_zone:
+                    Questing.skip()
+                    Questing.start()
+                    Questing.updateInfo()
+                    Questing.status() 
+
         # zone = Questing.findZone() 
         Adventure.adventureZone(Questing.quest_zone)
         Navigation.menu('questing')
@@ -37,6 +55,8 @@ def main():
             Inventory.boostAndMergeEquipped() 
             Inventory.boostCube()
             Questing.turnInItems(Questing.quest_zone)
+            Inventory.mergeInventory(slots=5)
+            ygg()
             Questing.updateInfo() 
             Questing.status() 
             Navigation.menu('questing')
