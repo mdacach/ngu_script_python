@@ -9,20 +9,16 @@ from helper import sleep, printTime
 
 # start quest, get zone, farm zone, turn items, check if completed, if yes, repeat 
 def main():
-    quests_completed = 0 
     while True:
-        if quests_completed:
-            print(f'completed a quest')
-            print(f'quests completed: {quests_completed}')
-            print(f'time: {round((end-start)/60, 2)} min')
-
         start = time.time() 
         Navigation.menu('questing')
         Questing.start() 
-        zone = Questing.findZone() 
-        Adventure.adventureZone(zone)
+        Questing.updateInfo() 
+        Questing.status()
+        # zone = Questing.findZone() 
+        Adventure.adventureZone(Questing.quest_zone)
         Navigation.menu('questing')
-        while not Questing.isCompleted():
+        while not Questing.is_completed:
             Navigation.menu('inventory')
             Inventory.boostCube()
             # farm that zone 
@@ -40,11 +36,12 @@ def main():
             Navigation.menu('inventory')
             Inventory.boostAndMergeEquipped() 
             Inventory.boostCube()
-            Questing.turnInItems(zone)
+            Questing.turnInItems(Questing.quest_zone)
+            Questing.updateInfo() 
+            Questing.status() 
             Navigation.menu('questing')
             
-            if Questing.isCompleted():
-                quests_completed += 1
+            if Questing.is_completed:
                 Questing.complete() 
                 end = time.time()
                 break
