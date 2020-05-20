@@ -71,6 +71,190 @@ class FightBosses:
             pyautogui.sleep(2)
             click(*coords.FIGHT)
 
+class Itopod:
+    """ Functions and variables related to ITOPOD. """
+    
+    tiers    = {
+              1: 0,
+              2: 50,
+              3: 100,
+              4: 150,
+              5: 200,
+              6: 250,
+              7: 300,
+              8: 350,
+             }
+    tiersEXP = {
+                1: 1,
+                2: 2,
+                3: 4,
+                4: 8,
+                5: 14,
+                6: 22,
+                7: 32,
+                8: 44, 
+              }
+    kills = 0 
+    AP_gained = 0 
+    EXP_gained = 0
+    PP_gained = 0 
+    tierKillsCount = {}
+    
+    @staticmethod
+    def itopodExperimental(duration: float = 0, verbose:int = 0) -> None:  # TODO
+        """ Abuse a bug in itopod floors to higher exp/hr. 
+
+        Farm optimal floor until there is only one kill remaining for a tier reward.  
+        If there is more than one tier with upcoming rewards, choose the upper one.  
+        
+        Global arguments:  
+        killCount -- total kills between all floors.  
+        totalEXP -- total EXP gained since first call.  
+        totalAP -- total AP gained since first call.  
+
+        Keyword arguments:  
+        duration -- if not 0, the script will only run for that amount of time. (default 0) 
+        verbose -- 0 for no printing, 1 for normal printing and 2 for extra verbose. (default 0)
+        """
+
+        if verbose > 1:
+            print(f'tiers: {Itopod.tiers}')
+            print(f'exp: {Itopod.tiersEXP}')
+
+        Navigation.menu('adventure')
+        if not Itopod.tierKillsCount:
+            for tier, floor in Itopod.tiers.items():
+                if verbose:
+                    if verbose > 1: 
+                        print(f'tier: {tier}, floor: {floor}')
+                    print(f'getting tier kills: ')
+                tierKills = Statistics.getTierKills(str(floor))
+
+                if tierKills == -1:
+                    print('could not detect tier kills')
+                    Itopod.tierKillsCount[tier] = 40 
+                else:
+                    if verbose:
+                        print(f'tier kills: {tierKills}')
+                    Itopod.tierKillsCount[tier] = tierKills
+
+        if verbose:
+            print(Itopod.tierKillsCount)
+
+
+
+        minimum = min(Itopod.tierKillsCount, key=Itopod.tierKillsCount.get)
+        if verbose:
+            print(f'minimum is tier {minimum} with {Itopod.tierKillsCount[minimum]} kill count')
+
+        next_tiers = [] 
+        minimum_value = min(Itopod.tierKillsCount.values())
+        if verbose:
+            print(f'minimum value: {minimum_value}')
+
+        for tier in Itopod.tierKillsCount:
+            if Itopod.tierKillsCount[tier] == minimum_value: # go get its reward 
+                if verbose:
+                    print(f'minimum tier: {tier} with {Itopod.tierKillsCount[tier]}')
+                next_tiers.append(tier)
+
+        if verbose:
+            print('next tiers:')
+            for tier in next_tiers:
+                print(f'{tier} at floor {Itopod.tiers[tier]}')
+
+        if minimum_value == 1:
+            current_tier = max(next_tiers) # next tier I will go to 
+            if verbose > 1:
+                print(f'going to tier {current_tier} at floor {Itopod.tiers[current_tier]}')
+            click(*coords.ITOPOD_ENTER)
+            click(*coords.ITOPOD_START_INPUT)
+            pyautogui.write(str(Itopod.tiers[current_tier])) 
+            click(*coords.ITOPOD_ENTER_CONFIRMATION)
+            optimal = False
+
+        else: # must be bigger than 1 
+            # can afford to go to optimal
+            current_tier = minimum 
+            if verbose > 1:
+                print(f'going to optimal floor')
+            click(*coords.ITOPOD_ENTER)
+            click(*coords.ITOPOD_START_INPUT)
+            click(*coords.ITOPOD_OPTIMAL)
+            click(*coords.ITOPOD_ENTER_CONFIRMATION)
+            optimal = True
+
+        start = time.time() 
+        while Itopod.tierKillsCount[current_tier] > 0:
+
+            while not Adventure.enemySpawn():
+                sleep(0.1)
+            Adventure.kill() 
+            while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
+                sleep(0.05)
+            pyautogui.press('w') 
+            Itopod.kills += 1
+
+            for tier in Itopod.tierKillsCount:
+                Itopod.tierKillsCount[tier] -= 1 # decrease all counters 
+                
+            for tier in Itopod.tierKillsCount: 
+                if Itopod.tierKillsCount[tier] == 0: 
+                    Itopod.tierKillsCount[tier] = 40 - tier  # formula for new kill counter 
+                    if current_tier == tier: # if we are in this tier, get its reward 
+                        Itopod.EXP_gained += Itopod.tiersEXP[tier] 
+                        Itopod.AP_gained += 1
+
+            next_tiers = [] 
+            minimum_value = min(Itopod.tierKillsCount.values()) # minimum kill counter remaining
+            for tier in Itopod.tierKillsCount:
+                if Itopod.tierKillsCount[tier] == minimum_value: 
+                    if verbose:
+                        print(f'minimum tier: {tier} at floor {Itopod.tiers[tier]} with {Itopod.tierKillsCount[tier]} remaining kills')
+                    next_tiers.append(tier)
+            
+            if verbose:
+                print('next tiers:')
+                for tier in next_tiers:
+                    print(f'tier {tier} at floor {Itopod.tiers[tier]}')
+
+            if minimum_value == 1:
+                current_tier = max(next_tiers) # next tier I will go to 
+                if verbose > 1:
+                    print(f'going to tier {current_tier} at floor {Itopod.tiers[current_tier]}')
+
+                click(*coords.ITOPOD_ENTER)
+                click(*coords.ITOPOD_START_INPUT)
+                pyautogui.write(str(Itopod.tiers[current_tier])) 
+                click(*coords.ITOPOD_ENTER_CONFIRMATION)
+                optimal = False 
+            elif not optimal: # must be bigger than 1 
+                # can afford to go to optimal
+                current_tier = minimum
+                if verbose > 1:
+                    print(f'going to optimal floor')
+
+                click(*coords.ITOPOD_ENTER)
+                click(*coords.ITOPOD_START_INPUT)
+                click(*coords.ITOPOD_OPTIMAL)
+                click(*coords.ITOPOD_ENTER_CONFIRMATION)
+                optimal = True
+
+            if verbose: 
+                print('*' * 20)
+            
+            if Itopod.kills  % 50 == 0:
+                print(f'total kills: {Itopod.kills}')
+                print(f'total exp: {Itopod.EXP_gained}')
+                print(f'total ap: {Itopod.AP_gained}')
+                print(f'time: {round((time.time() - start)/60, 2)} minutes')
+
+            if duration != 0 and time.time() - start > duration * 60:
+                return
+
+            if verbose:
+                print(f'tiers: {Itopod.tierKillsCount}')
+
 
 class Adventure:
     """ Various features related to Adventure menu. """
@@ -203,8 +387,8 @@ class Adventure:
                  5: 200,
                  6: 250,
                  7: 300,
-                 8: 350,}
-        
+                # 8: 350,
+                }
         tiersEXP = {
             1: 1,
             2: 2,
