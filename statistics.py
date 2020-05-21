@@ -128,11 +128,11 @@ class Statistics:
         Must be in ITOPOD menu.
         """
         # ONLY WORDS FOR TIERS ABOVE 150
-        click(*coords.ITOPOD_ENTER)
-        click(*coords.ITOPOD_START_INPUT)
+        click(*coords.ITOPOD_ENTER, delay='fast')
+        click(*coords.ITOPOD_START_INPUT, delay='fast')
         pyautogui.write(floor)
-        click(*coords.ITOPOD_ENTER_CONFIRMATION)
-        click(*coords.ITOPOD_CLICK_TOOLTIP)
+        click(*coords.ITOPOD_ENTER_CONFIRMATION, delay='fast')
+        click(*coords.ITOPOD_CLICK_TOOLTIP, delay='fast')
         if int(floor) < 150:
             region = coords.ITOPOD_TIER_COUNT_REGION_LOWER_TIERS
         else:
