@@ -167,10 +167,10 @@ class Itopod:
             current_tier = max(next_tiers) # next tier I will go to 
             if verbose > 1:
                 print(f'going to tier {current_tier} at floor {Itopod.tiers[current_tier]}')
-            click(*coords.ITOPOD_ENTER)
-            click(*coords.ITOPOD_START_INPUT)
+            click(*coords.ITOPOD_ENTER, delay='fast')
+            click(*coords.ITOPOD_START_INPUT, delay='fast')
             pyautogui.write(str(Itopod.tiers[current_tier])) 
-            click(*coords.ITOPOD_ENTER_CONFIRMATION)
+            click(*coords.ITOPOD_ENTER_CONFIRMATION, delay='fast')
             optimal = False
 
         else: # must be bigger than 1 
@@ -178,10 +178,10 @@ class Itopod:
             current_tier = minimum 
             if verbose > 1:
                 print(f'going to optimal floor')
-            click(*coords.ITOPOD_ENTER)
-            click(*coords.ITOPOD_START_INPUT)
-            click(*coords.ITOPOD_OPTIMAL)
-            click(*coords.ITOPOD_ENTER_CONFIRMATION)
+            click(*coords.ITOPOD_ENTER, delay='fast')
+            click(*coords.ITOPOD_START_INPUT, delay='fast')
+            click(*coords.ITOPOD_OPTIMAL, delay='fast')
+            click(*coords.ITOPOD_ENTER_CONFIRMATION, delay='fast')
             optimal = True
 
         start = time.time() 
@@ -190,9 +190,9 @@ class Itopod:
             while not Adventure.enemySpawn():
                 sleep(0.1)
             Adventure.kill() 
-            while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
-                sleep(0.05)
-            pyautogui.press('w') 
+           # while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
+            #    sleep(0.05)
+            #pyautogui.press('w') 
             Itopod.kills += 1
 
             for tier in Itopod.tierKillsCount:
@@ -223,10 +223,10 @@ class Itopod:
                 if verbose > 1:
                     print(f'going to tier {current_tier} at floor {Itopod.tiers[current_tier]}')
 
-                click(*coords.ITOPOD_ENTER)
-                click(*coords.ITOPOD_START_INPUT)
+                click(*coords.ITOPOD_ENTER, delay='fast')
+                click(*coords.ITOPOD_START_INPUT, delay='fast')
                 pyautogui.write(str(Itopod.tiers[current_tier])) 
-                click(*coords.ITOPOD_ENTER_CONFIRMATION)
+                click(*coords.ITOPOD_ENTER_CONFIRMATION, delay='fast')
                 optimal = False 
             elif not optimal: # must be bigger than 1 
                 # can afford to go to optimal
@@ -234,10 +234,10 @@ class Itopod:
                 if verbose > 1:
                     print(f'going to optimal floor')
 
-                click(*coords.ITOPOD_ENTER)
-                click(*coords.ITOPOD_START_INPUT)
-                click(*coords.ITOPOD_OPTIMAL)
-                click(*coords.ITOPOD_ENTER_CONFIRMATION)
+                click(*coords.ITOPOD_ENTER, delay='fast')
+                click(*coords.ITOPOD_START_INPUT, delay='fast')
+                click(*coords.ITOPOD_OPTIMAL, delay='fast')
+                click(*coords.ITOPOD_ENTER_CONFIRMATION, delay='fast')
                 optimal = True
 
             if verbose: 
@@ -1350,7 +1350,9 @@ class Questing:
         # print(f'lines split: {lines}')
         _, items_turned, items_needed = line
         # print(f'turned: {items_turned}, needed: {items_needed}')
-        return int(items_turned), int(items_needed) 
+        items_turned = Statistics.removeLetters(items_turned)
+        items_needed = Statistics.removeLetters(items_needed)
+        return items_turned, items_needed 
 
 
     @staticmethod 
@@ -1407,5 +1409,5 @@ class Questing:
 
 
 
-# if __name__ == "__main__":
-#     click(*coords.WANDOOS_DIGGER)
+if __name__ == "__main__":
+    pass 
