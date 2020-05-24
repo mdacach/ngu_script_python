@@ -756,7 +756,8 @@ class Adventure:
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
 
-        return Statistics.checkPixelColor(*coords.ENEMY_HEALTH_BAR_BORDER, (250, 250, 250))
+        #return Statistics.checkPixelColor(*coords.ENEMY_HEALTH_BAR_BORDER, (250, 250, 250))
+        return Statistics.checkPixelColor(*coords.ENEMY_TEXT, coords.ENEMY_BACKGROUND)
         # border = getCoords(*coords.ENEMY_HEALTH_BAR_BORDER)
         # check if border of enemy health bar is white
         #KONGREGATE COLOR IS DIFFERENT
