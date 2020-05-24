@@ -278,7 +278,9 @@ class Adventure:
              'bv': 16,
              'walderp': 17,
              'bdw': 18,
-             'bae': 19,}
+             'bae': 19,
+             'beast': 20,
+             'choco': 21,}
              
 
     # abilities mapping
