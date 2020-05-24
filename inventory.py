@@ -12,8 +12,8 @@ from navigation import Navigation
 def invManagement(slots=10):
     Navigation.menu('inventory')
     Inventory.boostAndMergeEquipped()
-    Inventory.mergeInventory(slots=24)
-    Inventory.boostInventory(slots=8)
+    Inventory.boostInventory(slots=3)
+    Inventory.mergeInventory(slots=5)
     Inventory.boostCube()
 
 
