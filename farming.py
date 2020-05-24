@@ -53,10 +53,6 @@ def main():
                         Adventure.kill(fast=True)
                     else:
                         Adventure.kill(buffs=True)
-                    while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
-                        # print(f'color:  {Statistics.getPixelColor(*coords.ABILITY_1)}')
-                        sleep(0.05)
-                    pyautogui.press('w')
                     killCounter += 1
                     if args.verbose:
                         print(f'kill count: {killCounter}')
@@ -71,10 +67,6 @@ def main():
                     Adventure.kill(fast=True)
                 else:
                     Adventure.snipe(fast=True)
-                while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
-                    # print(f'color:  {Statistics.getPixelColor(*coords.ABILITY_1)}')
-                    sleep(0.05)
-                pyautogui.press('w')
                 killCounter += 1
                 if args.verbose:
                     print(f'kill count: {killCounter}')
@@ -96,7 +88,7 @@ def main():
                     # Inventory.mergeInventory(slots=10)
                     invManagement(slots=args.slots)
                     # Inventory.trashItems()
-                    ygg()
+                    #ygg()
 
                 print(f'going back to adventure')
                 Navigation.menu('adventure')
