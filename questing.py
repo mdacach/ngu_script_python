@@ -1,27 +1,38 @@
 import argparse
-import time 
+import time
 
-import coords 
+import coords
 
-from features import Adventure, Questing, Inventory 
-from navigation import Navigation 
-from helper import sleep, printTime 
-from yggdrasil import ygg 
+from features import Adventure, Questing, Inventory
+from navigation import Navigation
+from helper import sleep, printTime
+from yggdrasil import ygg
 
-parser = argparse.ArgumentParser() 
+parser = argparse.ArgumentParser()
 
 parser.add_argument('--force_zone',
                     help='if the current quest is not major, will skip quests until one in the desired zone',
                     default='')
 
-args = parser.parse_args() 
-# start quest, get zone, farm zone, turn items, check if completed, if yes, repeat 
+parser.add_argument('--verbose', '-v',
+                    help='print stuff',
+                    default=False,
+                    action='store_true')
+
+parser.add_argument('--kills', '-k',
+                    help='kills between turning items',
+                    default=50,
+                    type=int)
+
+args = parser.parse_args()
+# start quest, get zone, farm zone, turn items, check if completed, if yes, repeat
+
+
 def main():
     while True:
-        start = time.time() 
         Navigation.menu('questing')
-        Questing.start() 
-        Questing.updateInfo() 
+        Questing.start()
+        Questing.updateInfo()
         Questing.status()
         if args.force_zone:
             if Questing.is_major:
@@ -31,43 +42,52 @@ def main():
                     Questing.skip()
                     Questing.start()
                     Questing.updateInfo()
-                    Questing.status() 
+                    Questing.status()
 
-        # zone = Questing.findZone() 
+        Inventory.boostCube()  # unclutter inventory
+        start = time.time()
         Adventure.adventureZone(Questing.quest_zone)
         Navigation.menu('questing')
         while not Questing.is_completed:
             Navigation.menu('inventory')
-            Inventory.boostCube()
-            # farm that zone 
+            # farm that zone
             Navigation.menu('adventure')
-            kc = 0 
-            while kc < 50:
+            Adventure.turnIdleOff()
+            kc = 0
+            while kc < args.kills:
                 while not Adventure.enemySpawn():
-                    sleep(0.05)
+                    sleep(0.03)
                 # kill the enemy
                 Adventure.snipe(fast=True)
-                kc += 1 
-            print(f'killed 50 monsters')
-            print(f'time: ', end='')
-            printTime() 
+                kc += 1
+
+            if args.verbose:
+                print(f'killed {args.kills} monsters')
+                print(f'time: ', end='')
+                printTime()
+
             Navigation.menu('inventory')
-            Inventory.boostAndMergeEquipped() 
-            Inventory.boostCube()
+            if Inventory.getEmptySlots() < 10:
+                Inventory.boostAndMergeEquipped()
+                Inventory.boostCube()
             Questing.turnInItems(Questing.quest_zone)
-            Inventory.mergeInventory(slots=5)
-            ygg()
-            Questing.updateInfo() 
-            Questing.status() 
+            # Inventory.mergeInventory(slots=5)
+            # ygg()
+            Questing.updateInfo()
+            if args.verbose:
+                Questing.status()
+
             Navigation.menu('questing')
-            
             if Questing.is_completed:
-                Questing.complete() 
+                Questing.complete()
                 end = time.time()
+                print(f'completed quest at ')
+                printTime()
+                print(f'duration: {round((end-start)/60, 2)} minutes')
                 break
-        
+
 
 if __name__ == '__main__':
     print(f'starting questing script at ')
-    printTime() 
+    printTime()
     main()
