@@ -3,14 +3,14 @@ from typing import Tuple
 import time
 
 import pyautogui
-import mss 
+import mss
 
-import coords 
+import coords
 from helper import *
 import pytesseract as ocr
 from PIL import Image, ImageFilter
 from navigation import Navigation
-from features import * 
+from features import *
 
 
 class Statistics:
@@ -34,16 +34,17 @@ class Statistics:
                       coords.GAME_WIDTH, coords.GAME_HEIGHT)
         with mss.mss() as sct:
             monitor = {}
-            monitor["left"], monitor["top"], monitor["width"], monitor["height"] = region 
+            monitor["left"], monitor["top"], monitor["width"], monitor["height"] = region
             img = sct.grab(monitor)
-            if save: 
+            if save:
                 output = name + ".png"
                 mss.tools.to_png(img.rgb, img.size, output=output)
-            img = Image.frombytes("RGB", img.size, img.bgra, "raw", "BGRX") # from mss docs 
+            img = Image.frombytes("RGB", img.size, img.bgra,
+                                  "raw", "BGRX")  # from mss docs
             return img
 
-    @staticmethod 
-    def getText(region: Tuple[int, int, int, int], save :bool = False, preprocess :bool = False):
+    @staticmethod
+    def getText(region: Tuple[int, int, int, int], save: bool = False, preprocess: bool = False):
         """ Get and return ocr of text in REGION. 
 
         Keyword arguments:  
@@ -62,34 +63,34 @@ class Statistics:
             img = img.filter(ImageFilter.SHARPEN)
         return ocr.image_to_string(img)
 
+    @staticmethod
+    def getPixelColor(x, y, img=None):
+        """ Get and return pixel color at x, y. """
+        if img == None:
+            img = Statistics.getScreenshot()
+        # screenshot does not have steam border (~25pixels)
+        return img.getpixel((x, y-25))
 
-    @staticmethod 
-    def getPixelColor(x, y, img = None):
-        """ Get and return pixel color at x, y. """ 
-        if img == None: 
-            img = Statistics.getScreenshot() 
-        return img.getpixel((x, y-25)) # screenshot does not have steam border (~25pixels)
-
-    @staticmethod 
+    @staticmethod
     def checkPixelColor(x, y, color, threshold=5, img=None):
-        """ Check if pixel x, y has color z. """ 
+        """ Check if pixel x, y has color z. """
         # print(Statistics.getPixelColor(x, y), color)
         if img != None:
-            pix = Statistics.getPixelColor(x, y, img=img) 
+            pix = Statistics.getPixelColor(x, y, img=img)
         else:
-            pix = Statistics.getPixelColor(x, y) 
+            pix = Statistics.getPixelColor(x, y)
         for c1, c2 in zip(pix, color):
-            if abs(c1 - c2) > threshold: 
-                return False 
-        return True 
+            if abs(c1 - c2) > threshold:
+                return False
+        return True
 
-    @staticmethod 
+    @staticmethod
     def removeLetters(text: str) -> int:
         """ Remove letters from string for OCR.  
-        
+
         Keyword arguments:  
         text -- the text to use.  
-        """ 
+        """
         text = [x for x in text if x.isdigit()]
         try:
             return int("".join(text))
@@ -105,23 +106,23 @@ class Statistics:
         text = ocr.image_to_string(img)
         return Statistics.removeLetters(text)
 
-
     @staticmethod
     def getBoss() -> int:
         """ Get and return the boss number from Fight Boss menu. """
-        img = Statistics.getScreenshot(save=True, region=coords.BOSS_NUMBER_REGION)
+        img = Statistics.getScreenshot(
+            save=True, region=coords.BOSS_NUMBER_REGION)
         text = ocr.image_to_string(img)
         return Statistics.removeLetters(text)
 
     @staticmethod
-    def getPP(): # TODO 
-        """ Get and return the current pp amount from itopod.  """ 
+    def getPP():  # TODO
+        """ Get and return the current pp amount from itopod.  """
         img = Statistics.getScreenshot(region=coords.ITOPOD_PP_REGION)
         text = ocr.image_to_string(img)
         return Statistics.removeLetters(text)
 
     @staticmethod
-    def getTierKills(floor:str): # TODO 
+    def getTierKills(floor: str):  # TODO
         """ Get and return itopod tier remaining kills to AP from FLOOR.
 
         Enters ITOPOD at FLOOR and get remaining kills from tooltip.  
@@ -150,8 +151,5 @@ class Statistics:
 
 
 if __name__ == '__main__':
-    pass
-    # Adventure.itopodExperimental() 
-    # Statistics.getTierKills('0')
-    # Statistics.getTierKills()
-    
+    click(*coords.ADVENTURE)
+    print(Statistics.getText(coords.TITAN_COUNTER_REGION, save=True))
