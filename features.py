@@ -20,7 +20,7 @@ Missing:
     """
 
 from collections import deque
-from typing import List, Set, Dict, Tuple
+from typing import List, Set, Dict, Tuple, Generator
 
 import re
 import time
@@ -825,7 +825,7 @@ class Inventory:
             Inventory.transformItem(loc)
 
     @staticmethod
-    def locateAll(image: str, confidence: float = 0.8) -> generator:
+    def locateAll(image: str, confidence: float = 0.8) -> Generator:
         """ Return a generator of the (absolute) locations of all items IMAGE. 
 
         Arguments:
