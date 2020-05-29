@@ -133,44 +133,91 @@ WANDOOS_MAGIC_CAP = 631, 371
 
 NGU = 231, 318
 
+NGU_TO_MAGIC_BUTTON = 378, 133
+
+NGUS_ENERGY = {
+    'AUGMENTS':        (516, 265),
+    'WANDOOS':         (516, 300),
+    'RESPAWN':         (516, 335),
+    'GOLD':            (516, 370),
+    'ADVENTURE_ALPHA': (516, 405),
+    'POWER_ALPHA':     (516, 440),
+    'DROP_CHANCE':     (516, 475),
+    'MAGIC_NGU':       (516, 510),
+    'PP':              (516, 545),
+}
+
+NGUS_MAGIC = {
+    'YGGDRASIL':       (516, 265),
+    'EXP':             (516, 300),
+    'POWER_BETA':      (516, 335),
+    'NUMBER':          (516, 370),
+    'TIME_MACHINE':    (516, 405),
+    'ENERGY_NGU':      (516, 440),
+    'ADVENTURE_BETA':  (516, 475),
+}
+
+NGUS_ENERGY_CAP = {
+    'AUGMENTS':        (590, 265),
+    'WANDOOS':         (590, 300),
+    'RESPAWN':         (590, 335),
+    'GOLD':            (590, 370),
+    'ADVENTURE_ALPHA': (590, 405),
+    'POWER_ALPHA':     (590, 440),
+    'DROP_CHANCE':     (590, 475),
+    'MAGIC_NGU':       (590, 510),
+    'PP':              (590, 545),
+}
+
+NGUS_MAGIC_CAP = {
+    'YGGDRASIL':       (590, 265),
+    'EXP':             (590, 300),
+    'POWER_BETA':      (590, 335),
+    'NUMBER':          (590, 370),
+    'TIME_MACHINE':    (590, 405),
+    'ENERGY_NGU':      (590, 440),
+    'ADVENTURE_BETA':  (590, 475),
+}
+
+
 YGGDRASIL = 235, 347
 FRUITS = {
-    'GOLD': (349, 201),
-    'POWER_ALPHA': (558, 201),
-    'ADVENTURE': (769, 200),
-    'KNOWLEDGE': (348, 299),
-    'POMEGRANATE': (557, 298),
-    'LUCK': (772, 295),
-    'POWER_BETA': (348, 394),
+    'GOLD':          (349, 201),
+    'POWER_ALPHA':   (558, 201),
+    'ADVENTURE':     (769, 200),
+    'KNOWLEDGE':     (348, 299),
+    'POMEGRANATE':   (557, 298),
+    'LUCK':          (772, 295),
+    'POWER_BETA':    (348, 394),
     'ARBITRARINESS': (619, 365),
-    'NUMBERS': (770, 393)
+    'NUMBERS':       (770, 393)
 }
 FRUITS_IS_HARVESTED = {
-    'GOLD': (338, 171),
-    'POWER_ALPHA': (544, 173),
-    'ADVENTURE': (743, 173),
-    'KNOWLEDGE': (338, 269),
-    'POMEGRANATE': (533, 269),
-    'LUCK': (744, 271),
-    'POWER_BETA': (321, 365),
+    'GOLD':          (338, 171),
+    'POWER_ALPHA':   (544, 173),
+    'ADVENTURE':     (743, 173),
+    'KNOWLEDGE':     (338, 269),
+    'POMEGRANATE':   (533, 269),
+    'LUCK':          (744, 271),
+    'POWER_BETA':    (321, 365),
     'ARBITRARINESS': (533, 365),
-    'NUMBERS': (744, 364)
+    'NUMBERS':       (744, 364)
 }
 HARVEST_ALL_MAX_TIER = 815, 474
 
 DIGGERS = {
-    'DROP_CHANCE': (550, 207),
-    'WANDOOS': (865, 208),
-    'STAT': (550, 396),
-    'ADVENTURE': (865, 396),
-    'ENERGY_NGU': (550, 207),
-    'MAGIC_NGU': (865, 208),
-    'ENERGY_BEARD': (550, 396),
-    'MAGIC_BEARD': (865, 396),
-    'PP': (550, 207),
-    'DAYCARE': (865, 208),
-    'BLOOD': (550, 396),
-    'EXP': (865, 396)
+    'DROP_CHANCE':   (550, 207),
+    'WANDOOS':       (865, 208),
+    'STAT':          (550, 396),
+    'ADVENTURE':     (865, 396),
+    'ENERGY_NGU':    (550, 207),
+    'MAGIC_NGU':     (865, 208),
+    'ENERGY_BEARD':  (550, 396),
+    'MAGIC_BEARD':   (865, 396),
+    'PP':            (550, 207),
+    'DAYCARE':       (865, 208),
+    'BLOOD':         (550, 396),
+    'EXP':           (865, 396)
 }
 
 DIGGERS_PAGE_1 = 343, 130
