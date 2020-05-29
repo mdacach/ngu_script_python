@@ -183,10 +183,10 @@ class Itopod:
             while not Adventure.enemySpawn():
                 sleep(0.03)
             Adventure.kill()
-            # Adventure.snipe(fast=True) slower 
+            # Adventure.snipe(fast=True) slower
             # while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
             #    sleep(0.05)
-            # pyautogui.press('w')
+            # pyautogui.ress('w')
             Itopod.kills += 1
 
             for tier in Itopod.tierKillsCount:
