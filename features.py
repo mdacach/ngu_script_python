@@ -297,12 +297,12 @@ class Adventure:
                       13: 'x'}
 
     @staticmethod
-    def getTitans():
+    def getTitans() -> list:
         """ Get titans that are ready to kill. 
 
         Parse text from titan counter in adventure menu.
         """
-        click(*coords.ADVENTURE)
+        Navigation.menu('adventure')
         titans_ready = []
         text = Statistics.getText(region=coords.TITAN_COUNTER_REGION)
         lines = text.split('\n')
@@ -318,13 +318,19 @@ class Adventure:
         return titans_ready
 
     @staticmethod
-    def killTitan(titan):
+    def killTitan(titan: str) -> None:
+        """ Will kill TITAN. """
         Adventure.adventureZone(titan)
         Adventure.snipe(buffs=True)
         print(f'killed titan {titan}')
 
     @staticmethod
-    def killTitans(titans):
+    def killTitans(titans: list) -> None:
+        """ Kill all TITANS in list.
+
+        Keep your drop chance loadout as 1.
+        Will reset your diggers.
+        """
         # loadout and diggers and kills
         Navigation.menu('inventory')
         print('boosting cube')
@@ -1100,8 +1106,8 @@ class Misc:
         pyautogui.press('t')
 
     @staticmethod
-    def inputResource(amount='cap', idle=False):
-        """ Sets input resource to AMOUNT. 
+    def inputResource(amount='cap', idle=False, energy=True):
+        """ Set input resource to AMOUNT. 
 
         Keyword arguments:   
         amount  -- cap, half or quarter.  
@@ -1113,20 +1119,38 @@ class Misc:
 
         if Navigation.currentMenu not in possibleMenus:
             Navigation.menu('basicTraining')
-        if not idle:
-            if amount == 'cap':
-                click(*coords.ENERGY_CUSTOM_AMOUNT_CAP)
-            if amount == 'half':
-                click(*coords.ENERGY_CUSTOM_AMOUNT_HALF)
-            if amount == 'quarter':
-                click(*coords.ENERGY_CUSTOM_AMOUNT_QUARTER)
+        
+        if energy: 
+            if not idle:
+                if amount == 'cap':
+                    click(*coords.ENERGY_CUSTOM_AMOUNT_CAP)
+                if amount == 'half':
+                    click(*coords.ENERGY_CUSTOM_AMOUNT_HALF)
+                if amount == 'quarter':
+                    click(*coords.ENERGY_CUSTOM_AMOUNT_QUARTER)
+            else:
+                if amount == 'cap':
+                    click(*coords.ENERGY_CUSTOM_AMOUNT_CAP)
+                if amount == 'half':
+                    click(*coords.ENERGY_CUSTOM_AMOUNT_HALF_IDLE)
+                if amount == 'quarter':
+                    click(*coords.ENERGY_CUSTOM_AMOUNT_QUARTER_IDLE)
         else:
-            if amount == 'cap':
-                click(*coords.ENERGY_CUSTOM_AMOUNT_CAP)
-            if amount == 'half':
-                click(*coords.ENERGY_CUSTOM_AMOUNT_HALF_IDLE)
-            if amount == 'quarter':
-                click(*coords.ENERGY_CUSTOM_AMOUNT_QUARTER_IDLE)
+            if not idle:
+                if amount == 'cap':
+                    click(*coords.MAGIC_CUSTOM_AMOUNT_CAP)
+                if amount == 'half':
+                    click(*coords.MAGIC_CUSTOM_AMOUNT_HALF)
+                if amount == 'quarter':
+                    click(*coords.MAGIC_CUSTOM_AMOUNT_QUARTER)
+            else:
+                if amount == 'cap':
+                    click(*coords.MAGIC_CUSTOM_AMOUNT_CAP)
+                if amount == 'half':
+                    click(*coords.MAGIC_CUSTOM_AMOUNT_HALF_IDLE)
+                if amount == 'quarter':
+                    click(*coords.MAGIC_CUSTOM_AMOUNT_QUARTER_IDLE)
+
 
 
 class Questing:
