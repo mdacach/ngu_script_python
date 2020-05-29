@@ -257,6 +257,7 @@ class Itopod:
 class Adventure:
     """ Various features related to Adventure menu. """
     # adventure zones
+    # titans here need to have the same name as hovering over adv menu
     zones = {'safe': 0,
              'tutorial': 1,
              'sewers': 2,
@@ -294,6 +295,51 @@ class Adventure:
                       11: 'h',
                       12: 'z',
                       13: 'x'}
+
+    @staticmethod
+    def getTitans():
+        """ Get titans that are ready to kill. 
+
+        Parse text from titan counter in adventure menu.
+        """
+        click(*coords.ADVENTURE)
+        titans_ready = []
+        text = Statistics.getText(region=coords.TITAN_COUNTER_REGION)
+        lines = text.split('\n')
+        for line in lines:
+            if 'READY' in line:
+                words = line.split()
+                # titan namme before spawn
+                titan = words[words.index('SPAWN')-1]
+                # sometimes have extraneous symbols
+                titan = Statistics.removeCharacters(titan).lower()
+                titans_ready.append(titan)
+
+        return titans_ready
+
+    @staticmethod
+    def killTitan(titan):
+        Adventure.adventureZone(titan)
+        Adventure.snipe(buffs=True)
+        print(f'killed titan {titan}')
+
+    @staticmethod
+    def killTitans(titans):
+        # loadout and diggers and kills
+        Navigation.menu('inventory')
+        print('boosting cube')
+        Inventory.boostCube()  # unclutter inventory
+        print('drop chance loadout')
+        Inventory.loadout(1)  # drop chance
+        GoldDiggers.clearActive()
+        print('dc, adv, pp, exp diggers')
+        GoldDiggers.activate(['DROP_CHANCE', 'ADVENTURE', 'PP', 'EXP'])
+        print('going to kill titans')
+        Navigation.menu('adventure')
+        for t in titans:
+            Adventure.killTitan(t)
+        print(f'killed all titans')
+        print('finished. you should change loadouts and diggers back now')
 
     @staticmethod
     def turnIdleOn() -> None:
@@ -476,9 +522,9 @@ class Adventure:
             if verbose:
                 print('needs healing')
             if buffs:
-                priority = [12, 8, 13, 10, 7, 9, 11, 5, 4, 3, 6, 2]
+                priority = [12, 8, 6, 13, 10, 7, 9, 11, 5, 4, 3, 2]
             else:
-                priority = [12, 8, 13, 10, 5, 4, 3, 6, 2]
+                priority = [12, 8, 6, 13, 10, 5, 4, 3, 2]
         else:
             # priority not needing to heal
             if verbose:
@@ -486,7 +532,7 @@ class Adventure:
             if fast:
                 priority = [5, 4, 2, 1]
             elif buffs:
-                priority = [12, 10, 7, 9, 11, 5, 4, 3, 6, 2]
+                priority = [12, 10, 6, 7, 9, 11, 5, 4, 3, 2]
             else:
                 priority = [12, 10, 5, 4, 3, 6, 2]
 
