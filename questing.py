@@ -1,3 +1,9 @@
+""" Script for doing quests. 
+Command Line arguments:
+--force_zone: will skip non-major quests until one in the desired zone.  
+--verbose:    will print stuff (i.e time).  
+--kills:      number of kills in zone before turning in items.  
+"""
 import argparse
 import time
 
@@ -25,6 +31,7 @@ parser.add_argument('--kills', '-k',
                     type=int)
 
 args = parser.parse_args()
+
 # start quest, get zone, farm zone, turn items, check if completed, if yes, repeat
 
 
@@ -67,12 +74,13 @@ def main():
                 printTime()
 
             Navigation.menu('inventory')
-            if Inventory.getEmptySlots() < 10:
+            inv = Inventory.getEmptySlots()
+            if inv < 10:
                 Inventory.boostAndMergeEquipped()
                 Inventory.boostCube()
             Questing.turnInItems(Questing.quest_zone)
             # Inventory.mergeInventory(slots=5)
-            # ygg()
+            ygg()
             Questing.updateInfo()
             if args.verbose:
                 Questing.status()
