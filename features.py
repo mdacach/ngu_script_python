@@ -11,11 +11,11 @@ Features:
     BloodMagic  
     Wandoos  
     Yggdrasil  
+    GoldDiggers  
 
 Missing:  
     AdvTraining  
     NGU  
-    GoldDiggers  
     Beards  
     """
 
@@ -394,10 +394,10 @@ class Adventure:
     # def sendAttacks(buffs: bool = False) -> None:
         # """ Cycle through attacks in adventure mode.
 
-        # Keyword arguments:  
-        # buffs - if set to True, will use buffs and heal when available.  
+        # Keyword arguments:
+        # buffs - if set to True, will use buffs and heal when available.
 
-        # Should be in Adventure menu already.  
+        # Should be in Adventure menu already.
         # """
         # if Navigation.currentMenu != 'adventure':
             # raise Exception('should be in Adventure menu!')
@@ -406,10 +406,9 @@ class Adventure:
         # else:
             # press('ytew')  # only attacks
 
-
     # @staticmethod
     # def kill(fast: bool = False, buffs: bool = False) -> None:
-        # """ Kill the current enemy. 
+        # """ Kill the current enemy.
 
         # Should be in Adventure menu already.  """
         # if Navigation.currentMenu != 'adventure':
@@ -507,7 +506,7 @@ class Adventure:
         return myQueue
 
     @staticmethod
-    def snipe(buffs: bool = False, verbose: bool = False, fast: bool = False):  
+    def snipe(buffs: bool = False, verbose: bool = False, fast: bool = False):
         """ Kill an enemy using abilities. 
 
         Keyword arguments:  
@@ -522,22 +521,24 @@ class Adventure:
             print(f'ABILITIES: {queue}')
 
         start = time.time()
-        while not Adventure.isEnemyDead(): # checking for enemy text 
-            if not queue: # no abilities in queue to use 
+        while not Adventure.isEnemyDead():  # checking for enemy text
+            if not queue:  # no abilities in queue to use
 
                 if verbose:
                     print(f'getting abilities queue')
-                
-                queue = deque(Adventure.getReadyAbilities(buffs=buffs, fast=fast))
+
+                queue = deque(Adventure.getReadyAbilities(
+                    buffs=buffs, fast=fast))
 
                 if verbose:
                     print(f'ABILITIES: {queue}')
 
-            ability = queue.popleft() # ability to use now 
+            ability = queue.popleft()  # ability to use now
 
-            end = time.time() # time till got new abilities 
+            end = time.time()  # time till got new abilities
 
-            press(Adventure.abilities_keys[ability]) # use the ability as specified by Adv. mapping 
+            # use the ability as specified by Adv. mapping
+            press(Adventure.abilities_keys[ability])
 
             if verbose:
                 print(f'time between attacks: {end - start}')
@@ -545,25 +546,19 @@ class Adventure:
             start = time.time()
 
             # check if regular attack is ready (fastest ability)
-            while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR): 
+            while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
                 sleep(0.05)
 
     @staticmethod
     def isEnemyDead() -> bool:
-        """ Return True if current enemy is dead, false otherwise. 
+        """ Return True if current enemy is dead, False otherwise. 
 
         Should be in Adventure menu already.  
         """
-
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
 
-        # return Statistics.checkPixelColor(*coords.ENEMY_HEALTH_BAR_BORDER, (250, 250, 250))
         return Statistics.checkPixelColor(*coords.ENEMY_TEXT, coords.ENEMY_BACKGROUND)
-        # border = getCoords(*coords.ENEMY_HEALTH_BAR_BORDER)
-        # check if border of enemy health bar is white
-        # KONGREGATE COLOR IS DIFFERENT
-        # return pyautogui.pixelMatchesColor(*border, (250, 250, 250), tolerance=10)
 
     @staticmethod
     def isPlayerLow() -> bool:
@@ -575,11 +570,6 @@ class Adventure:
             raise Exception('should be in Adventure menu!')
 
         return Statistics.checkPixelColor(*coords.MY_HEALTH_BAR_THRESHOLD, (255, 255, 255))
-        # border = getCoords(*coords.MY_HEALTH_BAR)
-        # if pyautogui.pixelMatchesColor(*border, (255, 255, 255), tolerance=10):
-        #     return True
-        # else:
-        #     return False
 
     @staticmethod
     def isPlayerFull() -> bool:
@@ -588,23 +578,21 @@ class Adventure:
             raise Exception('should be in Adventure menu!')
 
         return Statistics.checkPixelColor(*coords.MY_HEALTH_BAR_FULL, coords.HEALTH_BAR_RED)
-        # pix = getCoords(*coords.MY_HEALTH_BAR_FULL)
-        # return pyautogui.pixelMatchesColor(*pix, coords.HEALTH_BAR_RED, tolerance=10)
 
-    @staticmethod
-    def healHP() -> None:  # DEPRECATED
-        """ Heal HP in the Safe Zone. """
-        if Navigation.currentMenu != 'adventure':
-            raise Exception('should be in Adventure menu!')
-        Adventure.adventureZone('safe')
-        sleep(25)
-        # click(*ADVANCE_ZONE, button="right")
+    # @staticmethod
+    # def healHP() -> None:  # DEPRECATED
+        # """ Heal HP in the Safe Zone. """
+        # if Navigation.currentMenu != 'adventure':
+        # raise Exception('should be in Adventure menu!')
+        # Adventure.adventureZone('safe')
+        # sleep(25)
+        # # click(*ADVANCE_ZONE, button="right")
 
     @staticmethod
     def enemySpawn() -> bool:
         """ Return True if there is an enemy in adventure zone. 
 
-        May return false if enemy hp is low enough for the color check.  
+        Checks if the enemy health bar is red.  
 
         Should be in Adventure menu already. 
         """
@@ -612,25 +600,19 @@ class Adventure:
             raise Exception('should be in Adventure menu!')
 
         return Statistics.checkPixelColor(*coords.ENEMY_HEALTH_BAR_BORDER, coords.ENEMY_HEALTH_BAR_RED)
-        # enemy_hp = getCoords(*coords.ENEMY_HEALTH_BAR_BORDER)
-        # return pyautogui.pixelMatchesColor(*enemy_hp, coords.ENEMY_HEALTH_BAR_RED, tolerance=10)
 
     @staticmethod
     def isBoss() -> bool:
         """ Return True if current enemy is a Boss. 
 
-        Will check for the yellow crown on the adventure enemy.  
+        Checks for the yellow crown on the adventure enemy.  
 
         Should be in Adventure menu already.  
         """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
 
-        # get the pixel of the crown
-        # match it with yellow
         return Statistics.checkPixelColor(*coords.CROWN_LOCATION, coords.CROWN_COLOR)
-        # crown = getCoords(*coords.CROWN_LOCATION)
-        # return pyautogui.pixelMatchesColor(*crown, coords.CROWN_COLOR, tolerance=10)
 
     @staticmethod
     def refreshZone() -> None:
@@ -644,28 +626,16 @@ class Adventure:
         click(*coords.GO_BACK_ZONE)
         click(*coords.ADVANCE_ZONE)
 
-    @staticmethod
-    def buff() -> None:
-        """ Use adventure buffs. 
-
-        Order:  
-        Charge -> Defensive -> Offensive -> Ultimate
-        """
-        if Navigation.currentMenu != 'adventure':
-            raise Exception('should be in Adventure menu!')
-        press('gsfh', delay=1.1)
-
 
 class Augmentation:
     @staticmethod
-    def augmentation(aug=1, upgrade=False):
-        """ Allocates energy to augmentation.
+    def augmentation(aug: int = 1, upgrade: bool = False):
+        """ Allocate energy to augmentation.
 
         Keyword arguments:  
-        aug -- augmentation number, 1 is Danger Scissors.  
+        aug     -- augmentation number, 1 is Danger Scissors.  
         upgrade -- if True, will allocate energy to aug update instead.
         """
-        # click(*coords.AUGMENTATION)
         Navigation.menu('augments')
         if upgrade:
             x, y = coords.AUG1_UPGRADE[0], coords.AUG1_UPGRADE[1] + \
@@ -677,8 +647,11 @@ class Augmentation:
 
 class Inventory:
     @staticmethod
-    def loadout(num):
-        """ Wears loadout {num}. """
+    def loadout(num: int) -> None:
+        """ Wears loadout NUMBER. 
+
+        Only supports loadouts 1 and 2 as of now.
+        """
         Navigation.menu('inventory')
         if num == 1:
             click(*coords.LOADOUT1)
@@ -686,33 +659,33 @@ class Inventory:
             click(*coords.LOADOUT2)
 
     @staticmethod
-    def mergeItem(x, y):
-        """ Attemps to merge to item at x, y (relative). """
+    def mergeItem(x: int, y: int) -> None:
+        """ Merge item at X, Y (relative to game corner). """
         if Navigation.currentMenu != 'inventory':
             raise Exception('should be in Inventory menu!')
 
         click(x, y, delay='fast')
-        # sleep(coords.MEDIUM_SLEEP)
-        pyautogui.press('d')
-        # sleep(coords.FAST_SLEEP)
+        # two times to be sure
+        # pyautogui.press('d')
         pyautogui.press('d')
 
     @staticmethod
-    def boostItem(x, y):
-        """ Attempts to boost item at x, y (relative). """
+    def boostItem(x: int, y: int) -> None:
+        """ Boost item at X, Y (relative to game corner). """
         if Navigation.currentMenu != 'inventory':
             raise Exception('should be in Inventory menu!')
 
         click(x, y, delay='fast')
-        # sleep(coords.MEDIUM_SLEEP)
-        pyautogui.press('a')
-        # sleep(coords.FAST_SLEEP)
+        # two times to be sure
+        # pyautogui.press('a')
         pyautogui.press('a')
 
     @staticmethod
-    def boostAndMergeEquipped():
-        """ Wrapper function to boost and merge all equipped items. """
-        # click(*coords.INVENTORY)
+    def boostAndMergeEquipped() -> None:  # TODO add new acc slots
+        """ Merge and boost all equipped items.  
+
+        Feel free to change the order for your needs.  
+        """
         Navigation.menu('inventory')
         Inventory.mergeItem(*coords.ACC1)
         Inventory.boostItem(*coords.ACC1)
@@ -732,17 +705,18 @@ class Inventory:
         Inventory.boostItem(*coords.BOOTS)
 
     @staticmethod
-    def boostCube():
+    def boostCube() -> None:
         """ Boost infinity cube. """
-        # click(*coords.INVENTORY)
         Navigation.menu('inventory')
         click(*coords.CUBE, button="right")
 
     @staticmethod
-    def boostInventory(slots=36):
-        """ Boost first {slots} slots of inventory. 
+    def boostInventory(slots: int = 36) -> None:
+        """ Boost first SLOTS of inventory. 
 
-        Keyword arguments:  : 
+        Will boost starting from the first one and by rows.  
+
+        Keyword arguments:   
         slots -- number of slots to boost. 
         """
         Navigation.menu('inventory')
@@ -763,11 +737,13 @@ class Inventory:
             num += 1
 
     @staticmethod
-    def mergeInventory(slots=36):
-        """ Merge first slots of inventory. 
+    def mergeInventory(slots: int = 36) -> None:
+        """ Merge first SLOTS of inventory. 
 
-        Keyword arguments:  : 
-        slots -- number of slots to merge, starting from first one. 
+        Will boost starting from the first one and by rows.  
+
+        Keyword arguments:  
+        slots -- number of slots to merge. 
         """
         Navigation.menu('inventory')
 
@@ -788,8 +764,10 @@ class Inventory:
 
     @staticmethod
     def trashItems():
-        """ Wrapper function to trash items at rows 4 and 5. """
-        # click(*coords.INVENTORY)
+        """ Trash items at rows 4 and 5. 
+
+        Be careful to not trash anything important.
+        """
         Navigation.menu('inventory')
         for col in range(3, 5):
             for row in range(12):
@@ -799,7 +777,10 @@ class Inventory:
 
     @staticmethod
     def trashItem(x, y):
-        """ Trashes item at x, y (relative). """
+        """ Trash item at X, Y (relative to game corner). 
+
+        Be careful to not trash anything important.
+        """
         if Navigation.currentMenu != 'inventory':
             raise Exception('should be in Inventory menu!')
 
@@ -812,29 +793,44 @@ class Inventory:
         pyautogui.keyUp('ctrl')
 
     @staticmethod
-    def transformItem(loc):
-        """ Transforms item being hovered. """
+    def transformItem(loc: Tuple, verbose: bool = True):
+        """ Transform item being hovered. 
+
+        Keyword arguments:  
+        loc -- location of the item as pyautogui Tuple.
+        """
         if Navigation.currentMenu != 'inventory':
             raise Exception('should be in Inventory menu!')
+
         center = pyautogui.center(loc)
         rawClick(*center)
         sleep(0.1)
-        print('checking transformable')
+        if verbose:
+            print('checking transformable')
         if Inventory.checkTransformable():
-            print('is transformable')
+            if verbose:
+                print('is transformable')
             ctrlClick()
 
     @staticmethod
-    def transformAll(image):
-        """ Transform all items if transformable. """
+    def transformAll(image: str):
+        """ Transform all items IMAGE if transformable.
+
+        Arguments:
+        image -- path to the image of item. 
+        """
         Navigation.menu('inventory')
         locations = Inventory.locateAll(image)
         for loc in locations:
             Inventory.transformItem(loc)
 
     @staticmethod
-    def locateAll(image, confidence=0.8):
-        """ Returns a generator of the (absolute) locations of all items {image}. """
+    def locateAll(image: str, confidence: float = 0.8) -> generator:
+        """ Return a generator of the (absolute) locations of all items IMAGE. 
+
+        Arguments:
+        image -- path to the image of item.
+        """
         Navigation.menu('inventory')
         inventory = Statistics.getScreenshot()
         locations = pyautogui.locateAll(
@@ -842,20 +838,20 @@ class Inventory:
         return locations
 
     @staticmethod
-    def locateItem(image, confidence=0.8):
+    def locateItem(image: str, confidence: bool = 0.8) -> Tuple:
         """ Return the position of item in inventory, if exists. 
 
         This is a relative position to the game itself, without borders. If you want to 
         be able to click on this item, click at x, y+25 (25 px is the size of steam border).
         """
         Navigation.menu('inventory')
-        click(334, 80, delay='long')
+        click(334, 80, delay='long')  # get rid of tooltip
         inventory = Statistics.getScreenshot()
         loc = pyautogui.locate(image, inventory, confidence=confidence)
         return loc
 
     @staticmethod
-    def getEmptySlots(debug: bool = False):
+    def getEmptySlots(debug: bool = False) -> int:  # TODO add support to multiple pages
         """ Return number of empty slots on first page of inventory. 
 
         Keyword arguments:  
@@ -868,8 +864,8 @@ class Inventory:
         return len(list(empty))  # empty is a generator
 
     @staticmethod
-    def checkTransformable():
-        """ Check if item being highlighted is transformable. """
+    def checkTransformable() -> bool:
+        """ Check if item being hovered is transformable. """
         if Navigation.currentMenu != 'inventory':
             raise Exception('should be in Inventory menu!')
 
@@ -881,15 +877,14 @@ class Inventory:
 
 class TimeMachine:
     @staticmethod
-    def addEnergy():
-        """ Adds energy to Time Machine. """
-        # click(*coords.TIME_MACHINE)
+    def addEnergy() -> None:
+        """ Add energy to Time Machine. """
         Navigation.menu('timeMachine')
         click(*coords.TM_ADD_ENERGY)
 
     @staticmethod
-    def addMagic():
-        """ Adds magic to Time Machine. """
+    def addMagic() -> None:
+        """ Add magic to Time Machine. """
         # click(*coords.TIME_MACHINE)
         Navigation.menu('timeMachine')
         click(*coords.TM_ADD_MAGIC)
@@ -897,14 +892,13 @@ class TimeMachine:
 
 class BloodMagic:
     @staticmethod
-    def addMagic(magic=1, cap=False):
-        """ Adds magic to Blood Magic. 
+    def addMagic(magic=1, cap=False) -> None:
+        """ Add magic to Blood Magic. 
 
         Keyword arguments:  :
-        magic -- magic number, starts at 1. 
-        cap -- if True, will try to cap magic instead. 
+        magic  -- magic number, starts at 1. 
+        cap    -- if True, will try to cap magic instead. 
         """
-        # click(*coords.BLOOD_MAGIC)
         Navigation.menu('bloodMagic')
 
         if cap:
@@ -918,21 +912,20 @@ class BloodMagic:
 
 class Wandoos:
     @staticmethod
-    def addEnergy(cap=True):  # TODO add
+    def addEnergy() -> None:
         """ Add energy to wandoos.  
 
-        Keyword arguments:  
-        cap -- if set to False, will click add. (default True)  
+        Will always CAP. 
         """
         Navigation.menu('wandoos')
         click(*coords.WANDOOS_ENERGY_CAP)
 
     @staticmethod
-    def addMagic(cap=True):  # TODO add
+    def addMagic() -> None:
         """ Add magic to wandoos. 
 
-        Keyword arguments:
-        cap -- if set to False, will click add. (default True)
+        Will always CAP. 
+
         """
         Navigation.menu('wandoos')
         click(*coords.WANDOOS_MAGIC_CAP)
@@ -940,18 +933,16 @@ class Wandoos:
 
 class MoneyPit:
     @staticmethod
-    def moneyPit():
-        """ Throws money into pit. """
-        # click(*coords.MONEY_PIT)
+    def moneyPit() -> None:
+        """ Throw money into pit. """
         Navigation.menu('moneyPit')
-
         click(*coords.FEED_ME)
         click(*coords.FEED_YEAH)
 
 
 class Rebirth:
     @staticmethod
-    def rebirth():
+    def rebirth() -> None:
         """ Rebirth. """
         Navigation.menu('rebirth')
         click(*coords.REBIRTH_BUTTON)
@@ -960,25 +951,30 @@ class Rebirth:
 
 class Yggdrasil:
     @staticmethod
-    def harvestAll():
+    def harvestAll() -> None:
         """ Harvest all max tiered fruits. """
-        # click(*coords.YGGDRASIL)
         Navigation.menu('yggdrasil')
         click(*coords.HARVEST_ALL_MAX_TIER)
 
     @staticmethod
-    def isHarvested(fruit):
-        """ Return True if fruit is harvested. """
+    def isHarvested(fruit: str) -> bool:
+        """ Return True if fruit is harvested. 
+
+        Argument:
+        fruit -- string representing the name of the fruit you want to check. All caps and with underscores. """
         Navigation.menu('yggdrasil')
         pix = getCoords(*coords.FRUITS_IS_HARVESTED[fruit.upper()])
         return pyautogui.pixelMatchesColor(*pix, (255, 255, 255))
 
     @staticmethod
-    def activate(fruit):
+    def activate(fruit: str) -> None:
         """ Activate fruit in yggdrasil menu.
 
         If there is not enough resources idle, nothing happens.   
         If fruit is already activated, will harvest it. 
+
+        Argument:
+        fruit -- string representing the name of the fruit you want to check. All caps and with underscores.
         """
         Navigation.menu('yggdrasil')
         click(*coords.FRUITS[fruit.upper()])
@@ -986,13 +982,13 @@ class Yggdrasil:
 
 class GoldDiggers:
     @staticmethod
-    def clearActive():
+    def clearActive() -> None:
         """ Clear active diggers. """
         Navigation.menu('goldDiggers')
         click(*coords.CLEAR_ACTIVE)
 
     @staticmethod
-    def activate(diggers: List):
+    def activate(diggers: List) -> None:
         """ Activate diggers in list. Pass list of UPPERCASE diggers names with underscores.  
 
         Example:  
@@ -1021,23 +1017,21 @@ class GoldDiggers:
 
 class Misc:
     @staticmethod
-    def reclaimEnergy():
-        """ Reclaims all energy. """
-        # click(*coords.BASIC_TRAINING)
+    def reclaimEnergy() -> None:
+        """ Reclaim all energy. """
         if Navigation.currentMenu == 'adventure':
             Navigation.menu('basicTraining')
         pyautogui.press('r')
 
     @staticmethod
-    def reclaimMagic():
-        """ Reclaims all magic. """
-        # click(*coords.BASIC_TRAINING)
+    def reclaimMagic() -> None:
+        """ Reclaim all magic. """
         if Navigation.currentMenu == 'adventure':
             Navigation.menu('basicTraining')
         pyautogui.press('t')
 
     @staticmethod
-    def reclaimAll():
+    def reclaimAll() -> None:
         """ Reclaim all resources. """
         if Navigation.currentMenu == 'adventure':
             Navigation.menu('basicTraining')
@@ -1046,18 +1040,18 @@ class Misc:
 
     @staticmethod
     def inputResource(amount='cap', idle=False):
-        """ Sets input resource to {amount}. 
+        """ Sets input resource to AMOUNT. 
 
         Keyword arguments:   
-        amount -- cap, half or quarter.  
-        idle -- if True will consider only the idle energy. 
+        amount  -- cap, half or quarter.  
+        idle    -- if True will consider only the idle energy. 
         """
+        # menus with the input area
         possibleMenus = ['basicTraining', 'augments', 'advTraining',
                          'timeMachine', 'bloodMagic', 'wandoos', 'ngu']
 
         if Navigation.currentMenu not in possibleMenus:
             Navigation.menu('basicTraining')
-        # click(*coords.BASIC_TRAINING)
         if not idle:
             if amount == 'cap':
                 click(*coords.ENERGY_CUSTOM_AMOUNT_CAP)
@@ -1086,6 +1080,7 @@ class Questing:
         'beardverse': 'bv',
     }
 
+    # questing global variables to tracking
     quests_completed = 0
     items_turned = 0
     items_needed = 0
@@ -1094,7 +1089,7 @@ class Questing:
     is_completed = False
 
     @staticmethod
-    def updateInfo():
+    def updateInfo() -> None:
         """ Get and update Questing variables: items_turned,
         items_needed, is_major, quest_zone.
 
@@ -1121,7 +1116,7 @@ class Questing:
             Questing.quests_completed += 1
 
     @staticmethod
-    def status():
+    def status() -> None:
         """ Print general status of questing. """
         msg = f'quest in {Questing.quest_zone}'
         if Questing.is_major:
@@ -1133,19 +1128,19 @@ class Questing:
         print(f'Overall {Questing.quests_completed} quests completed.')
 
     @staticmethod
-    def isMajor(text: str):
+    def isMajor(text: str) -> bool:
         """ Return True if current quest is major. """
         return 'major' in text.lower()
 
     @staticmethod
-    def parseZone(text: str):
+    def parseZone(text: str) -> str:
         """ Return the zone specified by questing text. """
         for zone in Questing.zones:
             if zone in text.lower():
                 return Questing.zones[zone]
 
     @staticmethod
-    def findZone():
+    def findZone() -> str:
         """ Find the specified zone in questing text. """
         text = Statistics.getText(coords.QUESTING_TEXT_REGION)
         for zone in Questing.zones:
@@ -1153,7 +1148,7 @@ class Questing:
                 return Questing.zones[zone]
 
     @staticmethod
-    def turnInItems(item: str):
+    def turnInItems(item: str) -> None:
         """ Find and right click on ITEM. """
         img = 'images/' + item + '.png'
         inv = Inventory.locateItem(img, confidence=0.9)
@@ -1164,7 +1159,7 @@ class Questing:
             print('did not locate item')
 
     @staticmethod
-    def parseProgress(text: str):
+    def parseProgress(text: str) -> Tuple:
         """ Return the progress as a tuple (items_turned, items_needed). """
         lines = re.split('\n', text)
         # print(f'lines: {lines}')
@@ -1179,7 +1174,7 @@ class Questing:
         return items_turned, items_needed
 
     @staticmethod
-    def getProgress():
+    def getProgress() -> Tuple:
         """ Get and return current quest progress. 
 
         Should be in Questing menu!
@@ -1197,7 +1192,7 @@ class Questing:
         # return Statistics.getText(coords.QUESTING_PROGRESS_REGION)
 
     @staticmethod
-    def isCompleted():
+    def isCompleted() -> bool:
         """ Return True if current quest is completed. 
         """
         Navigation.menu('questing')
@@ -1206,7 +1201,7 @@ class Questing:
         return have == need
 
     @staticmethod
-    def complete():
+    def complete() -> None:
         """ Complete the current quest. 
 
         Should be in Questing menu!
@@ -1214,7 +1209,7 @@ class Questing:
         click(*coords.QUESTING_COMPLETE_QUEST)
 
     @staticmethod
-    def skip():
+    def skip() -> None:
         """ Skip the current quest. 
 
         Should be in Questing menu!
@@ -1223,7 +1218,7 @@ class Questing:
         click(*coords.QUESTING_SKIP_QUEST_CONFIRMATION)
 
     @staticmethod
-    def start():
+    def start() -> None:
         """ Start a quest. 
 
         Should be in Questing menu!
