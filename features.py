@@ -22,7 +22,7 @@ Missing:
 from collections import deque
 from typing import List, Set, Dict, Tuple
 
-import re 
+import re
 import time
 
 import coords
@@ -71,42 +71,43 @@ class FightBosses:
             pyautogui.sleep(2)
             click(*coords.FIGHT)
 
+
 class Itopod:
     """ Functions and variables related to ITOPOD. """
-    
-    tiers    = {
-              1: 0,
-              2: 50,
-              3: 100,
-              4: 150,
-              5: 200,
-              6: 250,
-              7: 300,
-              8: 350,
-             }
+
+    tiers = {
+        1: 0,
+        2: 50,
+        3: 100,
+        4: 150,
+        5: 200,
+        6: 250,
+        7: 300,
+        8: 350,
+    }
     tiersEXP = {
-                1: 1,
-                2: 2,
-                3: 4,
-                4: 8,
-                5: 14,
-                6: 22,
-                7: 32,
-                8: 44, 
-              }
-    kills = 0 
-    AP_gained = 0 
+        1: 1,
+        2: 2,
+        3: 4,
+        4: 8,
+        5: 14,
+        6: 22,
+        7: 32,
+        8: 44,
+    }
+    kills = 0
+    AP_gained = 0
     EXP_gained = 0
-    PP_gained = 0 
+    PP_gained = 0
     tierKillsCount = {}
-    
+
     @staticmethod
-    def itopodExperimental(duration: float = 0, verbose:int = 0) -> None:  # TODO
+    def itopodExperimental(duration: float = 0, verbose: int = 0) -> None:  # TODO
         """ Abuse a bug in itopod floors to higher exp/hr. 
 
         Farm optimal floor until there is only one kill remaining for a tier reward.  
         If there is more than one tier with upcoming rewards, choose the upper one.  
-        
+
         Global arguments:  
         killCount -- total kills between all floors.  
         totalEXP -- total EXP gained since first call.  
@@ -125,14 +126,14 @@ class Itopod:
         if not Itopod.tierKillsCount:
             for tier, floor in Itopod.tiers.items():
                 if verbose:
-                    if verbose > 1: 
+                    if verbose > 1:
                         print(f'tier: {tier}, floor: {floor}')
                     print(f'getting tier kills: ')
                 tierKills = Statistics.getTierKills(str(floor))
 
                 if tierKills == -1:
                     print('could not detect tier kills')
-                    Itopod.tierKillsCount[tier] = 40 
+                    Itopod.tierKillsCount[tier] = 40
                 else:
                     if verbose:
                         print(f'tier kills: {tierKills}')
@@ -141,21 +142,21 @@ class Itopod:
         if verbose:
             print(Itopod.tierKillsCount)
 
-
-
         minimum = min(Itopod.tierKillsCount, key=Itopod.tierKillsCount.get)
         if verbose:
-            print(f'minimum is tier {minimum} with {Itopod.tierKillsCount[minimum]} kill count')
+            print(
+                f'minimum is tier {minimum} with {Itopod.tierKillsCount[minimum]} kill count')
 
-        next_tiers = [] 
+        next_tiers = []
         minimum_value = min(Itopod.tierKillsCount.values())
         if verbose:
             print(f'minimum value: {minimum_value}')
 
         for tier in Itopod.tierKillsCount:
-            if Itopod.tierKillsCount[tier] == minimum_value: # go get its reward 
+            if Itopod.tierKillsCount[tier] == minimum_value:  # go get its reward
                 if verbose:
-                    print(f'minimum tier: {tier} with {Itopod.tierKillsCount[tier]}')
+                    print(
+                        f'minimum tier: {tier} with {Itopod.tierKillsCount[tier]}')
                 next_tiers.append(tier)
 
         if verbose:
@@ -164,18 +165,19 @@ class Itopod:
                 print(f'{tier} at floor {Itopod.tiers[tier]}')
 
         if minimum_value == 1:
-            current_tier = max(next_tiers) # next tier I will go to 
+            current_tier = max(next_tiers)  # next tier I will go to
             if verbose > 1:
-                print(f'going to tier {current_tier} at floor {Itopod.tiers[current_tier]}')
+                print(
+                    f'going to tier {current_tier} at floor {Itopod.tiers[current_tier]}')
             click(*coords.ITOPOD_ENTER, delay='fast')
             click(*coords.ITOPOD_START_INPUT, delay='fast')
-            pyautogui.write(str(Itopod.tiers[current_tier])) 
+            pyautogui.write(str(Itopod.tiers[current_tier]))
             click(*coords.ITOPOD_ENTER_CONFIRMATION, delay='fast')
             optimal = False
 
-        else: # must be bigger than 1 
+        else:  # must be bigger than 1
             # can afford to go to optimal
-            current_tier = minimum 
+            current_tier = minimum
             if verbose > 1:
                 print(f'going to optimal floor')
             click(*coords.ITOPOD_ENTER, delay='fast')
@@ -184,51 +186,55 @@ class Itopod:
             click(*coords.ITOPOD_ENTER_CONFIRMATION, delay='fast')
             optimal = True
 
-        start = time.time() 
+        start = time.time()
         while Itopod.tierKillsCount[current_tier] > 0:
 
             while not Adventure.enemySpawn():
                 sleep(0.1)
-            Adventure.kill() 
+            Adventure.kill()
            # while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
             #    sleep(0.05)
-            #pyautogui.press('w') 
+            # pyautogui.press('w')
             Itopod.kills += 1
 
             for tier in Itopod.tierKillsCount:
-                Itopod.tierKillsCount[tier] -= 1 # decrease all counters 
-                
-            for tier in Itopod.tierKillsCount: 
-                if Itopod.tierKillsCount[tier] == 0: 
-                    Itopod.tierKillsCount[tier] = 40 - tier  # formula for new kill counter 
-                    if current_tier == tier: # if we are in this tier, get its reward 
-                        Itopod.EXP_gained += Itopod.tiersEXP[tier] 
+                Itopod.tierKillsCount[tier] -= 1  # decrease all counters
+
+            for tier in Itopod.tierKillsCount:
+                if Itopod.tierKillsCount[tier] == 0:
+                    Itopod.tierKillsCount[tier] = 40 - \
+                        tier  # formula for new kill counter
+                    if current_tier == tier:  # if we are in this tier, get its reward
+                        Itopod.EXP_gained += Itopod.tiersEXP[tier]
                         Itopod.AP_gained += 1
 
-            next_tiers = [] 
-            minimum_value = min(Itopod.tierKillsCount.values()) # minimum kill counter remaining
+            next_tiers = []
+            # minimum kill counter remaining
+            minimum_value = min(Itopod.tierKillsCount.values())
             for tier in Itopod.tierKillsCount:
-                if Itopod.tierKillsCount[tier] == minimum_value: 
+                if Itopod.tierKillsCount[tier] == minimum_value:
                     if verbose:
-                        print(f'minimum tier: {tier} at floor {Itopod.tiers[tier]} with {Itopod.tierKillsCount[tier]} remaining kills')
+                        print(
+                            f'minimum tier: {tier} at floor {Itopod.tiers[tier]} with {Itopod.tierKillsCount[tier]} remaining kills')
                     next_tiers.append(tier)
-            
+
             if verbose:
                 print('next tiers:')
                 for tier in next_tiers:
                     print(f'tier {tier} at floor {Itopod.tiers[tier]}')
 
             if minimum_value == 1:
-                current_tier = max(next_tiers) # next tier I will go to 
+                current_tier = max(next_tiers)  # next tier I will go to
                 if verbose > 1:
-                    print(f'going to tier {current_tier} at floor {Itopod.tiers[current_tier]}')
+                    print(
+                        f'going to tier {current_tier} at floor {Itopod.tiers[current_tier]}')
 
                 click(*coords.ITOPOD_ENTER, delay='fast')
                 click(*coords.ITOPOD_START_INPUT, delay='fast')
-                pyautogui.write(str(Itopod.tiers[current_tier])) 
+                pyautogui.write(str(Itopod.tiers[current_tier]))
                 click(*coords.ITOPOD_ENTER_CONFIRMATION, delay='fast')
-                optimal = False 
-            elif not optimal: # must be bigger than 1 
+                optimal = False
+            elif not optimal:  # must be bigger than 1
                 # can afford to go to optimal
                 current_tier = minimum
                 if verbose > 1:
@@ -240,10 +246,10 @@ class Itopod:
                 click(*coords.ITOPOD_ENTER_CONFIRMATION, delay='fast')
                 optimal = True
 
-            if verbose: 
+            if verbose:
                 print('*' * 20)
-            
-            if Itopod.kills  % 50 == 0:
+
+            if Itopod.kills % 50 == 0:
                 print(f'total kills: {Itopod.kills}')
                 print(f'total exp: {Itopod.EXP_gained}')
                 print(f'total ap: {Itopod.AP_gained}')
@@ -280,8 +286,7 @@ class Adventure:
              'bdw': 18,
              'bae': 19,
              'beast': 20,
-             'choco': 21,}
-             
+             'choco': 21, }
 
     # abilities mapping
     abilities_keys = {1: 'w',
@@ -299,7 +304,7 @@ class Adventure:
                       13: 'x'}
 
     # global variables for itopodExperimental
-    killCount = 0 
+    killCount = 0
     totalAP = 0
     totalEXP = 0
 
@@ -322,7 +327,7 @@ class Adventure:
         """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
-        click(*coords.MY_HEALTH_BAR_BORDER) # get rid of tooltip
+        click(*coords.MY_HEALTH_BAR_BORDER)  # get rid of tooltip
         sleep(1)
         if (Adventure.isIdle()):
             pyautogui.press('q')
@@ -366,12 +371,12 @@ class Adventure:
         click(*coords.ITOPOD_ENTER_CONFIRMATION)
 
     @staticmethod
-    def itopodExperimental(duration: float = 0, verbose:int = 0) -> None:  # TODO
+    def itopodExperimental(duration: float = 0, verbose: int = 0) -> None:  # TODO
         """ Abuse a bug in itopod floors to higher exp/hr. 
 
         Farm optimal floor until there is only one kill remaining for a tier reward.  
         If there is more than one tier with upcoming rewards, choose the upper one.  
-        
+
         Global arguments:  
         killCount -- total kills between all floors.  
         totalEXP -- total EXP gained since first call.  
@@ -389,8 +394,8 @@ class Adventure:
                  5: 200,
                  6: 250,
                  7: 300,
-                # 8: 350,
-                }
+                 # 8: 350,
+                 }
         tiersEXP = {
             1: 1,
             2: 2,
@@ -399,7 +404,7 @@ class Adventure:
             5: 14,
             6: 22,
             7: 32,
-            8: 44, 
+            8: 44,
         }
 
         if verbose > 1:
@@ -410,14 +415,14 @@ class Adventure:
         tierKillsCount = {}
         for tier, floor in tiers.items():
             if verbose:
-                if verbose > 1: 
+                if verbose > 1:
                     print(f'tier: {tier}, floor: {floor}')
                 print(f'getting tier kills: ')
             tierKills = Statistics.getTierKills(str(floor))
 
             if tierKills == -1:
                 print('could not detect tier kills')
-                tierKillsCount[tier] = 40 
+                tierKillsCount[tier] = 40
             else:
                 if verbose:
                     print(f'tier kills: {tierKills}')
@@ -426,19 +431,18 @@ class Adventure:
         if verbose:
             print(tierKillsCount)
 
-
-
         minimum = min(tierKillsCount, key=tierKillsCount.get)
         if verbose:
-            print(f'minimum is tier {minimum} with {tierKillsCount[minimum]} kill count')
+            print(
+                f'minimum is tier {minimum} with {tierKillsCount[minimum]} kill count')
 
-        next_tiers = [] 
+        next_tiers = []
         minimum_value = min(tierKillsCount.values())
         if verbose:
             print(f'minimum value: {minimum_value}')
 
         for tier in tierKillsCount:
-            if tierKillsCount[tier] == minimum_value: # go get its reward 
+            if tierKillsCount[tier] == minimum_value:  # go get its reward
                 if verbose:
                     print(f'minimum tier: {tier} with {tierKillsCount[tier]}')
                 next_tiers.append(tier)
@@ -449,18 +453,19 @@ class Adventure:
                 print(f'{tier} at floor {tiers[tier]}')
 
         if minimum_value == 1:
-            current_tier = max(next_tiers) # next tier I will go to 
+            current_tier = max(next_tiers)  # next tier I will go to
             if verbose > 1:
-                print(f'going to tier {current_tier} at floor {tiers[current_tier]}')
+                print(
+                    f'going to tier {current_tier} at floor {tiers[current_tier]}')
             click(*coords.ITOPOD_ENTER)
             click(*coords.ITOPOD_START_INPUT)
-            pyautogui.write(str(tiers[current_tier])) 
+            pyautogui.write(str(tiers[current_tier]))
             click(*coords.ITOPOD_ENTER_CONFIRMATION)
             optimal = False
 
-        else: # must be bigger than 1 
+        else:  # must be bigger than 1
             # can afford to go to optimal
-            current_tier = minimum 
+            current_tier = minimum
             if verbose > 1:
                 print(f'going to optimal floor')
             click(*coords.ITOPOD_ENTER)
@@ -469,51 +474,55 @@ class Adventure:
             click(*coords.ITOPOD_ENTER_CONFIRMATION)
             optimal = True
 
-        start = time.time() 
+        start = time.time()
         while tierKillsCount[current_tier] > 0:
 
             while not Adventure.enemySpawn():
                 sleep(0.1)
-            Adventure.kill() 
+            Adventure.kill()
             while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
                 sleep(0.05)
-            pyautogui.press('w') 
+            pyautogui.press('w')
             Adventure.killCount += 1
 
             for tier in tierKillsCount:
-                tierKillsCount[tier] -= 1 # decrease all counters 
-                
-            for tier in tierKillsCount: 
-                if tierKillsCount[tier] == 0: 
-                    tierKillsCount[tier] = 40 - tier  # formula for new kill counter 
-                    if current_tier == tier: # if we are in this tier, get its reward 
-                        Adventure.totalEXP += tiersEXP[tier]
-                        Adventure.totalAP += 1 
+                tierKillsCount[tier] -= 1  # decrease all counters
 
-            next_tiers = [] 
-            minimum_value = min(tierKillsCount.values()) # minimum kill counter remaining
             for tier in tierKillsCount:
-                if tierKillsCount[tier] == minimum_value: 
+                if tierKillsCount[tier] == 0:
+                    # formula for new kill counter
+                    tierKillsCount[tier] = 40 - tier
+                    if current_tier == tier:  # if we are in this tier, get its reward
+                        Adventure.totalEXP += tiersEXP[tier]
+                        Adventure.totalAP += 1
+
+            next_tiers = []
+            # minimum kill counter remaining
+            minimum_value = min(tierKillsCount.values())
+            for tier in tierKillsCount:
+                if tierKillsCount[tier] == minimum_value:
                     if verbose:
-                        print(f'minimum tier: {tier} at floor {tiers[tier]} with {tierKillsCount[tier]} remaining kills')
+                        print(
+                            f'minimum tier: {tier} at floor {tiers[tier]} with {tierKillsCount[tier]} remaining kills')
                     next_tiers.append(tier)
-            
+
             if verbose:
                 print('next tiers:')
                 for tier in next_tiers:
                     print(f'tier {tier} at floor {tiers[tier]}')
 
             if minimum_value == 1:
-                current_tier = max(next_tiers) # next tier I will go to 
+                current_tier = max(next_tiers)  # next tier I will go to
                 if verbose > 1:
-                    print(f'going to tier {current_tier} at floor {tiers[current_tier]}')
+                    print(
+                        f'going to tier {current_tier} at floor {tiers[current_tier]}')
 
                 click(*coords.ITOPOD_ENTER)
                 click(*coords.ITOPOD_START_INPUT)
-                pyautogui.write(str(tiers[current_tier])) 
+                pyautogui.write(str(tiers[current_tier]))
                 click(*coords.ITOPOD_ENTER_CONFIRMATION)
-                optimal = False 
-            elif not optimal: # must be bigger than 1 
+                optimal = False
+            elif not optimal:  # must be bigger than 1
                 # can afford to go to optimal
                 current_tier = minimum
                 if verbose > 1:
@@ -522,13 +531,13 @@ class Adventure:
                 click(*coords.ITOPOD_ENTER)
                 click(*coords.ITOPOD_START_INPUT)
                 click(*coords.ITOPOD_OPTIMAL)
-                # pyautogui.write(str(tiers[current_tier])) 
+                # pyautogui.write(str(tiers[current_tier]))
                 click(*coords.ITOPOD_ENTER_CONFIRMATION)
                 optimal = True
 
-            if verbose: 
+            if verbose:
                 print('*' * 20)
-            
+
             if Adventure.killCount % 50 == 0:
                 print(f'total kills: {Adventure.killCount}')
                 print(f'total exp: {Adventure.totalEXP}')
@@ -540,10 +549,6 @@ class Adventure:
 
             if verbose:
                 print(f'tiers: {tierKillsCount}')
-
-
-
-
 
     @staticmethod
     def itopodPush(floor: str = '200') -> None:
@@ -616,7 +621,7 @@ class Adventure:
         # pyautogui.press('q')
         Adventure.turnIdleOn()
 
-    @staticmethod 
+    @staticmethod
     def kill(fast: bool = False, buffs: bool = False) -> None:
         """ Kill the current enemy. 
 
@@ -636,24 +641,24 @@ class Adventure:
 
     @staticmethod
     # EXPERIMENTAL # TODO
-    def getReadyAbilities(buffs: bool = False, fast:bool = True, verbose: bool = False) -> List[int]:
+    def getReadyAbilities(buffs: bool = False, fast: bool = True, verbose: bool = False) -> List[int]:
         """ Return the ready abilities as a list. 
 
         Keyword arguments:  
         buffs -- if you want to use buffs also (not recommended).
         """
         ready = set()
-        start = time.time() 
+        start = time.time()
         # sleep(0.1)
         img = Statistics.getScreenshot()
-        end = time.time() 
+        end = time.time()
         if verbose:
             print(f'screenshot time: {end - start}')
 
         x0 = coords.ABILITY_1[0]
         y0 = coords.ABILITY_1[1]
         i = 0
-        start = time.time() 
+        start = time.time()
         while i <= 15:  # 16 abilities (MOVE 69 LOCKED)
             if i < 5:  # row 1
                 x = x0 + i * coords.ABILITY_OFFSET_X
@@ -672,12 +677,12 @@ class Adventure:
             # print(f'color: {color}')
             if Statistics.checkPixelColor(x, y, color, img=img):
                 ready.add(i)
-        end = time.time() 
+        end = time.time()
         if verbose:
             print(f'pixel color time: {end - start}')
 
         if not Statistics.checkPixelColor(*coords.MY_HEALTH_BAR_THRESHOLD, (236, 52, 52), img=img):
-            #priority needing to heal
+            # priority needing to heal
             if verbose:
                 print('needs healing')
             if buffs:
@@ -688,7 +693,7 @@ class Adventure:
             # priority not needing to heal
             if verbose:
                 print('no need to heal')
-            if fast: 
+            if fast:
                 priority = [5, 4, 2, 1]
             elif buffs:
                 priority = [12, 10, 7, 9, 11, 5, 4, 3, 6, 2]
@@ -720,33 +725,32 @@ class Adventure:
             queue = deque(Adventure.getReadyAbilities(fast=fast))
         if verbose:
             print(f'ABILITIES: {queue}')
-        start = time.time() 
+        start = time.time()
         while not Adventure.isEnemyDead():
             if not queue:
                 if verbose:
                     print(f'getting abilities queue')
                 if buffs:
-                    queue = deque(Adventure.getReadyAbilities(buffs=True, fast=fast))
+                    queue = deque(Adventure.getReadyAbilities(
+                        buffs=True, fast=fast))
                 else:
                     queue = deque(Adventure.getReadyAbilities(fast=fast))
                 if verbose:
                     print(f'ABILITIES: {queue}')
             ability = queue.popleft()
-            end = time.time() 
-            
+            end = time.time()
+
             press(Adventure.abilities_keys[ability])
             if verbose:
                 print(f'time between attacks: {end - start}')
-            start = time.time() 
+            start = time.time()
 
             # WORK AROUND - SLEEP 1s (MY CD TIME)
-            
+
             while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
                 # print(f'color:  {Statistics.getPixelColor(*coords.ABILITY_1)}')
                 sleep(0.05)
             # sleep(0.9) # RED LIQUID GLOBAL CD
-
-
 
     @staticmethod
     def isEnemyDead() -> bool:
@@ -758,13 +762,12 @@ class Adventure:
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
 
-        #return Statistics.checkPixelColor(*coords.ENEMY_HEALTH_BAR_BORDER, (250, 250, 250))
+        # return Statistics.checkPixelColor(*coords.ENEMY_HEALTH_BAR_BORDER, (250, 250, 250))
         return Statistics.checkPixelColor(*coords.ENEMY_TEXT, coords.ENEMY_BACKGROUND)
         # border = getCoords(*coords.ENEMY_HEALTH_BAR_BORDER)
         # check if border of enemy health bar is white
-        #KONGREGATE COLOR IS DIFFERENT
+        # KONGREGATE COLOR IS DIFFERENT
         # return pyautogui.pixelMatchesColor(*border, (250, 250, 250), tolerance=10)
-
 
     @staticmethod
     def isPlayerLow() -> bool:
@@ -1037,22 +1040,23 @@ class Inventory:
     def locateAll(image, confidence=0.8):
         """ Returns a generator of the (absolute) locations of all items {image}. """
         Navigation.menu('inventory')
-        inventory = Statistics.getScreenshot() 
-        locations = pyautogui.locateAll(image, inventory, confidence=confidence)
+        inventory = Statistics.getScreenshot()
+        locations = pyautogui.locateAll(
+            image, inventory, confidence=confidence)
         return locations
-    
-    @staticmethod 
+
+    @staticmethod
     def locateItem(image, confidence=0.8):
         """ Return the position of item in inventory, if exists. 
-        
+
         This is a relative position to the game itself, without borders. If you want to 
         be able to click on this item, click at x, y+25 (25 px is the size of steam border).
         """
         Navigation.menu('inventory')
         click(334, 80, delay='long')
-        inventory = Statistics.getScreenshot() 
+        inventory = Statistics.getScreenshot()
         loc = pyautogui.locate(image, inventory, confidence=confidence)
-        return loc 
+        return loc
 
     @staticmethod
     def getEmptySlots(debug: bool = False):
@@ -1115,19 +1119,20 @@ class BloodMagic:
                 (magic - 1) * coords.BM_DIFF
         click(x, y)
 
-class Wandoos: 
-    @staticmethod 
-    def addEnergy(cap=True): # TODO add 
+
+class Wandoos:
+    @staticmethod
+    def addEnergy(cap=True):  # TODO add
         """ Add energy to wandoos.  
 
         Keyword arguments:  
         cap -- if set to False, will click add. (default True)  
-        """ 
+        """
         Navigation.menu('wandoos')
         click(*coords.WANDOOS_ENERGY_CAP)
 
-    @staticmethod 
-    def addMagic(cap=True): # TODO add 
+    @staticmethod
+    def addMagic(cap=True):  # TODO add
         """ Add magic to wandoos. 
 
         Keyword arguments:
@@ -1135,7 +1140,8 @@ class Wandoos:
         """
         Navigation.menu('wandoos')
         click(*coords.WANDOOS_MAGIC_CAP)
-        
+
+
 class MoneyPit:
     @staticmethod
     def moneyPit():
@@ -1181,24 +1187,41 @@ class Yggdrasil:
         Navigation.menu('yggdrasil')
         click(*coords.FRUITS[fruit.upper()])
 
+
 class GoldDiggers:
-    @staticmethod 
+    @staticmethod
     def clearActive():
-        """ Clear active diggers. """ 
+        """ Clear active diggers. """
         Navigation.menu('goldDiggers')
         click(*coords.CLEAR_ACTIVE)
-    
-    @staticmethod 
-    def statDigger():
-        """ Activate stat digger. """ 
-        Navigation.menu('goldDiggers')
-        click(*coords.STAT_DIGGER)
-    
-    @staticmethod 
-    def wandoosDigger():
-        """ Activate wandoos digger. """ 
-        Navigation.menu('goldDiggers')
-        click(*coords.WANDOOS_DIGGER)
+
+    @staticmethod
+    def activate(diggers: List):
+        """ Activate diggers in list. Pass list of UPPERCASE diggers names with underscores.  
+
+        Example:  
+        -> activate Magic Ngu and Drop Chance diggers:
+        activate(['MAGIC_NGU', 'DROP_CHANCE'])
+
+        Will pass through all diggers pages starting at 1 and activate diggers in there. 
+        """
+        page_1 = ['DROP_CHANCE', 'WANDOOS', 'STAT', 'ADVENTURE']
+        page_2 = ['ENERGY_NGU', 'MAGIC_NGU', 'ENERGY_BEARD', 'MAGIC_BEARD']
+        page_3 = ['PP', 'DAYCARE', 'BLOOD', 'EXP']
+
+        click(*coords.DIGGERS_PAGE_1)
+        for d in page_1:
+            if d in diggers:
+                click(*coords.DIGGERS[d])
+        click(*coords.DIGGERS_PAGE_2)
+        for d in page_2:
+            if d in diggers:
+                click(*coords.DIGGERS[d])
+        click(*coords.DIGGERS_PAGE_3)
+        for d in page_3:
+            if d in diggers:
+                click(*coords.DIGGERS[d])
+
 
 class Misc:
     @staticmethod
@@ -1254,34 +1277,35 @@ class Misc:
             if amount == 'quarter':
                 click(*coords.ENERGY_CUSTOM_AMOUNT_QUARTER_IDLE)
 
-class Questing:
-    # to find in questing text ocr 
-    zones = {
-             'sewers': 'sewers',
-             'forest': 'forest',
-             'security': 'hsb',
-             'universe': '2d',
-             'strange': 'avsp',
-             'mega': 'mega',
-             'beardverse': 'bv',
-            }
 
-    quests_completed = 0 
-    items_turned = 0 
+class Questing:
+    # to find in questing text ocr
+    zones = {
+        'sewers': 'sewers',
+        'forest': 'forest',
+        'security': 'hsb',
+        'universe': '2d',
+        'strange': 'avsp',
+        'mega': 'mega',
+        'beardverse': 'bv',
+    }
+
+    quests_completed = 0
+    items_turned = 0
     items_needed = 0
-    is_major = False  
+    is_major = False
     quest_zone = ""
-    is_completed = False 
-    
-    @staticmethod 
+    is_completed = False
+
+    @staticmethod
     def updateInfo():
         """ Get and update Questing variables: items_turned,
         items_needed, is_major, quest_zone.
-        
+
         A quest must be active!
         """
         Navigation.menu('questing')
-        click(100, 100) # get rid of tooltip
+        click(100, 100)  # get rid of tooltip
         # print(f'getting text')
         # sleep(5)
         text = Statistics.getText(coords.QUESTING_TEXT_REGION)
@@ -1289,18 +1313,20 @@ class Questing:
         # print(f'text: {text}')
         if not text:
             print('there is not an active quest')
-            return 
+            return
 
-        Questing.quest_zone = Questing.parseZone(text) # get zone 
-        Questing.items_turned, Questing.items_needed = Questing.parseProgress(text) # get progress 
-        Questing.is_completed = Questing.items_turned == Questing.items_needed # is quest completed
+        Questing.quest_zone = Questing.parseZone(text)  # get zone
+        Questing.items_turned, Questing.items_needed = Questing.parseProgress(
+            text)  # get progress
+        # is quest completed
+        Questing.is_completed = Questing.items_turned == Questing.items_needed
         Questing.is_major = Questing.isMajor(text)
         if Questing.is_completed:
             Questing.quests_completed += 1
 
     @staticmethod
     def status():
-        """ Print general status of questing. """ 
+        """ Print general status of questing. """
         msg = f'quest in {Questing.quest_zone}'
         if Questing.is_major:
             msg = 'Major ' + msg
@@ -1310,18 +1336,17 @@ class Questing:
         print(f'Progress: {Questing.items_turned}/{Questing.items_needed}')
         print(f'Overall {Questing.quests_completed} quests completed.')
 
-    @staticmethod 
+    @staticmethod
     def isMajor(text: str):
         """ Return True if current quest is major. """
         return 'major' in text.lower()
 
-    @staticmethod 
+    @staticmethod
     def parseZone(text: str):
-        """ Return the zone specified by questing text. """ 
+        """ Return the zone specified by questing text. """
         for zone in Questing.zones:
             if zone in text.lower():
                 return Questing.zones[zone]
-    
 
     @staticmethod
     def findZone():
@@ -1330,19 +1355,19 @@ class Questing:
         for zone in Questing.zones:
             if zone in text.lower():
                 return Questing.zones[zone]
-    
-    @staticmethod 
-    def turnInItems(item:str):
+
+    @staticmethod
+    def turnInItems(item: str):
         """ Find and right click on ITEM. """
         img = 'images/' + item + '.png'
         inv = Inventory.locateItem(img, confidence=0.9)
-        if inv: # it may be None if no item was located 
-            x, y, _, _ = inv 
+        if inv:  # it may be None if no item was located
+            x, y, _, _ = inv
             click(x, y+25, button='right')
         else:
             print('did not locate item')
 
-    @staticmethod 
+    @staticmethod
     def parseProgress(text: str):
         """ Return the progress as a tuple (items_turned, items_needed). """
         lines = re.split('\n', text)
@@ -1355,13 +1380,12 @@ class Questing:
         # print(f'turned: {items_turned}, needed: {items_needed}')
         items_turned = Statistics.removeLetters(items_turned)
         items_needed = Statistics.removeLetters(items_needed)
-        return items_turned, items_needed 
+        return items_turned, items_needed
 
-
-    @staticmethod 
+    @staticmethod
     def getProgress():
         """ Get and return current quest progress. 
-        
+
         Should be in Questing menu!
         """
         text = Statistics.getText(coords.QUESTING_TEXT_REGION)
@@ -1373,7 +1397,7 @@ class Questing:
         # print(f'lines split: {lines}')
         _, have, need = line
         print(f'have: {have}, need: {need}')
-        return int(have), int(need) 
+        return int(have), int(need)
         # return Statistics.getText(coords.QUESTING_PROGRESS_REGION)
 
     @staticmethod
@@ -1381,36 +1405,35 @@ class Questing:
         """ Return True if current quest is completed. 
         """
         Navigation.menu('questing')
-        click(640, 100, delay='long') # get rid of tooltip
-        have, need = Questing.getProgress() 
-        return have == need 
-    
-    @staticmethod 
+        click(640, 100, delay='long')  # get rid of tooltip
+        have, need = Questing.getProgress()
+        return have == need
+
+    @staticmethod
     def complete():
         """ Complete the current quest. 
-        
+
         Should be in Questing menu!
         """
         click(*coords.QUESTING_COMPLETE_QUEST)
 
-    @staticmethod 
+    @staticmethod
     def skip():
         """ Skip the current quest. 
-        
+
         Should be in Questing menu!
         """
         click(*coords.QUESTING_SKIP_QUEST)
         click(*coords.QUESTING_SKIP_QUEST_CONFIRMATION)
 
-    @staticmethod 
+    @staticmethod
     def start():
         """ Start a quest. 
 
         Should be in Questing menu!
         """
-        click(*coords.QUESTING_COMPLETE_QUEST) # position is the same as complete
-
+        click(*coords.QUESTING_COMPLETE_QUEST)  # position is the same as complete
 
 
 if __name__ == "__main__":
-    pass 
+    pass
