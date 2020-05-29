@@ -99,6 +99,15 @@ class Statistics:
             return -1
 
     @staticmethod
+    def removeCharacters(text: str) -> str:
+        """ Remove characters as '()' from a string.
+
+        Titan counter ocr sometimes has extraneous characters.
+        """
+        new_text = [x for x in text if x.isalpha()]
+        return "".join(new_text)
+
+    @staticmethod
     def getEXP():
         """ Get and return current EXP from spend EXP menu. """
         Navigation.menu('exp')
@@ -151,5 +160,6 @@ class Statistics:
 
 
 if __name__ == '__main__':
-    click(*coords.ADVENTURE)
-    print(Statistics.getText(coords.TITAN_COUNTER_REGION, save=True))
+    pass
+    # click(*coords.ADVENTURE)
+    # print(Statistics.getText(coords.TITAN_COUNTER_REGION, save=True))
