@@ -181,9 +181,10 @@ class Itopod:
         while Itopod.tierKillsCount[current_tier] > 0:
 
             while not Adventure.enemySpawn():
-                sleep(0.1)
+                sleep(0.03)
             Adventure.kill()
-           # while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
+            # Adventure.snipe(fast=True) slower 
+            # while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
             #    sleep(0.05)
             # pyautogui.press('w')
             Itopod.kills += 1
@@ -390,39 +391,34 @@ class Adventure:
                 click(*coords.ADVANCE_ZONE, delay="fast")
         # Navigation.adventureZone = zone  # update adventureZone variable #TODO have adv remember zones
 
-    # @staticmethod
-    # def sendAttacks(buffs: bool = False) -> None:
-        # """ Cycle through attacks in adventure mode.
+    @staticmethod
+    def sendAttacks() -> None:
+        """ Cycle through attacks in adventure mode.
 
-        # Keyword arguments:
-        # buffs - if set to True, will use buffs and heal when available.
+        Should be in Adventure menu already.
+        """
+        if Navigation.currentMenu != 'adventure':
+            raise Exception('should be in Adventure menu!')
 
-        # Should be in Adventure menu already.
-        # """
-        # if Navigation.currentMenu != 'adventure':
-            # raise Exception('should be in Adventure menu!')
-        # if buffs:
-            # press('gsfhdxytrew')  # all attacks and buffs
-        # else:
-            # press('ytew')  # only attacks
+        press('ytew')  # only attacks
 
-    # @staticmethod
-    # def kill(fast: bool = False, buffs: bool = False) -> None:
-        # """ Kill the current enemy.
+    @staticmethod
+    def kill(fast: bool = False, buffs: bool = False) -> None:
+        """ Kill the current enemy.
 
-        # Should be in Adventure menu already.  """
-        # if Navigation.currentMenu != 'adventure':
-            # raise Exception('should be in Adventure menu!')
+        Should be used when you want to quickly farm with only basic attacks.  
+        Use Adventure.snipe for more elaborate attacking patterns. 
 
-        # while not Adventure.isEnemyDead():
-            # if fast:  # use only regular attacks
-                # pyautogui.press('w')
-            # elif buffs:  # use all attacks and buffs
-                # Adventure.sendAttacks(buffs=True)
-            # else:  # use all attacks
-                # Adventure.sendAttacks()
-                # sleep(0.1)
-        # # after this, player may be dead
+        Should be in Adventure menu already.  
+        """
+        if Navigation.currentMenu != 'adventure':
+            raise Exception('should be in Adventure menu!')
+
+        while not Adventure.isEnemyDead():
+            if fast:  # use only regular attacks
+                pyautogui.press('w')
+            else:  # use all attacks
+                Adventure.sendAttacks()
 
     @staticmethod
     def getReadyAbilities(buffs: bool = False, fast: bool = True, verbose: bool = False) -> List[int]:
