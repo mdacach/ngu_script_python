@@ -4,6 +4,7 @@ import time
 
 import pyautogui
 
+
 from coords import *
 from features import *
 from helper import *
@@ -32,7 +33,6 @@ parser.add_argument('--slots',
                     default=10)
 
 args = parser.parse_args()
-print(args)
 
 
 def main():
@@ -79,24 +79,23 @@ def main():
                 print(f'inv management')
                 print(f'time: {round((time.time() - start))/60} minutes')
                 Adventure.turnIdleOn()
-                #Adventure.adventureZone('safe')
+                # Adventure.adventureZone('safe')
 
                 Navigation.menu('inventory')
                 emptySlots = Inventory.getEmptySlots()
                 print(f'empty slots: {emptySlots}')
                 if emptySlots < 10:
-                    # Inventory.mergeInventory(slots=10)
                     invManagement(slots=args.slots)
-                    # Inventory.trashItems()
-                    #ygg()
+                    ygg()
 
                 print(f'going back to adventure')
                 Navigation.menu('adventure')
-                #Adventure.adventureZone(args.zone)
+                # Adventure.adventureZone(args.zone)
                 # print(f'is idle: {Adventure.isIdle()}')
 
                 Adventure.turnIdleOff()
                 # print(f'is idle: {Adventure.isIdle()}')
+
 
 if __name__ == '__main__':
     main()
