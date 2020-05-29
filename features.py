@@ -991,6 +991,25 @@ class Rebirth:
         click(*coords.REBIRTH_CONFIRMATION)
 
 
+class NGU:
+    @staticmethod
+    def addEnergy(ngus: list):
+        """ Add energy to list of NGUS. 
+
+        Names should be in uppercase and spaces as underscores. """
+        for ngu in ngus:
+            click(*coords.NGUS_ENERGY[ngu])
+
+    @staticmethod
+    def addMagic(ngus: list):
+        """ Add magic to list of NGUS. 
+
+        Names should be in uppercase and spaces as underscores. """
+        click(*coords.NGU_TO_MAGIC_BUTTON)
+        for ngu in ngus:
+            click(*coords.NGUS_MAGIC[ngu])
+
+
 class Yggdrasil:
     @staticmethod
     def harvestAll() -> None:
