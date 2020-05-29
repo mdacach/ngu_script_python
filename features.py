@@ -35,7 +35,7 @@ class BasicTraining:
     """ Add energy to basic training. """
     @staticmethod
     def basicTraining() -> None:
-        """ Right clicks on add energy to ATK1.
+        """ Right click on add energy to ATK1.
 
             Requires training auto advance to be bought.
         """
@@ -61,15 +61,6 @@ class FightBosses:
         if Navigation.currentMenu != 'fightBoss':
             raise Exception('should be in Fight Boss menu!')
         click(*coords.FIGHT)
-
-    @staticmethod
-    def fightBosses() -> None:
-        """ Wrapper for nuke and fight bosses in sucession. """
-        Navigation.menu('fightBoss')
-        click(*coords.NUKE)
-        for _ in range(5):  # wait for boss to die
-            pyautogui.sleep(2)
-            click(*coords.FIGHT)
 
 
 class Itopod:
@@ -102,19 +93,19 @@ class Itopod:
     tierKillsCount = {}
 
     @staticmethod
-    def itopodExperimental(duration: float = 0, verbose: int = 0) -> None:  # TODO
+    def itopodExperimental(duration: float = 0, verbose: int = 0) -> None:
         """ Abuse a bug in itopod floors to higher exp/hr. 
 
         Farm optimal floor until there is only one kill remaining for a tier reward.  
-        If there is more than one tier with upcoming rewards, choose the upper one.  
+        If there is more than one tier with upcoming rewards, choose the highest one.  
 
         Global arguments:  
-        killCount -- total kills between all floors.  
-        totalEXP -- total EXP gained since first call.  
-        totalAP -- total AP gained since first call.  
+        killCount  -- total kills between all floors.  
+        totalEXP   -- total EXP gained since first call.  
+        totalAP    -- total AP gained since first call.  
 
         Keyword arguments:  
-        duration -- if not 0, the script will only run for that amount of time. (default 0) 
+        duration -- if not 0, the script will only run for that amount of time. (default 0)  
         verbose -- 0 for no printing, 1 for normal printing and 2 for extra verbose. (default 0)
         """
 
@@ -203,7 +194,7 @@ class Itopod:
             for tier in Itopod.tierKillsCount:
                 if Itopod.tierKillsCount[tier] == 0:
                     Itopod.tierKillsCount[tier] = 40 - \
-                        tier  # formula for new kill counter
+                        tier  # formula for new counter
                     if current_tier == tier:  # if we are in this tier, get its reward
                         Itopod.EXP_gained += Itopod.tiersEXP[tier]
                         Itopod.AP_gained += 1
@@ -303,11 +294,6 @@ class Adventure:
                       12: 'z',
                       13: 'x'}
 
-    # global variables for itopodExperimental
-    killCount = 0
-    totalAP = 0
-    totalEXP = 0
-
     @staticmethod
     def turnIdleOn() -> None:
         """ Enable Idle mode in Adventure. 
@@ -316,6 +302,9 @@ class Adventure:
         """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
+
+        click(*coords.MY_HEALTH_BAR_BORDER)  # get rid of tooltip
+        sleep(0.5)
         if (not Adventure.isIdle()):
             pyautogui.press('q')
 
@@ -327,8 +316,9 @@ class Adventure:
         """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
+
         click(*coords.MY_HEALTH_BAR_BORDER)  # get rid of tooltip
-        sleep(1)
+        sleep(0.5)
         if (Adventure.isIdle()):
             pyautogui.press('q')
 
@@ -348,13 +338,12 @@ class Adventure:
         """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
+
         return Statistics.checkPixelColor(*coords.IS_IDLE, coords.IS_IDLE_COLOR)
-        # pix = getCoords(*coords.IS_IDLE)
-        # return pyautogui.pixelMatchesColor(*pix, coords.IS_IDLE_COLOR, tolerance=10)
 
     @staticmethod
-    def itopodFarm(floor: str = 'optimal') -> None:
-        """ Enter ITOPOD in floor x.
+    def itopodFarm(floor: str = 'optimal') -> None:  # DEPRECATED # TODO remove?
+        """ Enter ITOPOD in floor x. If no floor is specified, go to optimal.  
 
         Keyword arguments:  
         floor -- floor to enter.
@@ -371,187 +360,7 @@ class Adventure:
         click(*coords.ITOPOD_ENTER_CONFIRMATION)
 
     @staticmethod
-    def itopodExperimental(duration: float = 0, verbose: int = 0) -> None:  # TODO
-        """ Abuse a bug in itopod floors to higher exp/hr. 
-
-        Farm optimal floor until there is only one kill remaining for a tier reward.  
-        If there is more than one tier with upcoming rewards, choose the upper one.  
-
-        Global arguments:  
-        killCount -- total kills between all floors.  
-        totalEXP -- total EXP gained since first call.  
-        totalAP -- total AP gained since first call.  
-
-        Keyword arguments:  
-        duration -- if not 0, the script will only run for that amount of time. (default 0) 
-        verbose -- 0 for no printing, 1 for normal printing and 2 for extra verbose. (default 0)
-        """
-
-        tiers = {1: 0,
-                 2: 50,
-                 3: 100,
-                 4: 150,
-                 5: 200,
-                 6: 250,
-                 7: 300,
-                 # 8: 350,
-                 }
-        tiersEXP = {
-            1: 1,
-            2: 2,
-            3: 4,
-            4: 8,
-            5: 14,
-            6: 22,
-            7: 32,
-            8: 44,
-        }
-
-        if verbose > 1:
-            print(f'tiers: {tiers}')
-            print(f'exp: {tiersEXP}')
-
-        Navigation.menu('adventure')
-        tierKillsCount = {}
-        for tier, floor in tiers.items():
-            if verbose:
-                if verbose > 1:
-                    print(f'tier: {tier}, floor: {floor}')
-                print(f'getting tier kills: ')
-            tierKills = Statistics.getTierKills(str(floor))
-
-            if tierKills == -1:
-                print('could not detect tier kills')
-                tierKillsCount[tier] = 40
-            else:
-                if verbose:
-                    print(f'tier kills: {tierKills}')
-                tierKillsCount[tier] = tierKills
-
-        if verbose:
-            print(tierKillsCount)
-
-        minimum = min(tierKillsCount, key=tierKillsCount.get)
-        if verbose:
-            print(
-                f'minimum is tier {minimum} with {tierKillsCount[minimum]} kill count')
-
-        next_tiers = []
-        minimum_value = min(tierKillsCount.values())
-        if verbose:
-            print(f'minimum value: {minimum_value}')
-
-        for tier in tierKillsCount:
-            if tierKillsCount[tier] == minimum_value:  # go get its reward
-                if verbose:
-                    print(f'minimum tier: {tier} with {tierKillsCount[tier]}')
-                next_tiers.append(tier)
-
-        if verbose:
-            print('next tiers:')
-            for tier in next_tiers:
-                print(f'{tier} at floor {tiers[tier]}')
-
-        if minimum_value == 1:
-            current_tier = max(next_tiers)  # next tier I will go to
-            if verbose > 1:
-                print(
-                    f'going to tier {current_tier} at floor {tiers[current_tier]}')
-            click(*coords.ITOPOD_ENTER)
-            click(*coords.ITOPOD_START_INPUT)
-            pyautogui.write(str(tiers[current_tier]))
-            click(*coords.ITOPOD_ENTER_CONFIRMATION)
-            optimal = False
-
-        else:  # must be bigger than 1
-            # can afford to go to optimal
-            current_tier = minimum
-            if verbose > 1:
-                print(f'going to optimal floor')
-            click(*coords.ITOPOD_ENTER)
-            click(*coords.ITOPOD_START_INPUT)
-            click(*coords.ITOPOD_OPTIMAL)
-            click(*coords.ITOPOD_ENTER_CONFIRMATION)
-            optimal = True
-
-        start = time.time()
-        while tierKillsCount[current_tier] > 0:
-
-            while not Adventure.enemySpawn():
-                sleep(0.1)
-            Adventure.kill()
-            while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
-                sleep(0.05)
-            pyautogui.press('w')
-            Adventure.killCount += 1
-
-            for tier in tierKillsCount:
-                tierKillsCount[tier] -= 1  # decrease all counters
-
-            for tier in tierKillsCount:
-                if tierKillsCount[tier] == 0:
-                    # formula for new kill counter
-                    tierKillsCount[tier] = 40 - tier
-                    if current_tier == tier:  # if we are in this tier, get its reward
-                        Adventure.totalEXP += tiersEXP[tier]
-                        Adventure.totalAP += 1
-
-            next_tiers = []
-            # minimum kill counter remaining
-            minimum_value = min(tierKillsCount.values())
-            for tier in tierKillsCount:
-                if tierKillsCount[tier] == minimum_value:
-                    if verbose:
-                        print(
-                            f'minimum tier: {tier} at floor {tiers[tier]} with {tierKillsCount[tier]} remaining kills')
-                    next_tiers.append(tier)
-
-            if verbose:
-                print('next tiers:')
-                for tier in next_tiers:
-                    print(f'tier {tier} at floor {tiers[tier]}')
-
-            if minimum_value == 1:
-                current_tier = max(next_tiers)  # next tier I will go to
-                if verbose > 1:
-                    print(
-                        f'going to tier {current_tier} at floor {tiers[current_tier]}')
-
-                click(*coords.ITOPOD_ENTER)
-                click(*coords.ITOPOD_START_INPUT)
-                pyautogui.write(str(tiers[current_tier]))
-                click(*coords.ITOPOD_ENTER_CONFIRMATION)
-                optimal = False
-            elif not optimal:  # must be bigger than 1
-                # can afford to go to optimal
-                current_tier = minimum
-                if verbose > 1:
-                    print(f'going to optimal floor')
-
-                click(*coords.ITOPOD_ENTER)
-                click(*coords.ITOPOD_START_INPUT)
-                click(*coords.ITOPOD_OPTIMAL)
-                # pyautogui.write(str(tiers[current_tier]))
-                click(*coords.ITOPOD_ENTER_CONFIRMATION)
-                optimal = True
-
-            if verbose:
-                print('*' * 20)
-
-            if Adventure.killCount % 50 == 0:
-                print(f'total kills: {Adventure.killCount}')
-                print(f'total exp: {Adventure.totalEXP}')
-                print(f'total ap: {Adventure.totalAP}')
-                print(f'time: {round((time.time() - start)/60, 2)} minutes')
-
-            if duration != 0 and time.time() - start > duration * 60:
-                return
-
-            if verbose:
-                print(f'tiers: {tierKillsCount}')
-
-    @staticmethod
-    def itopodPush(floor: str = '200') -> None:
+    def itopodPush(floor: str = '500') -> None:
         """ Enter ITOPOD with starting floor MAX and ending floor x.
 
         Keyword arguments:  
@@ -566,14 +375,12 @@ class Adventure:
 
     @staticmethod
     def adventureZone(zone: str = 'latest') -> None:
-        """ Go to adventure zone x.
+        """ Go to adventure zone ZONE.
 
         Keyword arguments:  
         zone -- zone to go to, by name specified in showZones.
         """
         Navigation.menu('adventure')
-        # if (Navigation.adventureZone == zone):
-        #     return # TODO
         click(*coords.GO_BACK_ZONE, button="right")   # start at 0
         if zone == 'latest':
             click(*coords.ADVANCE_ZONE, button="right")
@@ -581,71 +388,59 @@ class Adventure:
             times = Adventure.zones[zone]
             for _ in range(times):
                 click(*coords.ADVANCE_ZONE, delay="fast")
-        Navigation.adventureZone = zone  # update adventureZone variable
+        # Navigation.adventureZone = zone  # update adventureZone variable #TODO have adv remember zones
+
+    # @staticmethod
+    # def sendAttacks(buffs: bool = False) -> None:
+        # """ Cycle through attacks in adventure mode.
+
+        # Keyword arguments:  
+        # buffs - if set to True, will use buffs and heal when available.  
+
+        # Should be in Adventure menu already.  
+        # """
+        # if Navigation.currentMenu != 'adventure':
+            # raise Exception('should be in Adventure menu!')
+        # if buffs:
+            # press('gsfhdxytrew')  # all attacks and buffs
+        # else:
+            # press('ytew')  # only attacks
+
+
+    # @staticmethod
+    # def kill(fast: bool = False, buffs: bool = False) -> None:
+        # """ Kill the current enemy. 
+
+        # Should be in Adventure menu already.  """
+        # if Navigation.currentMenu != 'adventure':
+            # raise Exception('should be in Adventure menu!')
+
+        # while not Adventure.isEnemyDead():
+            # if fast:  # use only regular attacks
+                # pyautogui.press('w')
+            # elif buffs:  # use all attacks and buffs
+                # Adventure.sendAttacks(buffs=True)
+            # else:  # use all attacks
+                # Adventure.sendAttacks()
+                # sleep(0.1)
+        # # after this, player may be dead
 
     @staticmethod
-    def sendAttacks(buffs: bool = False) -> None:
-        """ Cycle through attacks in adventure mode.
-
-        Keyword arguments:  
-        buffs - if set to True, will use buffs and heal when available.  
-
-        Should be in Adventure menu already.  
-        """
-        if Navigation.currentMenu != 'adventure':
-            raise Exception('should be in Adventure menu!')
-        if buffs:
-            press('gsfhdxytrew')  # all attacks and buffs
-        else:
-            press('ytew')  # only attacks
-
-    @staticmethod
-    def killTitan():  # REWORK #TODO
-        """ Go to latest zone and attempts to kill the titan.
-         """
-        # click(*coords.ADVENTURE)
-        Navigation.menu('adventure')
-        click(*coords.ADVANCE_ZONE, button="right")
-        click(*coords.ADVANCE_ZONE)
-        # pyautogui.press('q')
-        Adventure.turnIdleOff()
-        # grb health bar color is not red
-        enemy_hp = getCoords(*coords.ENEMY_HEALTH_BAR)
-        sleep(6)
-        if not pyautogui.pixelMatchesColor(*enemy_hp, (255, 255, 255)):
-            print('titan spawned')
-            start = time.time()
-            while not Adventure.isEnemyDead() or (time.time() - start)/60 < 3:
-                Adventure.sendAttacks()
-                sleep(0.1)
-        # pyautogui.press('q')
-        Adventure.turnIdleOn()
-
-    @staticmethod
-    def kill(fast: bool = False, buffs: bool = False) -> None:
-        """ Kill the current enemy. 
-
-        Should be in Adventure menu already.  """
-        if Navigation.currentMenu != 'adventure':
-            raise Exception('should be in Adventure menu!')
-
-        while not Adventure.isEnemyDead():
-            if fast:  # use only regular attacks
-                pyautogui.press('w')
-            elif buffs:  # use all attacks and buffs
-                Adventure.sendAttacks(buffs=True)
-            else:  # use all attacks
-                Adventure.sendAttacks()
-                sleep(0.1)
-        # after this, player may be dead
-
-    @staticmethod
-    # EXPERIMENTAL # TODO
     def getReadyAbilities(buffs: bool = False, fast: bool = True, verbose: bool = False) -> List[int]:
         """ Return the ready abilities as a list. 
 
+        It uses different priorities if you are low on health or want to use buffs.
+        Will return a single regular attack if no other ability is off cooldown. 
+
+        Expected usage:  
+        -> set fast flag if you want to quickly kill enemies and have no trouble doing so.  
+        -> set buffs flag if you need to buff yourself for a difficult fight.  
+        -> set verbose for debugging. 
+
         Keyword arguments:  
-        buffs -- if you want to use buffs also (not recommended).
+        buffs   -- if you also want to use buffs.  
+        fast    -- if you only need to quickly attack.  
+        verbose -- debugging purposes. 
         """
         ready = set()
         start = time.time()
@@ -712,45 +507,46 @@ class Adventure:
         return myQueue
 
     @staticmethod
-    def snipe(buffs: bool = False, verbose: bool = False, fast: bool = False):  # EXPERIMENTAL #TODO
-        """ Snipe a boss using ready rotations. 
+    def snipe(buffs: bool = False, verbose: bool = False, fast: bool = False):  
+        """ Kill an enemy using abilities. 
 
         Keyword arguments:  
-        buffs -- if you want to use buffs also (not recommended).
+        buffs   -- if you want to use buffs also.
+        fast    --  if you only want to use quick attacks.  
+        verbose -- for debugging purposes. 
         """
         # turn off idle
-        if buffs:
-            queue = deque(Adventure.getReadyAbilities(buffs=True, fast=fast))
-        else:
-            queue = deque(Adventure.getReadyAbilities(fast=fast))
+        queue = deque(Adventure.getReadyAbilities(buffs=buffs, fast=fast))
+
         if verbose:
             print(f'ABILITIES: {queue}')
+
         start = time.time()
-        while not Adventure.isEnemyDead():
-            if not queue:
+        while not Adventure.isEnemyDead(): # checking for enemy text 
+            if not queue: # no abilities in queue to use 
+
                 if verbose:
                     print(f'getting abilities queue')
-                if buffs:
-                    queue = deque(Adventure.getReadyAbilities(
-                        buffs=True, fast=fast))
-                else:
-                    queue = deque(Adventure.getReadyAbilities(fast=fast))
+                
+                queue = deque(Adventure.getReadyAbilities(buffs=buffs, fast=fast))
+
                 if verbose:
                     print(f'ABILITIES: {queue}')
-            ability = queue.popleft()
-            end = time.time()
 
-            press(Adventure.abilities_keys[ability])
+            ability = queue.popleft() # ability to use now 
+
+            end = time.time() # time till got new abilities 
+
+            press(Adventure.abilities_keys[ability]) # use the ability as specified by Adv. mapping 
+
             if verbose:
                 print(f'time between attacks: {end - start}')
+
             start = time.time()
 
-            # WORK AROUND - SLEEP 1s (MY CD TIME)
-
-            while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
-                # print(f'color:  {Statistics.getPixelColor(*coords.ABILITY_1)}')
+            # check if regular attack is ready (fastest ability)
+            while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR): 
                 sleep(0.05)
-            # sleep(0.9) # RED LIQUID GLOBAL CD
 
     @staticmethod
     def isEnemyDead() -> bool:
