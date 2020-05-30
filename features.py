@@ -344,6 +344,13 @@ class Adventure:
         GoldDiggers.clearActive()
         print('dc, adv, pp, exp diggers')
         GoldDiggers.activate(['DROP_CHANCE', 'ADVENTURE', 'PP', 'EXP'])
+        print('turning on autokill')
+        # autokill should kill all previous titans
+        click(*coords.CONFIG)
+        click(*coords.AUTOKILL_TITAN_ON)
+        click(*coords.AUTOKILL_TITAN_OFF)
+        titans = Adventure.getTitans()
+        # manually kill what's left
         print('going to kill titans')
         Navigation.menu('adventure')
         for t in titans:
