@@ -24,6 +24,7 @@ while True:
         Adventure.killTitans(titans)
         Navigation.menu('inventory')
         Inventory.loadout(2)
+        Inventory.boostCube()
         Navigation.menu('goldDiggers')
         GoldDiggers.clearActive()
         GoldDiggers.activate(['PP', 'EXP', 'ENERGY_NGU', 'MAGIC_NGU'])
