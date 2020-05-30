@@ -353,7 +353,9 @@ class Adventure:
         titans = Adventure.getTitans()
         # manually kill what's left
         print('going to kill titans')
+        print(f'titans: {titans}')
         Navigation.menu('adventure')
+        Adventure.healHP()
         for t in titans:
             Adventure.killTitan(t)
         print(f'killed all titans')
