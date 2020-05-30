@@ -330,36 +330,57 @@ class Adventure:
         print(f'killed titan {titan}')
 
     @staticmethod
-    def killTitans(titans: list) -> None:
+    def killTitans(titans: list, verbose: bool = True) -> None:
         """ Kill all TITANS in list.
 
         Keep your drop chance loadout as 1.
         Will reset your diggers.
+
+        Arguments:  
+        titans    - list with titans to kill (from Adventure.getTitans). 
+        verbose   - print output for debugging purposes. 
         """
         # loadout and diggers and kills
         Navigation.menu('inventory')
-        print('boosting cube')
+
+        if verbose:
+            print('boosting cube')
+
         Inventory.boostCube()  # unclutter inventory
-        print('drop chance loadout')
+
+        if verbose:
+            print('drop chance loadout')
+
         Inventory.loadout(1)  # drop chance
         GoldDiggers.clearActive()
-        print('dc, adv, pp, exp diggers')
+
+        if verbose:
+            print('dc, adv, pp, exp diggers')
+
         GoldDiggers.activate(['DROP_CHANCE', 'ADVENTURE', 'PP', 'EXP'])
-        print('turning on autokill')
+
+        if verbose:
+            print('toggling autokill')
+
         # autokill should kill all previous titans
         click(*coords.CONFIG)
         click(*coords.AUTOKILL_TITAN_ON)
         click(*coords.AUTOKILL_TITAN_OFF)
         titans = Adventure.getTitans()
         # manually kill what's left
-        print('going to kill titans')
-        print(f'titans: {titans}')
+        if verbose:
+            print('going to kill titans')
+            print(f'titans: {titans}')
+
         Navigation.menu('adventure')
         Adventure.healHP()
+
         for t in titans:
             Adventure.killTitan(t)
-        print(f'killed all titans')
-        print('finished. you should change loadouts and diggers back now')
+
+        if verbose:
+            print(f'killed all titans')
+            print('finished. you should change loadouts and diggers back now')
 
     @staticmethod
     def turnIdleOn() -> None:
@@ -642,7 +663,7 @@ class Adventure:
         return Statistics.checkPixelColor(*coords.MY_HEALTH_BAR_FULL, coords.HEALTH_BAR_RED)
 
     @staticmethod
-    def healHP() -> None:  
+    def healHP() -> None:
         """ Heal hp in the safe zone. """
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in adventure menu!')
