@@ -114,6 +114,7 @@ class Itopod:
             print(f'exp: {Itopod.tiersEXP}')
 
         Navigation.menu('adventure')
+        Adventure.turnIdleOff()
         if not Itopod.tierKillsCount:
             for tier, floor in Itopod.tiers.items():
                 if verbose:
