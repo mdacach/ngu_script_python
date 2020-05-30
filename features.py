@@ -357,7 +357,10 @@ class Adventure:
             print('drop chance loadout')
 
         Inventory.loadout(1)  # drop chance
-        GoldDiggers.clearActive()
+        # remembering previous diggers
+        Navigation.menu('goldDiggers')
+        click(*coords.SAVE_ACTIVE)
+        click(*coords.CLEAR_ACTIVE)
 
         if verbose:
             print('dc, adv, pp, exp diggers')
@@ -387,6 +390,9 @@ class Adventure:
 
         for t in titans:
             Adventure.killTitan(t)
+
+        Navigation.menu('goldDiggers')
+        click(*coords.CAP_SAVED)
 
         if verbose:
             print(f'killed all titans')
