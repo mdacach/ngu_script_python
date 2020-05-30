@@ -359,7 +359,9 @@ class Adventure:
         Inventory.loadout(1)  # drop chance
         # remembering previous diggers
         Navigation.menu('goldDiggers')
+        # print('saving')
         click(*coords.SAVE_ACTIVE)
+        # print('clearing')
         click(*coords.CLEAR_ACTIVE)
 
         if verbose:
@@ -392,6 +394,7 @@ class Adventure:
             Adventure.killTitan(t)
 
         Navigation.menu('goldDiggers')
+        click(*coords.CLEAR_ACTIVE)
         click(*coords.CAP_SAVED)
 
         if verbose:
