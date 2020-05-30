@@ -641,14 +641,14 @@ class Adventure:
 
         return Statistics.checkPixelColor(*coords.MY_HEALTH_BAR_FULL, coords.HEALTH_BAR_RED)
 
-    # @staticmethod
-    # def healHP() -> None:  # DEPRECATED
-        # """ Heal HP in the Safe Zone. """
-        # if Navigation.currentMenu != 'adventure':
-        # raise Exception('should be in Adventure menu!')
-        # Adventure.adventureZone('safe')
-        # sleep(25)
-        # # click(*ADVANCE_ZONE, button="right")
+    @staticmethod
+    def healHP() -> None:  
+        """ Heal hp in the safe zone. """
+        if Navigation.currentMenu != 'adventure':
+            raise Exception('should be in adventure menu!')
+        Adventure.adventureZone('safe')
+        while not Adventure.isPlayerFull():
+            sleep(1)
 
     @staticmethod
     def enemySpawn() -> bool:
