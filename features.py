@@ -378,20 +378,25 @@ class Adventure:
         click(*coords.AUTOKILL_TITAN_OFF)
         titans = Adventure.getTitans()
         # manually kill what's left
-        if verbose:
-            print('going to kill titans')
-            print(f'titans: {titans}')
 
-        # drop chanche and fighting accs
-        if use_fighting_loadout:
-            Navigation.menu('inventory')
-            Inventory.loadout(3)
+        if titans:
+            if verbose:
+                print('going to kill titans')
+                print(f'titans: {titans}')
 
-        Navigation.menu('adventure')
-        Adventure.healHP()
+            # drop chanche and fighting accs
+            if use_fighting_loadout:
+                Navigation.menu('inventory')
+                Inventory.loadout(3)
 
-        for t in titans:
-            Adventure.killTitan(t)
+            Navigation.menu('adventure')
+            Adventure.healHP()
+
+            for t in titans:
+                Adventure.killTitan(t)
+        else:
+            if verbose:
+                print('no titans left')
 
         Navigation.menu('goldDiggers')
         click(*coords.CLEAR_ACTIVE)
