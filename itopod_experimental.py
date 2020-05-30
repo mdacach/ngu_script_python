@@ -1,10 +1,38 @@
 from inventory import invManagement
-from features import Itopod, Inventory, Yggdrasil
+from features import Adventure, GoldDiggers, Itopod, Inventory, Misc, NGU, Yggdrasil
 from navigation import Navigation
+
+print(f'initial preparations')
+Navigation.menu('inventory')
+Inventory.loadout(2)
+Navigation.menu('goldDiggers')
+GoldDiggers.clearActive()
+GoldDiggers.activate(['PP', 'EXP', 'ENERGY_NGU', 'MAGIC_NGU'])
+Misc.inputResource(amount='half', idle=True, energy=True)
+Navigation.menu('ngu')
+NGU.addEnergy(['ADVENTURE_ALPHA', 'DROP_CHANCE'])
+Misc.inputResource(amount='half', idle=True, energy=False)
+NGU.addMagic(['YGGDRASIL', 'EXP'])
 
 totalTime = 0
 duration = 5
 while True:
+    titans = Adventure.getTitans()
+    if titans:
+        # after this needs to reset loadout and diggers and e/m
+        Adventure.turnIdleOff()
+        Adventure.killTitans(titans)
+        Navigation.menu('inventory')
+        Inventory.loadout(2)
+        Navigation.menu('goldDiggers')
+        GoldDiggers.clearActive()
+        GoldDiggers.activate(['PP', 'EXP', 'ENERGY_NGU', 'MAGIC_NGU'])
+        Misc.inputResource(amount='half', idle=True, energy=True)
+        Navigation.menu('ngu')
+        NGU.addEnergy(['ADVENTURE_ALPHA', 'DROP_CHANCE'])
+        Misc.inputResource(amount='half', idle=True, energy=False)
+        NGU.addMagic(['YGGDRASIL', 'EXP'])
+
     Navigation.menu('adventure')
     print('*' * 30)
     Itopod.itopodExperimental(duration=duration)
