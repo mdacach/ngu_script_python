@@ -729,7 +729,7 @@ class Inventory:
 
         click(x, y, delay='fast')
         # two times to be sure
-        # pyautogui.press('d')
+        pyautogui.press('d')
         pyautogui.press('d')
 
     @staticmethod
@@ -740,7 +740,7 @@ class Inventory:
 
         click(x, y, delay='fast')
         # two times to be sure
-        # pyautogui.press('a')
+        pyautogui.press('aa')
         pyautogui.press('a')
 
     @staticmethod
@@ -789,6 +789,7 @@ class Inventory:
         y0 = coords.SLOT1[1]
         i = 0
         j = 0
+        click(x0, y0)  # boosting first item sometimes fail
         while num < slots:
             if (i >= 12):
                 i = 0
@@ -815,6 +816,7 @@ class Inventory:
         y0 = coords.SLOT1[1]
         i = 0
         j = 0
+        click(x0, y0)  # boosting first item sometimes fail
         while num < slots:
             if (i >= 12):
                 i = 0
