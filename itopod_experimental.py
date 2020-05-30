@@ -22,6 +22,10 @@ parser.add_argument('--verbose',
                     help='print output',
                     action='store_true')
 
+parser.add_argument('--use_fighting_loadout',
+                    help='use fighting loadout for manualing titans',
+                    action='store_true')
+
 args = parser.parse_args()
 
 
@@ -50,11 +54,8 @@ def main():
             if titans:
                 # after this needs to reset loadout and diggers and e/m
                 Adventure.turnIdleOff()
-                if args.verbose:
-                    print(titans)
-                    Adventure.killTitans(titans, verbose=True)
-                else:
-                    Adventure.killTitans(titans)
+                Adventure.killTitans(
+                    titans, verbose=args.verbose, use_fighting_loadout=args.use_fighting_loadout)
                 if args.verbose:
                     print('redoing setup')
                 Navigation.menu('inventory')
