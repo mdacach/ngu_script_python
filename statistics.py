@@ -161,5 +161,3 @@ class Statistics:
 
 if __name__ == '__main__':
     pass
-    # click(*coords.ADVENTURE)
-    # print(Statistics.getText(coords.TITAN_COUNTER_REGION, save=True))
