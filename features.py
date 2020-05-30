@@ -335,7 +335,7 @@ class Adventure:
 
         Keep your full drop chance loadout as 1. 
         Keep your fighting loadout as 3 if you're using it. 
-        Will reset your diggers and resources. 
+        Will reset your resources and retoggle your diggers. 
 
         Arguments:  
         titans                 -- list with titans to kill (from Adventure.getTitans). 
