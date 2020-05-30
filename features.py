@@ -321,6 +321,10 @@ class Adventure:
     def killTitan(titan: str) -> None:
         """ Will kill TITAN. """
         Adventure.adventureZone(titan)
+        start = time.time()
+        # wait for 10s at max for spawn (in case titan ocr bugged)
+        while time.time() - start < 10 and not Adventure.enemySpawn():
+            sleep(0.03)
         Adventure.snipe(buffs=True)
         print(f'killed titan {titan}')
 
@@ -647,7 +651,8 @@ class Adventure:
         if Navigation.currentMenu != 'adventure':
             raise Exception('should be in Adventure menu!')
 
-        return Statistics.checkPixelColor(*coords.ENEMY_HEALTH_BAR_BORDER, coords.ENEMY_HEALTH_BAR_RED)
+        return not Adventure.isEnemyDead()
+#        return Statistics.checkPixelColor(*coords.ENEMY_HEALTH_BAR_BORDER, coords.ENEMY_HEALTH_BAR_RED)
 
     @staticmethod
     def isBoss() -> bool:
@@ -1119,8 +1124,8 @@ class Misc:
 
         if Navigation.currentMenu not in possibleMenus:
             Navigation.menu('basicTraining')
-        
-        if energy: 
+
+        if energy:
             if not idle:
                 if amount == 'cap':
                     click(*coords.ENERGY_CUSTOM_AMOUNT_CAP)
@@ -1150,7 +1155,6 @@ class Misc:
                     click(*coords.MAGIC_CUSTOM_AMOUNT_HALF_IDLE)
                 if amount == 'quarter':
                     click(*coords.MAGIC_CUSTOM_AMOUNT_QUARTER_IDLE)
-
 
 
 class Questing:
