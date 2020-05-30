@@ -330,15 +330,20 @@ class Adventure:
         print(f'killed titan {titan}')
 
     @staticmethod
-    def killTitans(titans: list, verbose: bool = True) -> None:
+    def killTitans(titans: list, verbose: bool = True, use_fighting_loadout: bool = False) -> None:
         """ Kill all TITANS in list.
 
-        Keep your drop chance loadout as 1.
-        Will reset your diggers.
+        Keep your full drop chance loadout as 1. 
+        Keep your fighting loadout as 3 if you're using it. 
+        Will reset your diggers and resources. 
 
         Arguments:  
-        titans    - list with titans to kill (from Adventure.getTitans). 
-        verbose   - print output for debugging purposes. 
+        titans                 -- list with titans to kill (from Adventure.getTitans). 
+
+        Keyword arguments:  
+        use_fighting_loadout  -- switch to loadout 3 for manual fights. Use this if you need to 
+        mix some fight accs for your titan fight. 
+        verbose                -- print output for debugging purposes. 
         """
         # loadout and diggers and kills
         Navigation.menu('inventory')
@@ -371,6 +376,11 @@ class Adventure:
         if verbose:
             print('going to kill titans')
             print(f'titans: {titans}')
+
+        # drop chanche and fighting accs
+        if use_fighting_loadout:
+            Navigation.menu('inventory')
+            Inventory.loadout(3)
 
         Navigation.menu('adventure')
         Adventure.healHP()
@@ -741,6 +751,8 @@ class Inventory:
             click(*coords.LOADOUT1)
         if num == 2:
             click(*coords.LOADOUT2)
+        if num == 3:
+            click(*coords.LOADOUT3)
 
     @staticmethod
     def mergeItem(x: int, y: int) -> None:
