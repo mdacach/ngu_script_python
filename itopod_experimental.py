@@ -25,6 +25,9 @@ parser.add_argument('--verbose',
 parser.add_argument('--use_fighting_loadout',
                     help='use fighting loadout for manualing titans',
                     action='store_true')
+parser.add_argument('--noygg',
+                    help='do not harvest ygg',
+                    action='store_true')
 
 args = parser.parse_args()
 
@@ -85,7 +88,8 @@ def main():
         if Inventory.getEmptySlots() < 10:
             invManagement()
 
-        Yggdrasil.harvestAll()
+        if not args.noygg:
+            Yggdrasil.harvestAll()
 
 
 if __name__ == '__main__':
