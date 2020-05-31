@@ -75,6 +75,7 @@ class Itopod:
         6: 250,
         7: 300,
         8: 350,
+        # 9: 400,
     }
     tiersEXP = {
         1: 1,
@@ -85,6 +86,7 @@ class Itopod:
         6: 22,
         7: 32,
         8: 44,
+        # 9: 58,
     }
     kills = 0
     AP_gained = 0
@@ -391,6 +393,12 @@ class Adventure:
 
             Navigation.menu('adventure')
             Adventure.healHP()
+
+            if verbose:
+                print('disabling beast mode')
+
+                if Statistics.checkPixelColor(*coords.BEAST_MODE_ON, coords.BEAST_MODE_COLOR):
+                    click(*coords.BEAST_MODE)
 
             for t in titans:
                 Adventure.killTitan(t)
