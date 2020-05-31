@@ -1,8 +1,12 @@
 import argparse
 
-from inventory import invManagement
+import coords
+
 from features import Adventure, GoldDiggers, Itopod, Inventory, Misc, NGU, Yggdrasil
+from helper import click
+from inventory import invManagement
 from navigation import Navigation
+from statistics import Statistics
 
 parser = argparse.ArgumentParser()
 
@@ -27,6 +31,10 @@ parser.add_argument('--use_fighting_loadout',
                     action='store_true')
 parser.add_argument('--noygg',
                     help='do not harvest ygg',
+                    action='store_true')
+
+parser.add_argument('--nobeast',
+                    help='do not use beast mode',
                     action='store_true')
 
 args = parser.parse_args()
@@ -57,6 +65,10 @@ def main():
             if titans:
                 # after this needs to reset loadout and diggers and e/m
                 Adventure.turnIdleOff()
+                if not args.nobeast:
+                    if not Statistics.checkPixelColor(*coords.BEAST_MODE_ON, coords.BEAST_MODE_COLOR):
+                        click(*coords.BEAST_MODE)
+
                 Adventure.killTitans(
                     titans, verbose=args.verbose, use_fighting_loadout=args.use_fighting_loadout)
                 if args.verbose:
