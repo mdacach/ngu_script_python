@@ -11,8 +11,11 @@ import coords
 
 from features import Adventure, Questing, Inventory
 from navigation import Navigation
-from helper import sleep, printTime
+from helper import Helper
 from yggdrasil import ygg
+
+sleep = Helper.sleep
+printTime = Helper.printTime
 
 parser = argparse.ArgumentParser()
 
@@ -36,6 +39,7 @@ args = parser.parse_args()
 
 
 def main():
+    Helper.init()
     while True:
         Navigation.menu('questing')
         Questing.start()

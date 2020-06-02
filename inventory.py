@@ -1,10 +1,7 @@
-""" Inventory management script. """
-import time
+""" Inventory management script. 
 
-import pyautogui
-
-import coords
-from helper import *
+    Should only be called inside other scripts.
+"""
 from features import Inventory
 from navigation import Navigation
 
@@ -12,12 +9,10 @@ from navigation import Navigation
 def invManagement(slots=10):
     Navigation.menu('inventory')
     Inventory.boostAndMergeEquipped()
-    Inventory.boostInventory(slots=1)
+    Inventory.boostInventory(slots=5)
     Inventory.mergeInventory(slots=10)
     Inventory.boostCube()
 
 
 if __name__ == '__main__':
-    Navigation.menu('inventory')
-    empty = Inventory.getEmptySlots()
-    print(f'empty slots: {empty}')
+    invManagement()

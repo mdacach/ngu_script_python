@@ -1,123 +1,128 @@
-""" Helper functions. 
-
-    Intializes by getting position of top-left corner of the game. 
+""" Helper functions, including click, sleep, move. 
+    
+    Call Helper.init() at the start of every script to locate the left corner. 
 """
 
-from typing import List, Set, Dict, Tuple
 import time
+from typing import List, Set, Dict, Tuple
 
 import pyautogui
 
 import constants
 
 # get the game corner coordinates
-CORNER = None
-print('searching for corner...')
-while CORNER == None:
-    CORNER = pyautogui.locateOnScreen('images/ingame-corner.png')
-    if CORNER == None:
-        print('could not find top-left corner')
-print('success')
-# our coordinates are shifted 25 px up because of steam border
-
-# normalize to standard int:
-CORNER = list(map(int, CORNER))
-
-# lower pyautogui.PAUSE constant
-pyautogui.PAUSE = 0.01
-
-def printTime():
-    print(time.strftime("%H:%M:%S", time.localtime()))
-
-def rawMove(x: int, y: int) -> None:
-    """ Move mouse to absolute coordinates x, y. 
-
-    This method does not use getCoords.
-    """
-    pyautogui.moveTo(x, y)
 
 
-def rawClick(x: int, y: int, button: str = "left") -> None:
-    """ Click on absolute coordinates x, y. 
+class Helper:
+    # global variable
+    CORNER = None
 
-    Keyword arguments:  
-    button -- left or right.
-    """
-    pyautogui.click(x, y, button=button)
+    @staticmethod
+    def init():
 
+        print('searching for game left corner...')
 
-def sleep(time: int) -> None:
-    """ Sleep for x amount of seconds. """
-    pyautogui.sleep(time)
+        while Helper.CORNER == None:
+            Helper.CORNER = pyautogui.locateOnScreen(
+                'images/ingame-corner.png')
+            if Helper.CORNER == None:
+                print('could not find top-left corner, \nis the game fully visible?')
 
+        print('success')
+        # our coordinates are shifted 25 px up because of steam border
 
-def getCoords(x: int, y: int) -> Tuple[int, int]:
-    """ Return coordinates relative to top-left corner of the game. """
+        # normalize to standard int:
+        Helper.CORNER = list(map(int, Helper.CORNER))
 
-    # due to pyautogui and opencv interation, CORNER returns a box with numpy.int64 type numbers.
-    # this breaks all other parts of the code and pyautogui itself.
-    # as a workaround, I recast every coordinate as standard int.
-    return (int(CORNER[0] + x), int(CORNER[1] + y - 25))
+        # lower pyautogui.PAUSE constant
+        pyautogui.PAUSE = 0.01
 
+    @staticmethod
+    def printTime():
+        print(time.strftime("%H:%M:%S", time.localtime()))
 
-def getRegion(x: int, y: int, x2: int, y2: int) -> Tuple[int, int, int, int]:
-    """ Return coordinates for a region of the screen normalized by the game corner. """
-    x, y = getCoords(x, y)
-    return (int(x), int(y), int(x2), int(y2))
+    @staticmethod
+    def rawMove(x: int, y: int) -> None:
+        """ Move mouse to absolute coordinates x, y. 
 
+        This method does not use getCoords.
+        """
+        pyautogui.moveTo(x, y)
 
-def moveTo(x: int, y: int) -> None:
-    """ Move mouse to coordinates x, y relative to game. """
-    x, y = getCoords(x, y)
-    pyautogui.moveTo(x, y)
+    @staticmethod
+    def rawClick(x: int, y: int, button: str = "left") -> None:
+        """ Click on absolute coordinates x, y. 
 
+        Keyword arguments:  
+        button -- left or right.
+        """
+        pyautogui.click(x, y, button=button)
 
-def click(x: int, y: int, button: str = "left", delay: str = "medium") -> None:
-    """ Click on coordinates x, y relative to game. 
+    @staticmethod
+    def sleep(time: int) -> None:
+        """ Sleep for x amount of seconds. """
+        pyautogui.sleep(time)
 
-    Keyword arguments:  
-    button -- left or right.  
-    delay -- time to wait after click: fast, medium or long.  
-    """
-    moveTo(x, y)
-    pyautogui.click(button=button)
-    if delay == "fast":
-        sleep(constants.FAST_SLEEP)
-    elif delay == "medium":
-        sleep(constants.MEDIUM_SLEEP)
-    elif delay == "long":
-        sleep(constants.LONG_SLEEP)
+    @staticmethod
+    def getCoords(x: int, y: int) -> Tuple[int, int]:
+        """ Return coordinates relative to top-left corner of the game. """
 
+        # due to pyautogui and opencv interation, CORNER returns a box with numpy.int64 type numbers.
+        # this breaks all other parts of the code and pyautogui itself.
+        # as a workaround, I recast every coordinate as standard int.
+        return (int(Helper.CORNER[0] + x), int(Helper.CORNER[1] + y - 25))
 
-def ctrlClick() -> None:  # TODO add coordinates
-    """ Control click on current mouse position. """
-    pyautogui.keyDown('ctrl')
-    sleep(0.3)
-    pyautogui.click()
-    sleep(0.3)
-    pyautogui.keyUp('ctrl')
+    @staticmethod
+    def getRegion(x: int, y: int, x2: int, y2: int) -> Tuple[int, int, int, int]:
+        """ Return coordinates for a region of the screen normalized by the game corner. """
+        x, y = Helper.getCoords(x, y)
+        return (int(x), int(y), int(x2), int(y2))
 
+    @staticmethod
+    def moveTo(x: int, y: int) -> None:
+        """ Move mouse to coordinates x, y relative to game. """
+        x, y = Helper.getCoords(x, y)
+        pyautogui.moveTo(x, y)
 
-def press(letters: str, delay: int = 0) -> None:
-    """ Send letters to window. 
+    @staticmethod
+    def click(x: int, y: int, button: str = "left", delay: str = "medium") -> None:
+        """ Click on coordinates x, y relative to game. 
 
-    Keyword arguments:  
-    delay -- optional delay between letters, in seconds.
-    """
-    for letter in letters:
-        pyautogui.press(letter)
-        if delay:
-            pyautogui.sleep(delay)
+        Keyword arguments:  
+        button -- left or right.  
+        delay -- time to wait after click: fast, medium or long.  
+        """
+        Helper.moveTo(x, y)
+        pyautogui.click(button=button)
+        if delay == "fast":
+            Helper.sleep(constants.FAST_SLEEP)
+        elif delay == "medium":
+            Helper.sleep(constants.MEDIUM_SLEEP)
+        elif delay == "long":
+            Helper.sleep(constants.LONG_SLEEP)
 
+    @staticmethod
+    def ctrlClick() -> None:  # TODO add coordinates
+        """ Control click on current mouse position. """
+        pyautogui.keyDown('ctrl')
+        Helper.sleep(0.3)
+        pyautogui.click()
+        Helper.sleep(0.3)
+        pyautogui.keyUp('ctrl')
 
-if __name__ == '__main__':
-    print(f'debugging: ')
-    print(f'CORNER: {CORNER}')
-    print(f'CORNER[0] = {CORNER[0]}')
-    print(f'type: {type(CORNER[0])}')
-    for x in CORNER:
-        print(x)
-    # print(f'should work: ')
-    # pyautogui.pixelMatchesColor(100, 100, (255, 255, 255))
-    # print(f'should not work: ')
-    # pyautogui.pixelMatchesColor(*getCoords(100, 100), (255, 255, 255))
+    @staticmethod
+    def press(letters: str, delay: float = 0) -> None:
+        """ Send letters to window. 
+
+        Keyword arguments:  
+        delay -- optional delay between letters, in seconds.
+        """
+        for letter in letters:
+            pyautogui.press(letter)
+            if delay:
+                pyautogui.sleep(delay)
+
+    @staticmethod
+    def write(letters: str, delay: float = 0):
+        """ Write letters to window. """
+        pyautogui.write(letters, interval=delay)

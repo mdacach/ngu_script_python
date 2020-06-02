@@ -4,27 +4,33 @@ import time
 
 import pyautogui
 
-
-from coords import *
-from features import *
-from helper import *
+from features import Adventure, Inventory
+from helper import Helper
 from inventory import invManagement
 from navigation import Navigation
 from yggdrasil import ygg
 
+sleep = Helper.sleep
+
 parser = argparse.ArgumentParser()
-parser.add_argument('zone', help='the zone to farm')
+parser.add_argument('zone',
+                    help='the zone to farm')
+
 parser.add_argument('--boss', '-b',
                     help='kill only bosses',
                     action='store_true')
+
 parser.add_argument('--kills', '-k',
                     help='kills between inv management',
                     type=int,
                     default=50)
+
 parser.add_argument('--verbose', '-v',
                     help='print stuff',
                     action='store_true')
-parser.add_argument('--fast', '-f', help='use only regular attacks',
+
+parser.add_argument('--fast', '-f',
+                    help='use only regular attacks',
                     action='store_true')
 
 parser.add_argument('--slots',
@@ -36,65 +42,65 @@ args = parser.parse_args()
 
 
 def main():
+    Helper.init()
+
     Adventure.adventureZone(args.zone)
-    print(Navigation.currentMenu)
-    killCounter = 0
+
     if args.verbose:
         print(f'farming zone {args.zone}')
         print(f'boss only: {args.boss}')
         print(f'kills until inv management: {args.kills}')
-    start = time.time()
+
     Adventure.turnIdleOff()
+    killCounter = 0
+    lastKill = False
     while True:
-        if Adventure.enemySpawn():
+        while not Adventure.enemySpawn():
+            sleep(0.03)
+
+        if Adventure.isBoss():
+            if args.fast:
+                Adventure.kill(fast=True)
+            else:
+                Adventure.snipe()
+            killCounter += 1
+            lastKill = True
+            if args.verbose:
+                print(f'killed: {killCounter}')
+
+        else:
             if args.boss:
-                if Adventure.isBoss():
-                    if args.fast:
-                        Adventure.kill(fast=True)
-                    else:
-                        Adventure.kill(buffs=True)
-                    killCounter += 1
-                    if args.verbose:
-                        print(f'kill count: {killCounter}')
-                    # sleep(1)
-                    # pyautogui.press('d')
-                    killed = True
-                else:
-                    killed = False
-                    Adventure.refreshZone()
+                Adventure.refreshZone()
+                lastKill = False
             else:
                 if args.fast:
                     Adventure.kill(fast=True)
                 else:
-                    Adventure.snipe(fast=True)
+                    Adventure.snipe()
+
                 killCounter += 1
+                lastKill = True
+
                 if args.verbose:
-                    print(f'kill count: {killCounter}')
-                # sleep(1)
-                # pyautogui.press('d')
-                killed = True
+                    print(f'killed: {killCounter}')
 
-            if killed and killCounter > 0 and killCounter % args.kills == 0:
+        if lastKill and killCounter % args.kills == 0:
+            if args.verbose:
+                print(f'inv management:')
 
-                print(f'inv management')
-                print(f'time: {round((time.time() - start))/60} minutes')
-                Adventure.turnIdleOn()
-                # Adventure.adventureZone('safe')
+            Adventure.turnIdleOn()
 
-                Navigation.menu('inventory')
-                emptySlots = Inventory.getEmptySlots()
+            Navigation.menu('inventory')
+            emptySlots = Inventory.getEmptySlots()
+
+            if args.verbose:
                 print(f'empty slots: {emptySlots}')
-                if emptySlots < 10:
-                    invManagement(slots=args.slots)
-                    ygg()
+            if emptySlots < 10:
+                invManagement(slots=args.slots)
+                ygg()
 
-                print(f'going back to adventure')
-                Navigation.menu('adventure')
-                # Adventure.adventureZone(args.zone)
-                # print(f'is idle: {Adventure.isIdle()}')
-
-                Adventure.turnIdleOff()
-                # print(f'is idle: {Adventure.isIdle()}')
+            Navigation.menu('adventure')
+            Adventure.turnIdleOff()
 
 
 if __name__ == '__main__':

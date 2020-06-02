@@ -3,7 +3,7 @@ import argparse
 import coords
 
 from features import Adventure, GoldDiggers, Itopod, Inventory, Misc, NGU, Yggdrasil
-from helper import click
+from helper import Helper
 from inventory import invManagement
 from navigation import Navigation
 from statistics import Statistics
@@ -41,19 +41,26 @@ args = parser.parse_args()
 
 
 def main():
+
+    Helper.init()
+
     if not args.nosetup:
         if args.verbose:
             print(f'initial preparations')
+
         Navigation.menu('inventory')
         Inventory.loadout(2)
         Navigation.menu('goldDiggers')
         GoldDiggers.clearActive()
-        GoldDiggers.activate(['PP', 'EXP', 'ENERGY_NGU', 'MAGIC_NGU'])
-        Misc.inputResource(amount='half', idle=True, energy=True)
+        GoldDiggers.activate(
+            ['PP', 'EXP', 'ADVENTURE', 'ENERGY_NGU', 'MAGIC_NGU'])
         Navigation.menu('ngu')
+        Misc.inputResource(amount='half', idle=True, energy=True)
         NGU.addEnergy(['ADVENTURE_ALPHA', 'DROP_CHANCE'])
         Misc.inputResource(amount='half', idle=True, energy=False)
         NGU.addMagic(['YGGDRASIL', 'EXP'])
+        # Misc.inputResource(amount='cap', idle=True, energy=False)
+        # NGU.addMagic(['ENERGY_NGU'])
 
     totalTime = 0
     duration = args.duration
@@ -65,9 +72,6 @@ def main():
             if titans:
                 # after this needs to reset loadout and diggers and e/m
                 Adventure.turnIdleOff()
-                if not args.nobeast:
-                    if not Statistics.checkPixelColor(*coords.BEAST_MODE_ON, coords.BEAST_MODE_COLOR):
-                        click(*coords.BEAST_MODE)
 
                 Adventure.killTitans(
                     titans, verbose=args.verbose, use_fighting_loadout=args.use_fighting_loadout)
@@ -80,13 +84,18 @@ def main():
                 # Navigation.menu('goldDiggers')
                 # GoldDiggers.clearActive()
                 # GoldDiggers.activate(['PP', 'EXP', 'ENERGY_NGU', 'MAGIC_NGU'])
-                Misc.inputResource(amount='half', idle=True, energy=True)
                 Navigation.menu('ngu')
+                Misc.inputResource(amount='half', idle=True, energy=True)
                 NGU.addEnergy(['ADVENTURE_ALPHA', 'DROP_CHANCE'])
                 Misc.inputResource(amount='half', idle=True, energy=False)
                 NGU.addMagic(['YGGDRASIL', 'EXP'])
+                # Misc.inputResource(amount='cap', idle=True, energy=False)
+                # NGU.addMagic(['ENERGY_NGU'])
 
         Navigation.menu('adventure')
+        if not args.nobeast:
+            if not Statistics.checkPixelColor(*coords.BEAST_MODE_ON, coords.BEAST_MODE_COLOR):
+                Helper.click(*coords.BEAST_MODE)
         print('*' * 30)
         Itopod.itopodExperimental(duration=duration)
         totalTime += duration

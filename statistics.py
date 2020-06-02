@@ -6,11 +6,15 @@ import pyautogui
 import mss
 
 import coords
-from helper import *
+from helper import Helper
 import pytesseract as ocr
 from PIL import Image, ImageFilter
 from navigation import Navigation
 from features import *
+
+click = Helper.click
+getRegion = Helper.getRegion
+getCoords = Helper.getCoords
 
 
 class Statistics:
@@ -30,7 +34,7 @@ class Statistics:
         if region:
             region = getRegion(*region)
         else:  # all game screen
-            region = (CORNER[0], CORNER[1],
+            region = (Helper.CORNER[0], Helper.CORNER[1],
                       coords.GAME_WIDTH, coords.GAME_HEIGHT)
         with mss.mss() as sct:
             monitor = {}

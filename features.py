@@ -21,14 +21,23 @@ Missing:
 
 from collections import deque
 from typing import List, Set, Dict, Tuple, Generator
-
-import re
 import time
+import re
+
+import pyautogui
 
 import coords
-from helper import *
+from helper import Helper
 from navigation import Navigation
 from statistics import Statistics
+
+click = Helper.click
+moveTo = Helper.moveTo
+sleep = Helper.sleep
+getRegion = Helper.getRegion
+getCoords = Helper.getCoords
+press = Helper.press
+write = Helper.write
 
 
 class BasicTraining:
@@ -165,7 +174,7 @@ class Itopod:
                     f'going to tier {current_tier} at floor {Itopod.tiers[current_tier]}')
             click(*coords.ITOPOD_ENTER, delay='fast')
             click(*coords.ITOPOD_START_INPUT, delay='fast')
-            pyautogui.write(str(Itopod.tiers[current_tier]))
+            write(str(Itopod.tiers[current_tier]))
             click(*coords.ITOPOD_ENTER_CONFIRMATION, delay='fast')
             optimal = False
 
@@ -226,7 +235,7 @@ class Itopod:
 
                 click(*coords.ITOPOD_ENTER, delay='fast')
                 click(*coords.ITOPOD_START_INPUT, delay='fast')
-                pyautogui.write(str(Itopod.tiers[current_tier]))
+                write(str(Itopod.tiers[current_tier]))
                 click(*coords.ITOPOD_ENTER_CONFIRMATION, delay='fast')
                 optimal = False
             elif not optimal:  # must be bigger than 1
@@ -425,7 +434,7 @@ class Adventure:
         click(*coords.MY_HEALTH_BAR_BORDER)  # get rid of tooltip
         sleep(0.5)
         if (not Adventure.isIdle()):
-            pyautogui.press('q')
+            press('q')
 
     @staticmethod
     def turnIdleOff() -> None:
@@ -439,7 +448,7 @@ class Adventure:
         click(*coords.MY_HEALTH_BAR_BORDER)  # get rid of tooltip
         sleep(0.5)
         if (Adventure.isIdle()):
-            pyautogui.press('q')
+            press('q')
 
     @staticmethod
     def showZones() -> None:
@@ -473,9 +482,9 @@ class Adventure:
             click(*coords.ITOPOD_OPTIMAL)
         else:
             click(*coords.ITOPOD_START_INPUT)
-            pyautogui.write(floor, interval=0.2)
+            write(floor, interval=0.2)
             click(*coords.ITOPOD_END_INPUT)
-            pyautogui.write(floor, interval=0.2)
+            write(floor, interval=0.2)
         click(*coords.ITOPOD_ENTER_CONFIRMATION)
 
     @staticmethod
@@ -489,7 +498,7 @@ class Adventure:
         click(*coords.ITOPOD_ENTER)
         click(*coords.ITOPOD_MAX)
         click(*coords.ITOPOD_END_INPUT)
-        pyautogui.write(floor, interval=0.2)
+        write(floor, interval=0.2)
         click(*coords.ITOPOD_ENTER_CONFIRMATION)
 
     @staticmethod
@@ -534,7 +543,7 @@ class Adventure:
 
         while not Adventure.isEnemyDead():
             if fast:  # use only regular attacks
-                pyautogui.press('w')
+                press('w')
             else:  # use all attacks
                 Adventure.sendAttacks()
 
@@ -783,8 +792,8 @@ class Inventory:
 
         click(x, y, delay='fast')
         # two times to be sure
-        pyautogui.press('d')
-        pyautogui.press('d')
+        press('d')
+        press('d')
 
     @staticmethod
     def boostItem(x: int, y: int) -> None:
@@ -794,8 +803,8 @@ class Inventory:
 
         click(x, y, delay='fast')
         # two times to be sure
-        pyautogui.press('aa')
-        pyautogui.press('a')
+        press('aa')
+        press('a')
 
     @staticmethod
     def boostAndMergeEquipped() -> None:  # TODO add new acc slots
@@ -1159,22 +1168,22 @@ class Misc:
         """ Reclaim all energy. """
         if Navigation.currentMenu == 'adventure':
             Navigation.menu('basicTraining')
-        pyautogui.press('r')
+        press('r')
 
     @staticmethod
     def reclaimMagic() -> None:
         """ Reclaim all magic. """
         if Navigation.currentMenu == 'adventure':
             Navigation.menu('basicTraining')
-        pyautogui.press('t')
+        press('t')
 
     @staticmethod
     def reclaimAll() -> None:
         """ Reclaim all resources. """
         if Navigation.currentMenu == 'adventure':
             Navigation.menu('basicTraining')
-        pyautogui.press('r')
-        pyautogui.press('t')
+        press('r')
+        press('t')
 
     @staticmethod
     def inputResource(amount='cap', idle=False, energy=True):

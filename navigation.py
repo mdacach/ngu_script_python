@@ -1,6 +1,9 @@
 """ Navigation module. """
 import coords
-from helper import *
+from helper import Helper
+
+click = Helper.click
+sleep = Helper.sleep
 
 
 class Navigation:
