@@ -7,6 +7,7 @@ from helper import Helper
 from inventory import invManagement
 from navigation import Navigation
 from statistics import Statistics
+from setup import Setup
 
 parser = argparse.ArgumentParser()
 
@@ -45,22 +46,7 @@ def main():
     Helper.init()
 
     if not args.nosetup:
-        if args.verbose:
-            print(f'initial preparations')
-
-        Navigation.menu('inventory')
-        Inventory.loadout(2)
-        Navigation.menu('goldDiggers')
-        GoldDiggers.clearActive()
-        GoldDiggers.activate(
-            ['PP', 'EXP', 'ADVENTURE', 'ENERGY_NGU', 'MAGIC_NGU'])
-        Navigation.menu('ngu')
-        Misc.inputResource(amount='half', idle=True, energy=True)
-        NGU.addEnergy(['ADVENTURE_ALPHA', 'DROP_CHANCE'])
-        Misc.inputResource(amount='half', idle=True, energy=False)
-        NGU.addMagic(['YGGDRASIL', 'EXP'])
-        # Misc.inputResource(amount='cap', idle=True, energy=False)
-        # NGU.addMagic(['ENERGY_NGU'])
+        Setup.setup('itopod')
 
     totalTime = 0
     duration = args.duration
@@ -75,22 +61,11 @@ def main():
 
                 Adventure.killTitans(
                     titans, verbose=args.verbose, use_fighting_loadout=args.use_fighting_loadout)
+
                 if args.verbose:
                     print('redoing setup')
-                Navigation.menu('inventory')
-                Inventory.loadout(2)
-                Inventory.boostCube()
-                # kill titans won't mess with gold diggers now
-                # Navigation.menu('goldDiggers')
-                # GoldDiggers.clearActive()
-                # GoldDiggers.activate(['PP', 'EXP', 'ENERGY_NGU', 'MAGIC_NGU'])
-                Navigation.menu('ngu')
-                Misc.inputResource(amount='half', idle=True, energy=True)
-                NGU.addEnergy(['ADVENTURE_ALPHA', 'DROP_CHANCE'])
-                Misc.inputResource(amount='half', idle=True, energy=False)
-                NGU.addMagic(['YGGDRASIL', 'EXP'])
-                # Misc.inputResource(amount='cap', idle=True, energy=False)
-                # NGU.addMagic(['ENERGY_NGU'])
+
+                Setup.setup('itopod')
 
         Navigation.menu('adventure')
         if not args.nobeast:
