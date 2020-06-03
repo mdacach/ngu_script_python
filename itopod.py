@@ -1,47 +1,92 @@
-""" Farming itopod script with fast attack """
 import argparse
-from helper import *
-from coords import *
-import features as f
+
+import coords
+
+from features import Adventure, GoldDiggers, Itopod, Inventory, Misc, NGU, Yggdrasil
+from helper import Helper
+from inventory import invManagement
 from navigation import Navigation
-import time
-import pyautogui
+from statistics import Statistics
+from setup import Setup
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--push', help='push to max possible floor')
-parser.add_argument(
-    '--fast', help='use only regular attacks to be faster', default=True)
-parser.add_argument('--floor', help='floor to farm', default='optimal')
+
+parser.add_argument('--duration', '-d',
+                    help='duration to run itopod script for',
+                    type=int, default=5)
+
+parser.add_argument('--nosetup',
+                    help='will not set up diggers and ngu',
+                    action='store_true')
+
+parser.add_argument('--notitans',
+                    help='disable killing titans',
+                    action='store_true')
+
+parser.add_argument('--verbose',
+                    help='print output',
+                    action='store_true')
+
+parser.add_argument('--use_fighting_loadout',
+                    help='use fighting loadout for manualing titans',
+                    action='store_true')
+parser.add_argument('--noygg',
+                    help='do not harvest ygg',
+                    action='store_true')
+
+parser.add_argument('--nobeast',
+                    help='do not use beast mode',
+                    action='store_true')
 
 args = parser.parse_args()
-print(args)
 
 
-if args.floor != 'optimal':
-    f.Adventure.itopodFarm(args.floor)
-else:
-    f.Adventure.itopodFarm()
+def main():
 
-start = time.time()
-killCounter = 0
+    Helper.init()
 
-f.Adventure.turnIdleOff()
-while True:
-    if f.Adventure.enemySpawn():
-        if args.fast:
-            f.Adventure.kill(fast=True)
-        else:
-            f.Adventure.kill()
-        killCounter += 1
-        print(f'kill counter: {killCounter}')
+    if not args.nosetup:
+        Setup.setup('itopod')
 
-        if killCounter % 100 == 0:  # at every 100 kills
-            f.Adventure.turnIdleOn()
-            f.Inventory.boostAndMergeEquipped()
-            f.Inventory.boostInventory(slots=10)
-            f.Inventory.boostCube()
-            f.Inventory.mergeInventory(slots=24)
-            f.Yggdrasil.harvestAll()
-            Navigation.menu('adventure')
-            f.Adventure.turnIdleOff()
+    totalTime = 0
+    duration = args.duration
+    while True:
+        if not args.notitans:
+            if args.verbose:
+                print('getting available titans')
+            titans = Adventure.getTitans()
+            if titans:
+                # after this needs to reset loadout and diggers and e/m
+                Adventure.turnIdleOff()
 
+                Adventure.killTitans(
+                    titans, verbose=args.verbose, use_fighting_loadout=args.use_fighting_loadout)
+
+                if args.verbose:
+                    print('redoing setup')
+
+                Setup.setup('itopod')
+
+        Navigation.menu('adventure')
+        if not args.nobeast:
+            if not Statistics.checkPixelColor(*coords.BEAST_MODE_ON, coords.BEAST_MODE_COLOR):
+                Helper.click(*coords.BEAST_MODE)
+        print('*' * 30)
+        Itopod.itopodExperimental(duration=duration)
+        totalTime += duration
+        print(f'total exp: {Itopod.EXP_gained}')
+        print(f'total ap: {Itopod.AP_gained}')
+        print(f'kills: {Itopod.kills}')
+        print(f'total time: {totalTime} minutes')
+        print('*' * 30)
+
+        Navigation.menu('inventory')
+        if Inventory.getEmptySlots() < 10:
+            invManagement()
+
+        if not args.noygg:
+            Yggdrasil.harvestAll()
+
+
+if __name__ == '__main__':
+    main()
