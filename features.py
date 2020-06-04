@@ -1037,6 +1037,13 @@ class BloodMagic:
                 (magic - 1) * coords.BM_DIFF
         click(x, y)
 
+    @staticmethod
+    def cap():
+        """ Cap all blood magic spells.  """
+        Navigation.menu('bloodMagic')
+
+        click(*coords.BM_CAP_ALL)
+
 
 class Wandoos:
     @staticmethod
