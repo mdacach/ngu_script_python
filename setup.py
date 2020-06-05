@@ -2,7 +2,7 @@ import argparse
 
 from helper import Helper
 from navigation import Navigation
-from features import Inventory, GoldDiggers, NGU, Misc
+from features import BloodMagic, Inventory, GoldDiggers, NGU, Misc
 
 parser = argparse.ArgumentParser()
 
@@ -30,6 +30,22 @@ class Setup:
                 'idle': True,
                 'energy': False,
             }
+        },
+        'cblock': {
+            'loadout': 2,
+            'diggers': ['PP', 'EXP', 'ADVENTURE', 'ENERGY_NGU', 'MAGIC_NGU'],
+            'energy_ngus': ['AUGMENTS'],
+            'magic_ngus': ['POWER_BETA'],
+            'energy_input': {
+                'amount': 'cap',
+                'idle': True,
+                'energy': True,
+            },
+            'magic_input': {
+                'amount': 'cap',
+                'idle': True,
+                'energy': False,
+            }
         }
     }
 
@@ -37,13 +53,17 @@ class Setup:
     def setup(preset='itopod'):
 
         preset = Setup.presets[preset]
-        print(preset)
+        # print(preset)
 
         Helper.init()
 
         # loadout
         Navigation.menu('inventory')
         Inventory.loadout(preset['loadout'])
+
+        # blood magic
+        Navigation.menu('bloodMagic')
+        BloodMagic.cap()
 
         # gold diggers
         Navigation.menu('goldDiggers')
