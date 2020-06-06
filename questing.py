@@ -78,10 +78,11 @@ def main():
                 printTime()
 
             Navigation.menu('inventory')
-            inv = Inventory.getEmptySlots()
-            if inv < 10:
-                Inventory.boostAndMergeEquipped()
-                Inventory.boostCube()
+            Inventory.boostCube()
+            # inv = Inventory.getEmptySlots()
+            # if inv < 10:
+            # Inventory.boostAndMergeEquipped()
+            # Inventory.boostCube()
             Questing.turnInItems(Questing.quest_zone)
             # Inventory.mergeInventory(slots=5)
             ygg()
