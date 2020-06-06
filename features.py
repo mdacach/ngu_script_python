@@ -1089,6 +1089,7 @@ class Rebirth:
         """ Rebirth. """
         Navigation.menu('rebirth')
         click(*coords.REBIRTH_BUTTON)
+        sleep(1)
         click(*coords.REBIRTH_CONFIRMATION)
 
 
@@ -1436,3 +1437,13 @@ class Challenges:
         print(f'current challenge {Challenges.current_challenge}')
         print(f' is a challenge active? {Challenges.is_active()}')
 
+    @staticmethod
+    def start(challenge: str):
+        """ Starts CHALLENGE. 
+
+        Arguments:
+        challenge -- name of the challenge in uppercase and underscore_separated."""
+        click(*coords.REBIRTH_MENU)
+        click(*coords.CHALLENGES_MENU, delay='long')
+        click(*coords.CHALLENGES[challenge], delay='long')
+        click(*coords.CHALLENGES_YEAH)
