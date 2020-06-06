@@ -1137,7 +1137,7 @@ class Yggdrasil:
         If fruit is already activated, will harvest it. 
 
         Argument:
-        fruit -- string representing the name of the fruit you want to check. All caps and with underscores.
+        fruit -- string representing the name of the fruit you want to activate/harvest. All caps and with underscores.
         """
         Navigation.menu('yggdrasil')
         click(*coords.FRUITS[fruit.upper()])
