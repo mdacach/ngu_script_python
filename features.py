@@ -1047,23 +1047,31 @@ class BloodMagic:
 
 class Wandoos:
     @staticmethod
-    def addEnergy() -> None:
+    def addEnergy(cap: bool = True) -> None:
         """ Add energy to wandoos.  
 
-        Will always CAP. 
+        Keyword arguments:  
+        cap -- cap wandoos if set to True, click add otherwise.  
         """
         Navigation.menu('wandoos')
-        click(*coords.WANDOOS_ENERGY_CAP)
+        if cap:
+            click(*coords.WANDOOS_ENERGY_CAP)
+        else:
+            click(*coords.WANDOOS_ENERGY_ADD)
 
     @staticmethod
-    def addMagic() -> None:
+    def addMagic(cap: bool = True) -> None:
         """ Add magic to wandoos. 
 
-        Will always CAP. 
+        Keyword arguments:  
+        cap -- cap wandoos if set to True, click add otherwise.  
 
         """
         Navigation.menu('wandoos')
-        click(*coords.WANDOOS_MAGIC_CAP)
+        if cap:
+            click(*coords.WANDOOS_MAGIC_CAP)
+        else:
+            click(*coords.WANDOOS_MAGIC_ADD)
 
 
 class MoneyPit:
