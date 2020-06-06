@@ -10,7 +10,7 @@ from helper import Helper
 import pytesseract as ocr
 from PIL import Image, ImageFilter
 from navigation import Navigation
-from features import *
+# from features import *
 
 click = Helper.click
 getRegion = Helper.getRegion
