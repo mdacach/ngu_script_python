@@ -38,7 +38,13 @@ parser.add_argument('--nobeast',
                     help='do not use beast mode',
                     action='store_true')
 
+parser.add_argument('--setup',
+                    help='setup to use from setup script',
+                    default='itopod')
+
 args = parser.parse_args()
+
+# print(args)
 
 
 def main():
@@ -46,7 +52,7 @@ def main():
     Helper.init()
 
     if not args.nosetup:
-        Setup.setup('itopod')
+        Setup.setup(args.setup)
 
     totalTime = 0
     duration = args.duration
@@ -65,7 +71,7 @@ def main():
                 if args.verbose:
                     print('redoing setup')
 
-                Setup.setup('itopod')
+                Setup.setup(args.setup)
 
         Navigation.menu('adventure')
         if not args.nobeast:
