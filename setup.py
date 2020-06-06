@@ -4,14 +4,6 @@ from helper import Helper
 from navigation import Navigation
 from features import BloodMagic, Inventory, GoldDiggers, NGU, Misc
 
-parser = argparse.ArgumentParser()
-
-parser.add_argument('--preset', '-p',
-                    help='preset of what to run',
-                    default='itopod')
-
-args = parser.parse_args()
-
 
 class Setup:
     presets = {
@@ -34,15 +26,15 @@ class Setup:
         'cblock': {
             'loadout': 2,
             'diggers': ['PP', 'EXP', 'ADVENTURE', 'ENERGY_NGU', 'MAGIC_NGU'],
-            'energy_ngus': ['AUGMENTS'],
-            'magic_ngus': ['POWER_BETA'],
+            'energy_ngus': ['AUGMENTS', 'WANDOOS', 'GOLD', 'POWER_ALPHA'],
+            'magic_ngus': ['POWER_BETA', 'NUMBER', 'TIME_MACHINE', 'YGGDRASIL'],
             'energy_input': {
-                'amount': 'cap',
+                'amount': 'quarter',
                 'idle': True,
                 'energy': True,
             },
             'magic_input': {
-                'amount': 'cap',
+                'amount': 'quarter',
                 'idle': True,
                 'energy': False,
             }
@@ -79,4 +71,10 @@ class Setup:
 
 
 if __name__ == '__main__':
-    Setup.setup(args.preset)
+    parser = argparse.ArgumentParser()
+parser.add_argument('--preset', '-p',
+                    help='preset of what to run',
+                    default='itopod')
+
+args = parser.parse_args()
+Setup.setup(args.preset)
