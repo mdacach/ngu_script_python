@@ -1405,5 +1405,34 @@ class Questing:
         click(*coords.QUESTING_COMPLETE_QUEST)  # position is the same as complete
 
 
-if __name__ == "__main__":
-    pass
+class Challenges:
+    current_challenge = ''
+    challenge_time = None
+
+    @staticmethod
+    def is_active():
+        """ Return True if a challenge is active.
+
+        Must be called after Challenges.update()"""
+        cc = Challenges.current_challenge
+        if cc:
+            return 'NONE' not in cc
+        else:
+            return False
+
+    @staticmethod
+    def update():
+        """ Update challenge info. """
+        click(*coords.REBIRTH_MENU)
+        click(*coords.CHALLENGES_MENU)
+        text = Statistics.getText(coords.CHALLENGE_OCR_REGION)
+        lines = re.split('\n', text)
+        # print(f'lines: {lines}')
+        line = [line for line in lines if "CURRENT" in line][0]
+        # print(f'line: {line}')
+        current_challenge = re.split(':', line)
+        # print(f'current_challenge: {current_challenge}')
+        Challenges.current_challenge = current_challenge[1]
+        print(f'current challenge {Challenges.current_challenge}')
+        print(f' is a challenge active? {Challenges.is_active()}')
+
