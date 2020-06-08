@@ -72,9 +72,9 @@ class Setup:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-parser.add_argument('--preset', '-p',
-                    help='preset of what to run',
-                    default='itopod')
+    parser.add_argument('--preset', '-p',
+                        help='preset of what to run',
+                        default='itopod')
 
-args = parser.parse_args()
-Setup.setup(args.preset)
+    args = parser.parse_args()
+    Setup.setup(args.preset)
