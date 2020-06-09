@@ -51,11 +51,9 @@ def main():
 
     Helper.init()
 
-    if not args.nosetup:
-        Setup.setup(args.setup)
-
     totalTime = 0
     duration = args.duration
+    itopod_setup = False
     while True:
         if not args.notitans:
             if args.verbose:
@@ -68,12 +66,14 @@ def main():
                 Adventure.killTitans(
                     titans, verbose=args.verbose, use_fighting_loadout=args.use_fighting_loadout)
 
-                if args.verbose:
-                    print('redoing setup')
+                itopod_setup = False
 
-                Setup.setup(args.setup)
+        if not args.nosetup and not itopod_setup:
+            Setup.setup(args.setup)
+            itopod_setup = True
 
         Navigation.menu('adventure')
+
         if not args.nobeast:
             if not Statistics.checkPixelColor(*coords.BEAST_MODE_ON, coords.BEAST_MODE_COLOR):
                 Helper.click(*coords.BEAST_MODE)
