@@ -9,11 +9,14 @@ class Setup:
     presets = {
         'itopod': {
             'loadout': 2,
-            'diggers': ['PP', 'EXP', 'ADVENTURE', 'ENERGY_NGU', 'MAGIC_NGU'],
+            'diggers': ['PP', 'EXP', 'ADVENTURE', 'ENERGY_NGU', 'MAGIC_NGU', 'DAYCARE'],
             'energy_ngus': ['ADVENTURE_ALPHA', 'DROP_CHANCE'],
             'magic_ngus': ['YGGDRASIL', 'EXP'],
+            # 'energy_ngus': ['MAGIC_NGU'],
+            # 'magic_ngus': ['ENERGY_NGU', 'ADVENTURE_BETA'],
             'energy_input': {
                 'amount': 'half',
+                # 'amount': 'cap',
                 'idle': True,
                 'energy': True,
             },
@@ -64,6 +67,8 @@ class Setup:
 
         # ngu
         Navigation.menu('ngu')
+        print('waiting for e/m')
+        Helper.sleep(30)
         Misc.inputResource(**preset['energy_input'])
         NGU.addEnergy(preset['energy_ngus'])
         Misc.inputResource(**preset['magic_input'])
