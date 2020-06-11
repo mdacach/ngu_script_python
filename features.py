@@ -85,6 +85,7 @@ class Itopod:
         7: 300,
         8: 350,
         9: 400,
+        10: 450,
     }
     tiersEXP = {
         1: 1,
@@ -96,6 +97,7 @@ class Itopod:
         7: 32,
         8: 44,
         9: 58,
+        10: 74,
     }
     kills = 0
     AP_gained = 0
@@ -306,7 +308,8 @@ class Adventure:
                       10: 'g',
                       11: 'h',
                       12: 'z',
-                      13: 'x'}
+                      13: 'x',
+                      14: 'c'}
 
     @staticmethod
     def getTitans() -> list:
@@ -332,16 +335,43 @@ class Adventure:
     @staticmethod
     def killTitan(titan: str) -> None:
         """ Will kill TITAN. """
-        Adventure.adventureZone(titan)
         start = time.time()
         # wait for 10s at max for spawn (in case titan ocr bugged)
-        while time.time() - start < 10 and not Adventure.enemySpawn():
+        print('healing')
+        Adventure.healHP()
+        # while time.time() - start < 10 and not Adventure.enemySpawn():
+        # sleep(0.03)
+
+        # first rotation after completed beast set
+        # enter with beast mode, charge and parry, active and cooled down.
+        # offensive buff -> ultimate buff -> paralyze -> ultimate -> strong
+        # -> pierce -> charge -> block -> parry -> strong -> disable beast mmode
+
+        # enable beast mode
+        print('enable beast mode')
+        if not Statistics.checkPixelColor(*coords.BEAST_MODE_ON, coords.BEAST_MODE_COLOR):
+            click(*coords.BEAST_MODE)
+            sleep(1)
+
+
+        # enable parry and charge
+        print('enable parry and charge')
+        click(*coords.CHARGE_COOLDOWN)
+        sleep(1)
+        click(*coords.PARRY_COOLDOWN)
+
+        while not Statistics.checkPixelColor(*coords.CHARGE_COOLDOWN, coords.ABILITY_ROW_2_READY_COLOR) \
+                or not Statistics.checkPixelColor(*coords.PARRY_COOLDOWN, coords.ABILITY_ROW_1_READY_COLOR):
             sleep(0.03)
+
+        print('should have beast mode, parry and charge active and cooled down by now.')
+        Adventure.adventureZone(titan)
+        Adventure.snipe(first_rotation=True)
         Adventure.snipe(buffs=True)
         print(f'killed titan {titan}')
 
     @staticmethod
-    def killTitans(titans: list, verbose: bool = True, use_fighting_loadout: bool = False) -> None:
+    def killTitans(titans: list, verbose: bool = True, snipe: bool = False) -> None:
         """ Kill all TITANS in list.
 
         Keep your full drop chance loadout as 1. 
@@ -349,12 +379,11 @@ class Adventure:
         Will reset your resources and retoggle your diggers. 
 
         Arguments:  
-        titans                 -- list with titans to kill (from Adventure.getTitans). 
+        titans   -- list with titans to kill (from Adventure.getTitans). 
 
         Keyword arguments:  
-        use_fighting_loadout  -- switch to loadout 3 for manual fights. Use this if you need to 
-        mix some fight accs for your titan fight. 
-        verbose                -- print output for debugging purposes. 
+        snipe    -- switch to loadout 3 (fighting accs) for manual fights. snipe the titan with optimal first rotation. 
+        verbose  -- print output for debugging purposes. 
         """
         # loadout and diggers and kills
         Navigation.menu('inventory')
@@ -396,19 +425,21 @@ class Adventure:
                 print(f'titans: {titans}')
 
             # drop chanche and fighting accs
-            if use_fighting_loadout:
+            if snipe:
                 Navigation.menu('inventory')
                 Inventory.loadout(3)
 
             Navigation.menu('adventure')
-            Adventure.healHP()
+            # Adventure.healHP()
 
-            print('disabling beast mode')
+            if not snipe:
+                print('disabling beast mode')
 
-            if Statistics.checkPixelColor(*coords.BEAST_MODE_ON, coords.BEAST_MODE_COLOR):
-                click(*coords.BEAST_MODE)
+                if Statistics.checkPixelColor(*coords.BEAST_MODE_ON, coords.BEAST_MODE_COLOR):
+                    click(*coords.BEAST_MODE)
 
             for t in titans:
+                print(f'calling killTitan with {t}')
                 Adventure.killTitan(t)
         else:
             if verbose:
@@ -629,15 +660,38 @@ class Adventure:
         return myQueue
 
     @staticmethod
-    def snipe(buffs: bool = False, verbose: bool = False, fast: bool = False):
+    def snipe(buffs: bool = False, verbose: bool = False, fast: bool = False, first_rotation: bool = False):
         """ Kill an enemy using abilities. 
 
         Keyword arguments:  
         buffs   -- if you want to use buffs also.
         fast    --  if you only want to use quick attacks.  
         verbose -- for debugging purposes. 
+        first_rotation -- hardcoded optimal rotation when beaset set is completed. 
         """
         # turn off idle
+        if first_rotation:
+            print('first rotation')
+            abilities = [9, 11, 12, 5, 2, 4, 10, 6, 3, 2, 14]
+            abilities = deque(abilities)
+            print(f'abilities {abilities} type {type(abilities)}')
+
+            while abilities:
+
+                ability = abilities.popleft()
+                print(f'ability {ability}')
+                press(Adventure.abilities_keys[ability])
+
+                sleep(0.1)
+                while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
+                    print('cooldown')
+                    sleep(0.03)
+
+                print(f'abilities {abilities} type {type(abilities)}')
+
+            print('end of first rotation')
+            return
+
         queue = deque(Adventure.getReadyAbilities(buffs=buffs, fast=fast))
 
         if verbose:
@@ -669,8 +723,9 @@ class Adventure:
             start = time.time()
 
             # check if regular attack is ready (fastest ability)
+            sleep(0.1)
             while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
-                sleep(0.05)
+                sleep(0.03)
 
     @staticmethod
     def isEnemyDead() -> bool:
@@ -1447,3 +1502,7 @@ class Challenges:
         click(*coords.CHALLENGES_MENU, delay='long')
         click(*coords.CHALLENGES[challenge], delay='long')
         click(*coords.CHALLENGES_YEAH)
+
+
+if __name__ == '__main__':
+    pass
