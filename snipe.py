@@ -73,6 +73,7 @@ def main():
                 Adventure.adventureZone(args.zone)
 
         else:
+            Helper.press('d')  # heal
             Adventure.refreshZone()
 
 
