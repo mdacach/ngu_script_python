@@ -335,8 +335,20 @@ class Adventure:
     @staticmethod
     def killTitan(titan: str) -> None:
         """ Will kill TITAN. """
-        start = time.time()
         # wait for 10s at max for spawn (in case titan ocr bugged)
+
+        # enable beast mode 
+        print('enable beast mode')
+        if not Statistics.checkPixelColor(*coords.BEAST_MODE_ON, coords.BEAST_MODE_COLOR):
+            click(*coords.BEAST_MODE)
+            sleep(1)
+
+        # enable parry and charge
+        print('enable parry and charge')
+        click(*coords.CHARGE_COOLDOWN)
+        sleep(1)
+        click(*coords.PARRY_COOLDOWN)
+
         print('healing')
         Adventure.healHP()
         # while time.time() - start < 10 and not Adventure.enemySpawn():
@@ -347,19 +359,7 @@ class Adventure:
         # offensive buff -> ultimate buff -> paralyze -> ultimate -> strong
         # -> pierce -> charge -> block -> parry -> strong -> disable beast mmode
 
-        # enable beast mode
-        print('enable beast mode')
-        if not Statistics.checkPixelColor(*coords.BEAST_MODE_ON, coords.BEAST_MODE_COLOR):
-            click(*coords.BEAST_MODE)
-            sleep(1)
-
-
-        # enable parry and charge
-        print('enable parry and charge')
-        click(*coords.CHARGE_COOLDOWN)
-        sleep(1)
-        click(*coords.PARRY_COOLDOWN)
-
+        # check for cooldowns
         while not Statistics.checkPixelColor(*coords.CHARGE_COOLDOWN, coords.ABILITY_ROW_2_READY_COLOR) \
                 or not Statistics.checkPixelColor(*coords.PARRY_COOLDOWN, coords.ABILITY_ROW_1_READY_COLOR):
             sleep(0.03)
@@ -432,11 +432,11 @@ class Adventure:
             Navigation.menu('adventure')
             # Adventure.healHP()
 
-            if not snipe:
-                print('disabling beast mode')
+            # if not snipe:
+            # print('disabling beast mode')
 
-                if Statistics.checkPixelColor(*coords.BEAST_MODE_ON, coords.BEAST_MODE_COLOR):
-                    click(*coords.BEAST_MODE)
+            # if Statistics.checkPixelColor(*coords.BEAST_MODE_ON, coords.BEAST_MODE_COLOR):
+            # click(*coords.BEAST_MODE)
 
             for t in titans:
                 print(f'calling killTitan with {t}')
