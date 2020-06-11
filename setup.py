@@ -12,7 +12,7 @@ class Setup:
             'diggers': ['PP', 'EXP', 'ADVENTURE', 'ENERGY_NGU', 'MAGIC_NGU', 'DAYCARE'],
             'energy_ngus': ['ADVENTURE_ALPHA', 'DROP_CHANCE'],
             'magic_ngus': ['YGGDRASIL', 'EXP'],
-            # 'energy_ngus': ['MAGIC_NGU'],
+            # 'energy_ngus': ['PP'],
             # 'magic_ngus': ['ENERGY_NGU', 'ADVENTURE_BETA'],
             'energy_input': {
                 'amount': 'half',
