@@ -27,8 +27,8 @@ parser.add_argument('--verbose',
                     help='print output',
                     action='store_true')
 
-parser.add_argument('--use_fighting_loadout',
-                    help='use fighting loadout for manualing titans',
+parser.add_argument('--snipe',
+                    help='use fighting loadout for manualing titans and first optimal rotation',
                     action='store_true')
 parser.add_argument('--noygg',
                     help='do not harvest ygg',
@@ -44,7 +44,7 @@ parser.add_argument('--setup',
 
 args = parser.parse_args()
 
-# print(args)
+print(args)
 
 
 def main():
@@ -63,8 +63,9 @@ def main():
                 # after this needs to reset loadout and diggers and e/m
                 Adventure.turnIdleOff()
 
+                print('calling killTitans with args.snipe {args.snipe}')
                 Adventure.killTitans(
-                    titans, verbose=args.verbose, use_fighting_loadout=args.use_fighting_loadout)
+                    titans, verbose=args.verbose, snipe=args.snipe)
 
                 itopod_setup = False
 
