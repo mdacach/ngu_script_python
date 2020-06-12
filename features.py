@@ -1303,6 +1303,16 @@ class Misc:
                 if amount == 'quarter':
                     click(*coords.MAGIC_CUSTOM_AMOUNT_QUARTER_IDLE)
 
+    @staticmethod
+    def inputValue(value: float):
+        """ Value should be in scientific notation.
+
+        Example usage:  
+        3.5e9, 1e11
+        """
+        click(*coords.INPUT_VALUE_TEXT)
+        Helper.write(str(value))
+
 
 class Questing:
     # to find in questing text ocr
