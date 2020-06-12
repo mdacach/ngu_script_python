@@ -337,19 +337,20 @@ class Adventure:
         """ Will kill TITAN. """
         # wait for 10s at max for spawn (in case titan ocr bugged)
 
-        # enable beast mode 
-        print('enable beast mode')
+        # enable beast mode
+        Adventure.adventureZone('safe')
+        # print('enable beast mode')
         if not Statistics.checkPixelColor(*coords.BEAST_MODE_ON, coords.BEAST_MODE_COLOR):
             click(*coords.BEAST_MODE)
             sleep(1)
 
         # enable parry and charge
-        print('enable parry and charge')
+        # print('enable parry and charge')
         click(*coords.CHARGE_COOLDOWN)
         sleep(1)
         click(*coords.PARRY_COOLDOWN)
 
-        print('healing')
+        # print('healing')
         Adventure.healHP()
         # while time.time() - start < 10 and not Adventure.enemySpawn():
         # sleep(0.03)
@@ -364,11 +365,11 @@ class Adventure:
                 or not Statistics.checkPixelColor(*coords.PARRY_COOLDOWN, coords.ABILITY_ROW_1_READY_COLOR):
             sleep(0.03)
 
-        print('should have beast mode, parry and charge active and cooled down by now.')
+        # print('should have beast mode, parry and charge active and cooled down by now.')
         Adventure.adventureZone(titan)
         Adventure.snipe(first_rotation=True)
         Adventure.snipe(buffs=True)
-        print(f'killed titan {titan}')
+        # print(f'killed titan {titan}')
 
     @staticmethod
     def killTitans(titans: list, verbose: bool = True, snipe: bool = False) -> None:
@@ -671,25 +672,25 @@ class Adventure:
         """
         # turn off idle
         if first_rotation:
-            print('first rotation')
+            # print('first rotation')
             abilities = [9, 11, 12, 5, 2, 4, 10, 6, 3, 2, 14]
             abilities = deque(abilities)
-            print(f'abilities {abilities} type {type(abilities)}')
+            # print(f'abilities {abilities} type {type(abilities)}')
 
             while abilities:
 
                 ability = abilities.popleft()
-                print(f'ability {ability}')
+                # print(f'ability {ability}')
                 press(Adventure.abilities_keys[ability])
 
                 sleep(0.1)
                 while not Statistics.checkPixelColor(*coords.ABILITY_1, coords.ABILITY_ROW_1_READY_COLOR):
-                    print('cooldown')
+                    # print('cooldown')
                     sleep(0.03)
 
-                print(f'abilities {abilities} type {type(abilities)}')
+                # print(f'abilities {abilities} type {type(abilities)}')
 
-            print('end of first rotation')
+            # print('end of first rotation')
             return
 
         queue = deque(Adventure.getReadyAbilities(buffs=buffs, fast=fast))
