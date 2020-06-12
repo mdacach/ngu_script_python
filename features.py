@@ -1151,21 +1151,25 @@ class Rebirth:
 
 class NGU:
     @staticmethod
-    def addEnergy(ngus: list):
+    def addEnergy(ngus: dict):
         """ Add energy to list of NGUS. 
 
         Names should be in uppercase and spaces as underscores. """
-        for ngu in ngus:
-            click(*coords.NGUS_ENERGY[ngu])
+        for key, val in ngus.items():
+            if val != -1:
+                Misc.inputValue(val)
+            click(*coords.NGUS_ENERGY[key])
 
     @staticmethod
-    def addMagic(ngus: list):
+    def addMagic(ngus: dict):
         """ Add magic to list of NGUS. 
 
         Names should be in uppercase and spaces as underscores. """
         click(*coords.NGU_TO_MAGIC_BUTTON)
-        for ngu in ngus:
-            click(*coords.NGUS_MAGIC[ngu])
+        for key, val in ngus.items():
+            if val != -1:
+                Misc.inputValue(val)
+            click(*coords.NGUS_MAGIC[key])
 
 
 class Yggdrasil:
