@@ -53,7 +53,7 @@ def main():
 
     totalTime = 0
     duration = args.duration
-    itopod_setup = False
+    itopod_setup = True
     while True:
         if not args.notitans:
             if args.verbose:
@@ -69,7 +69,7 @@ def main():
 
                 itopod_setup = False
 
-        if not args.nosetup and not itopod_setup:
+        if not args.nosetup or not itopod_setup:
             Setup.setup(args.setup)
             itopod_setup = True
 
@@ -89,7 +89,7 @@ def main():
 
         Navigation.menu('inventory')
         if Inventory.getEmptySlots() < 10:
-            invManagement()
+            invManagement(boost=2, merge=8)
 
         if not args.noygg:
             Yggdrasil.harvestAll()
