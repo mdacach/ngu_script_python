@@ -13,3 +13,7 @@ Note that kongregates colors and steam colors are slightly differente. I will ne
 
 https://lists.devloop.org.uk/pipermail/shifter-users/2019-July/002365.html  
 https://github.com/ValveSoftware/Proton
+
+Needed for the script in Arch-based distros:  
+`sudo pacman -S tk scrot` -> tkinter and scrot  
+
