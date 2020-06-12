@@ -1294,14 +1294,14 @@ class Misc:
                 if amount == 'half':
                     click(*coords.MAGIC_CUSTOM_AMOUNT_HALF)
                 if amount == 'quarter':
-                    click(*coords.MAGIC_CUSTOM_AMOUNT_QUARTER_IDLE)
+                    click(*coords.MAGIC_CUSTOM_AMOUNT_QUARTER)
             else:
                 if amount == 'cap':
                     click(*coords.MAGIC_CUSTOM_AMOUNT_CAP)
                 if amount == 'half':
                     click(*coords.MAGIC_CUSTOM_AMOUNT_HALF_IDLE)
                 if amount == 'quarter':
-                    click(*coords.MAGIC_CUSTOM_AMOUNT_QUARTER)  # TODO put idle
+                    click(*coords.MAGIC_CUSTOM_AMOUNT_QUARTER_IDLE)
 
 
 class Questing:
