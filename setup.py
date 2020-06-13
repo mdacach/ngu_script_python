@@ -10,10 +10,15 @@ class Setup:
         'itopod': {
             'loadout': 2,
             'diggers': ['PP', 'EXP', 'ADVENTURE', 'ENERGY_NGU', 'MAGIC_NGU', 'DAYCARE'],
-            'energy_ngus': ['ADVENTURE_ALPHA', 'DROP_CHANCE'],
-            'magic_ngus': ['YGGDRASIL', 'EXP'],
-            # 'energy_ngus': ['PP'],
-            # 'magic_ngus': ['ENERGY_NGU', 'ADVENTURE_BETA'],
+            'energy_ngus': {
+                'ADVENTURE_ALPHA': 4.5e9,
+                'DROP_CHANCE': 4.5e9,
+            },
+            'magic_ngus': {
+                'YGGDRASIL': 9e9,
+                'EXP': 9e9,
+                # 'ADVENTURE_BETA': 1e9,
+            },
             'energy_input': {
                 'amount': 'half',
                 # 'amount': 'cap',
