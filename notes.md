@@ -17,3 +17,6 @@ https://github.com/ValveSoftware/Proton
 Needed for the script in Arch-based distros:  
 `sudo pacman -S tk scrot` -> tkinter and scrot  
 
+Add this to launch settings in steam:  
+`DISPLAY=:100 PROTON_USE_WINED3D=1 PROTON_NO_D3D11=1 WINE_FULLSCREEN_INTEGER_SCALING=1 %command%`  
+
