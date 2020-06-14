@@ -53,7 +53,10 @@ def main():
 
     totalTime = 0
     duration = args.duration
-    itopod_setup = True
+    if args.nosetup:
+        itopod_setup = True
+    else:
+        itopod_setup = False
     while True:
         if not args.notitans:
             if args.verbose:
@@ -69,7 +72,7 @@ def main():
 
                 itopod_setup = False
 
-        if not args.nosetup or not itopod_setup:
+        if not itopod_setup:
             Setup.setup(args.setup)
             itopod_setup = True
 
