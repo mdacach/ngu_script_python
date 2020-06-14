@@ -11,13 +11,16 @@ class Setup:
             'loadout': 2,
             'diggers': ['PP', 'EXP', 'ADVENTURE', 'ENERGY_NGU', 'MAGIC_NGU', 'DAYCARE'],
             'energy_ngus': {
-                'ADVENTURE_ALPHA': 4.5e9,
-                'DROP_CHANCE': 4.5e9,
+                'ADVENTURE_ALPHA': 20e9,
+                # 'DROP_CHANCE': 3e9,
+                # 'PP': 2e9,
+                # 'MAGIC_NGU': 12e9,
             },
             'magic_ngus': {
-                'YGGDRASIL': 9e9,
-                'EXP': 9e9,
-                # 'ADVENTURE_BETA': 1e9,
+                # 'YGGDRASIL': 11e9,
+                # 'EXP': 7.5e9,
+                'ADVENTURE_BETA': 25e9,
+                # 'ENERGY_NGU': 20e9,
             },
             'energy_input': {
                 'amount': 'half',

@@ -13,6 +13,7 @@ from features import Adventure, Questing, Inventory
 from navigation import Navigation
 from helper import Helper
 from yggdrasil import ygg
+from inventory import invManagement
 
 sleep = Helper.sleep
 printTime = Helper.printTime
@@ -55,7 +56,8 @@ def main():
                     Questing.updateInfo()
                     Questing.status()
 
-        Inventory.boostCube()  # unclutter inventory
+        # Inventory.boostCube()  # unclutter inventory
+        invManagement(boost=2, merge=0)
         start = time.time()
         Adventure.adventureZone(Questing.quest_zone)
         Navigation.menu('questing')
@@ -78,14 +80,10 @@ def main():
                 printTime()
 
             Navigation.menu('inventory')
-            Inventory.boostCube()
-            # inv = Inventory.getEmptySlots()
-            # if inv < 10:
-            # Inventory.boostAndMergeEquipped()
             # Inventory.boostCube()
+            invManagement(boost=2, merge=0)
             Questing.turnInItems(Questing.quest_zone)
-            # Inventory.mergeInventory(slots=5)
-            ygg()
+            # ygg()
             Questing.updateInfo()
             if args.verbose:
                 Questing.status()
