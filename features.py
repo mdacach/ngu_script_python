@@ -186,7 +186,7 @@ class Itopod:
             if verbose > 1:
                 print(f'going to optimal floor')
             click(*coords.ITOPOD_ENTER, delay='fast')
-            click(*coords.ITOPOD_START_INPUT, delay='fast')
+            # click(*coords.ITOPOD_START_INPUT, delay='fast')
             click(*coords.ITOPOD_OPTIMAL, delay='fast')
             click(*coords.ITOPOD_ENTER_CONFIRMATION, delay='fast')
             optimal = True
@@ -247,7 +247,7 @@ class Itopod:
                     print(f'going to optimal floor')
 
                 click(*coords.ITOPOD_ENTER, delay='fast')
-                click(*coords.ITOPOD_START_INPUT, delay='fast')
+                # click(*coords.ITOPOD_START_INPUT, delay='fast')
                 click(*coords.ITOPOD_OPTIMAL, delay='fast')
                 click(*coords.ITOPOD_ENTER_CONFIRMATION, delay='fast')
                 optimal = True
