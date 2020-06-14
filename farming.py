@@ -38,6 +38,10 @@ parser.add_argument('--slots',
                     type=int,
                     default=10)
 
+parser.add_argument('--noygg',
+                    help='do not harvest ygg',
+                    action='store_true')
+
 args = parser.parse_args()
 
 
@@ -96,8 +100,9 @@ def main():
             if args.verbose:
                 print(f'empty slots: {emptySlots}')
             if emptySlots < 10:
-                invManagement(slots=args.slots)
-                ygg()
+                invManagement(boost=2, merge=0)
+                if not args.noygg:
+                    ygg()
 
             Navigation.menu('adventure')
             Adventure.turnIdleOff()
