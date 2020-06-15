@@ -312,6 +312,15 @@ class Adventure:
                       14: 'c'}
 
     @staticmethod
+    def getAdventureZone():
+        """ Get and return name of current adventure zone.
+
+        Should be in Adventure Menu alrady. 
+        """
+        click(*coords.ADVENTURE_HOVER)
+        return Statistics.getText(coords.ADVENTURE_ZONE_REGION)
+
+    @staticmethod
     def getTitans() -> list:
         """ Get titans that are ready to kill. 
 
@@ -333,21 +342,36 @@ class Adventure:
         return titans_ready
 
     @staticmethod
-    def killTitan(titan: str) -> None:
-        """ Will kill TITAN. """
+    def killTitan(titan: str) -> bool:
+        """ Will kill TITAN. 
+
+        Return True if titan successfully killed, False otherwise.
+        """
         # wait for 10s at max for spawn (in case titan ocr bugged)
 
         # enable beast mode
         Adventure.adventureZone('safe')
         # print('enable beast mode')
+
+        # cooldown to enable beast mode
+        while not Statistics.checkPixelColor(*coords.BEAST_COOLDOWN, coords.ABILITY_ROW_3_READY_COLOR):
+            sleep(0.03)
+
         if not Statistics.checkPixelColor(*coords.BEAST_MODE_ON, coords.BEAST_MODE_COLOR):
             click(*coords.BEAST_MODE)
             sleep(1)
 
         # enable parry and charge
         # print('enable parry and charge')
+        # cooldown to enable charge
+        while not Statistics.checkPixelColor(*coords.CHARGE_COOLDOWN, coords.ABILITY_ROW_2_READY_COLOR):
+            sleep(0.03)
         click(*coords.CHARGE_COOLDOWN)
         sleep(1)
+
+        # cooldown to enable parry
+        while not Statistics.checkPixelColor(*coords.PARRY_COOLDOWN, coords.ABILITY_ROW_1_READY_COLOR):
+            sleep(0.03)
         click(*coords.PARRY_COOLDOWN)
 
         # print('healing')
@@ -369,6 +393,13 @@ class Adventure:
         Adventure.adventureZone(titan)
         Adventure.snipe(first_rotation=True)
         Adventure.snipe(buffs=True)
+        if 'safe' in Adventure.getAdventureZone().lower():
+            print(f'player is dead :x {titan}')
+            print('nice try, maybe next time.')
+            return False
+        else:
+            print(f'killed {titan}, well played.')
+            return True
         # print(f'killed titan {titan}')
 
     @staticmethod
@@ -441,7 +472,13 @@ class Adventure:
 
             for t in titans:
                 print(f'calling killTitan with {t}')
-                Adventure.killTitan(t)
+                failures = 0
+                while failures < 3 and not Adventure.killTitan(t):
+                    failures += 1
+                if failures == 3:
+                    print(f"could not kill {t}")
+
+                # Adventure.killTitan(t)
         else:
             if verbose:
                 print('no titans left')
@@ -613,14 +650,20 @@ class Adventure:
                 x = x0 + i * coords.ABILITY_OFFSET_X
                 y = y0
                 color = coords.ABILITY_ROW_1_READY_COLOR
+                print(f'row 1: {x}, {y}')
+                print(f'color: {color}')
             elif i < 11:  # row 2
                 x = x0 + (i - 6) * coords.ABILITY_OFFSET_X
                 y = y0 + coords.ABILITY_OFFSET_Y
                 color = coords.ABILITY_ROW_2_READY_COLOR
+                print(f'row 2: {x}, {y}')
+                print(f'color: {color}')
             else:  # row 3
                 x = x0 + (i - 12) * coords.ABILITY_OFFSET_X
                 y = y0 + 2 * coords.ABILITY_OFFSET_Y
                 color = coords.ABILITY_ROW_3_READY_COLOR
+                print(f'row 3: {x}, {y}')
+                print(f'color: {color}')
             i += 1
             # print(f'ability: {getPixelColor(x, y)}')
             # print(f'color: {color}')
