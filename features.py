@@ -1198,9 +1198,19 @@ class NGU:
         """ Add energy to list of NGUS. 
 
         Names should be in uppercase and spaces as underscores. """
+
+        special_values = {0: 'cap',
+                          1: 'half',
+                          2: 'quarter'}
+
         for key, val in ngus.items():
-            if val != -1:
+            # python 3.6 and above remains dict insertion order thankfully
+            if val in special_values:
+                Misc.inputResource(
+                    amount=special_values[val], idle=True, energy=True)
+            else:
                 Misc.inputValue(val)
+
             click(*coords.NGUS_ENERGY[key])
 
     @staticmethod
@@ -1208,10 +1218,20 @@ class NGU:
         """ Add magic to list of NGUS. 
 
         Names should be in uppercase and spaces as underscores. """
+
+        special_values = {0: 'cap',
+                          1: 'half',
+                          2: 'quarter'}
+
         click(*coords.NGU_TO_MAGIC_BUTTON)
         for key, val in ngus.items():
-            if val != -1:
+            # python 3.6 and above remains dict insertion order thankfully
+            if val in special_values:
+                Misc.inputResource(
+                    amount=special_values[val], idle=True, energy=False)
+            else:
                 Misc.inputValue(val)
+
             click(*coords.NGUS_MAGIC[key])
 
 
