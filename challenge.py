@@ -40,6 +40,7 @@ class ChallengeRuns:
             'no_ngu': 'basic',
             'no_tm': 'no_tm',
             'no_rebirth': 'no_rebirth',
+            'laser_sword': 'lsc'
         }
         challenge = names[challenge]
         print(f'starting {challenge} run')
@@ -49,9 +50,81 @@ class ChallengeRuns:
             ChallengeRuns.no_tm(ChallengeRuns.runs[0])
         elif challenge == 'no_rebirth':
             ChallengeRuns.no_rebirth()
+        elif challenge == 'lsc':
+            ChallengeRuns.lsc()
         else:
             print('something went wrong. make sure you spelled the challenge correctly.')
             return
+
+    @staticmethod
+    def lsc():
+        """ LSC challenge logic."""
+
+        start = time.time()
+
+        Navigation.menu('fightBoss')
+        FightBosses.nuke()
+        Helper.sleep(3)  # wait for nuke
+        FightBosses.fightBoss()
+
+        Navigation.menu('inventory')
+        Inventory.loadout(1)  # gold heavy
+
+        Navigation.menu('adventure')
+        Adventure.adventureZone('bae')
+        Adventure.turnIdleOn()
+
+        # before augments
+        Misc.inputValue(2e9)
+
+        Navigation.menu('timeMachine')
+        TimeMachine.addEnergy()
+        TimeMachine.addMagic()
+
+        Navigation.menu('wandoos')
+        Wandoos.addEnergy(cap=False)
+        Wandoos.addMagic(cap=False)
+
+        Navigation.menu('fightBoss')
+        FightBosses.nuke()
+        FightBosses.fightBoss()
+
+        Navigation.menu('goldDiggers')
+        GoldDiggers.clearActive()
+        GoldDiggers.activate(['STAT', 'WANDOOS', 'MAGIC_BEARD', 'BLOOD'])
+
+        Challenges.update()
+        while Challenges.is_active():
+            Navigation.menu('augments')
+            Misc.inputResource(amount='half', idle=True, energy=True)
+            Augmentation.augmentation(aug=7)
+            Augmentation.augmentation(aug=7, upgrade=True)
+            Helper.sleep(3)
+
+            Navigation.menu('fightBoss')
+            FightBosses.nuke()
+            FightBosses.fightBoss()
+
+            Navigation.menu('wandoos')
+            Wandoos.addEnergy(cap=True)  # release some energy
+            Wandoos.addMagic(cap=True)
+
+            Navigation.menu('bloodMagic')
+            for i in range(1, 8):
+                BloodMagic.addMagic(magic=i, cap=True)
+
+            Challenges.update()
+
+        print('done with challenge')
+
+        print('waiting for 3 min')
+        while time.time() - start <= 180:
+            Helper.sleep(1)
+
+        print('starting another one')
+        ChallengeRuns.completed += 1
+        print(f'completed: {ChallengeRuns.completed}')
+        ChallengeRuns.start(args.challenge)
 
     @staticmethod
     def basic(duration: int):
@@ -507,8 +580,10 @@ class ChallengeRuns:
         print(f'completed: {ChallengeRuns.completed}')
         ChallengeRuns.start(args.challenge)
 
+    def evil30():
+
+
 
 if __name__ == '__main__':
     Helper.init()
     ChallengeRuns.start(args.challenge)
-
