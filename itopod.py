@@ -42,6 +42,11 @@ parser.add_argument('--setup',
                     help='setup to use from setup script',
                     default='itopod')
 
+parser.add_argument('--optimal',
+                    help='optimal floor to use',
+                    type=int,
+                    default=0)
+
 args = parser.parse_args()
 
 print(args)
@@ -81,8 +86,10 @@ def main():
         if not args.nobeast:
             if not Statistics.checkPixelColor(*coords.BEAST_MODE_ON, coords.BEAST_MODE_COLOR):
                 Helper.click(*coords.BEAST_MODE)
+
         print('*' * 30)
-        Itopod.itopodExperimental(duration=duration)
+        Itopod.itopodExperimental(
+            duration=duration, optimal_floor=args.optimal)
         totalTime += duration
         print(f'total exp: {Itopod.EXP_gained}')
         print(f'total ap: {Itopod.AP_gained}')
@@ -91,8 +98,8 @@ def main():
         print('*' * 30)
 
         Navigation.menu('inventory')
-        if Inventory.getEmptySlots() < 10:
-            invManagement(boost=2, merge=8)
+        if Inventory.getEmptySlots() < 20:
+            invManagement(boost=0, merge=0)
 
         if not args.noygg:
             Yggdrasil.harvestAll()
