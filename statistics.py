@@ -65,6 +65,7 @@ class Statistics:
             w, h = img.size
             img = img.resize((w*6, h*6), Image.BICUBIC)
             img = img.filter(ImageFilter.SHARPEN)
+
         return ocr.image_to_string(img)
 
     @staticmethod
