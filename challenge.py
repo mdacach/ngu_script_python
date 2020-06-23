@@ -580,9 +580,6 @@ class ChallengeRuns:
         print(f'completed: {ChallengeRuns.completed}')
         ChallengeRuns.start(args.challenge)
 
-    def evil30():
-
-
 
 if __name__ == '__main__':
     Helper.init()
