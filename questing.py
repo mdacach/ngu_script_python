@@ -57,12 +57,12 @@ def main():
                     Questing.status()
 
         # Inventory.boostCube()  # unclutter inventory
-        invManagement(boost=2, merge=0)
+        # invManagement(boost=2, merge=0)
         start = time.time()
         Adventure.adventureZone(Questing.quest_zone)
         Navigation.menu('questing')
         while not Questing.is_completed:
-            Navigation.menu('inventory')
+            # Navigation.menu('inventory')
             # farm that zone
             Navigation.menu('adventure')
             Adventure.turnIdleOff()
@@ -81,7 +81,7 @@ def main():
 
             Navigation.menu('inventory')
             # Inventory.boostCube()
-            invManagement(boost=2, merge=0)
+            # invManagement(boost=2, merge=0)
             Questing.turnInItems(Questing.quest_zone)
             # ygg()
             Questing.updateInfo()
