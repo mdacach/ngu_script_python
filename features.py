@@ -1,22 +1,22 @@
 """ Module for various features handling.
 
-Features:  
-    BasicTraining   
-    FightBoss 
-    MoneyPit  
-    Adventure  
-    Inventory  
-    Augmentation  
-    TimeMachine  
-    BloodMagic  
-    Wandoos  
-    Yggdrasil  
-    GoldDiggers  
+Features:
+    BasicTraining
+    FightBoss
+    MoneyPit
+    Adventure
+    Inventory
+    Augmentation
+    TimeMachine
+    BloodMagic
+    Wandoos
+    Yggdrasil
+    GoldDiggers
 
-Missing:  
-    AdvTraining  
-    NGU  
-    Beards  
+Missing:
+    AdvTraining
+    NGU
+    Beards
     """
 
 from collections import deque
@@ -63,9 +63,9 @@ class FightBosses:
 
     @staticmethod
     def fightBoss() -> None:
-        """ Click Fight Boss once. 
+        """ Click Fight Boss once.
 
-        Should be in Fight Boss menu.  
+        Should be in Fight Boss menu.
         """
         if Navigation.currentMenu != 'fightBoss':
             raise Exception('should be in Fight Boss menu!')
@@ -86,6 +86,8 @@ class Itopod:
         8: 350,
         9: 400,
         10: 450,
+        11: 500,
+        12: 550,
     }
     tiersEXP = {
         1: 1,
@@ -98,6 +100,8 @@ class Itopod:
         8: 44,
         9: 58,
         10: 74,
+        11: 92,
+        12: 112,
     }
     kills = 0
     AP_gained = 0
@@ -105,21 +109,22 @@ class Itopod:
     PP_gained = 0
     tierKillsCount = {}
 
-    @staticmethod
-    def itopodExperimental(duration: float = 0, verbose: int = 0) -> None:
-        """ Abuse a bug in itopod floors to higher exp/hr. 
+    @ staticmethod
+    def itopodExperimental(duration: float = 0, optimal_floor: int = 0, verbose: int = 0) -> None:
+        """ Abuse a bug in itopod floors to higher exp/hr.
 
-        Farm optimal floor until there is only one kill remaining for a tier reward.  
-        If there is more than one tier with upcoming rewards, choose the highest one.  
+        Farm optimal floor until there is only one kill remaining for a tier reward.
+        If there is more than one tier with upcoming rewards, choose the highest one.
 
-        Global arguments:  
-        killCount  -- total kills between all floors.  
-        totalEXP   -- total EXP gained since first call.  
-        totalAP    -- total AP gained since first call.  
+        Global arguments:
+        killCount  -- total kills between all floors.
+        totalEXP   -- total EXP gained since first call.
+        totalAP    -- total AP gained since first call.
 
-        Keyword arguments:  
-        duration -- if not 0, the script will only run for that amount of time. (default 0)  
-        verbose -- 0 for no printing, 1 for normal printing and 2 for extra verbose. (default 0)
+        Keyword arguments:
+        duration      -- if not 0, the script will only run for that amount of time. (default 0)
+        verbose       -- 0 for no printing, 1 for normal printing and 2 for extra verbose. (default 0)
+        optimal_floor -- floor to use instead of optimal button.  
         """
 
         if verbose > 1:
@@ -183,11 +188,14 @@ class Itopod:
         else:  # must be bigger than 1
             # can afford to go to optimal
             current_tier = minimum
+            click(*coords.ITOPOD_ENTER, delay='fast')
             if verbose > 1:
                 print(f'going to optimal floor')
-            click(*coords.ITOPOD_ENTER, delay='fast')
-            # click(*coords.ITOPOD_START_INPUT, delay='fast')
-            click(*coords.ITOPOD_OPTIMAL, delay='fast')
+            if optimal_floor:
+                click(*coords.ITOPOD_START_INPUT, delay='fast')
+                write(str(optimal_floor))
+            else:
+                click(*coords.ITOPOD_OPTIMAL, delay='fast')
             click(*coords.ITOPOD_ENTER_CONFIRMATION, delay='fast')
             optimal = True
 
@@ -247,8 +255,12 @@ class Itopod:
                     print(f'going to optimal floor')
 
                 click(*coords.ITOPOD_ENTER, delay='fast')
-                # click(*coords.ITOPOD_START_INPUT, delay='fast')
-                click(*coords.ITOPOD_OPTIMAL, delay='fast')
+                if optimal_floor:
+                    click(*coords.ITOPOD_START_INPUT, delay='fast')
+                    write(str(optimal_floor))
+                else:
+                    click(*coords.ITOPOD_OPTIMAL, delay='fast')
+
                 click(*coords.ITOPOD_ENTER_CONFIRMATION, delay='fast')
                 optimal = True
 
@@ -293,7 +305,8 @@ class Adventure:
              'bdw': 18,
              'bae': 19,
              'beast': 20,
-             'choco': 21, }
+             'choco': 21,
+             'evil': 22}
 
     # abilities mapping
     abilities_keys = {1: 'w',
@@ -650,20 +663,20 @@ class Adventure:
                 x = x0 + i * coords.ABILITY_OFFSET_X
                 y = y0
                 color = coords.ABILITY_ROW_1_READY_COLOR
-                print(f'row 1: {x}, {y}')
-                print(f'color: {color}')
+                # print(f'row 1: {x}, {y}')
+                # print(f'color: {color}')
             elif i < 11:  # row 2
                 x = x0 + (i - 6) * coords.ABILITY_OFFSET_X
                 y = y0 + coords.ABILITY_OFFSET_Y
                 color = coords.ABILITY_ROW_2_READY_COLOR
-                print(f'row 2: {x}, {y}')
-                print(f'color: {color}')
+                # print(f'row 2: {x}, {y}')
+                # print(f'color: {color}')
             else:  # row 3
                 x = x0 + (i - 12) * coords.ABILITY_OFFSET_X
                 y = y0 + 2 * coords.ABILITY_OFFSET_Y
                 color = coords.ABILITY_ROW_3_READY_COLOR
-                print(f'row 3: {x}, {y}')
-                print(f'color: {color}')
+                # print(f'row 3: {x}, {y}')
+                # print(f'color: {color}')
             i += 1
             # print(f'ability: {getPixelColor(x, y)}')
             # print(f'color: {color}')
@@ -860,6 +873,24 @@ class Augmentation:
         upgrade -- if True, will allocate energy to aug update instead.
         """
         Navigation.menu('augments')
+        if aug >= 6:
+            click(944, 600)  # scroll down
+            click(944, 600)
+            if aug == 6:
+                if upgrade:
+                    click(*coords.AUG6_UPGRADE)
+                else:
+                    click(*coords.AUG6)
+            if aug == 7:
+                if upgrade:
+                    click(*coords.AUG7_UPGRADE)
+                else:
+                    click(*coords.AUG7)
+
+            click(944, 280)  # scroll up
+            click(944, 280)
+            return
+
         if upgrade:
             x, y = coords.AUG1_UPGRADE[0], coords.AUG1_UPGRADE[1] + \
                 (aug - 1) * coords.AUG_DIFF
@@ -892,7 +923,7 @@ class Inventory:
         click(x, y, delay='fast')
         # two times to be sure
         press('d')
-        press('d')
+        # press('d')
 
     @staticmethod
     def boostItem(x: int, y: int) -> None:
@@ -902,8 +933,8 @@ class Inventory:
 
         click(x, y, delay='fast')
         # two times to be sure
-        press('aa')
         press('a')
+        # press('a')
 
     @staticmethod
     def boostAndMergeEquipped() -> None:  # TODO add new acc slots
@@ -951,7 +982,7 @@ class Inventory:
         y0 = coords.SLOT1[1]
         i = 0
         j = 0
-        click(x0, y0)  # boosting first item sometimes fail
+        # click(x0, y0)  # boosting first item sometimes fail
         while num < slots:
             if (i >= 12):
                 i = 0
@@ -978,7 +1009,7 @@ class Inventory:
         y0 = coords.SLOT1[1]
         i = 0
         j = 0
-        click(x0, y0)  # boosting first item sometimes fail
+        # click(x0, y0)  # boosting first item sometimes fail
         while num < slots:
             if (i >= 12):
                 i = 0
@@ -1391,6 +1422,7 @@ class Questing:
         'strange': 'avsp',
         'mega': 'mega',
         'beardverse': 'bv',
+        'chocolate': 'choco',
     }
 
     # questing global variables to tracking
