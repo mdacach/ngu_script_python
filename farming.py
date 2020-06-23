@@ -99,8 +99,8 @@ def main():
 
             if args.verbose:
                 print(f'empty slots: {emptySlots}')
-            if emptySlots < 10:
-                invManagement(boost=2, merge=0)
+            if emptySlots < 20:
+                invManagement(boost=4, merge=4)
                 if not args.noygg:
                     ygg()
 
